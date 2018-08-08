@@ -1,7 +1,15 @@
+html {
+	height: 100%;
+}
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  overflow-x: hidden;
+	height: 100%;
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	overflow-x: hidden;
+	/*overflow-y: hidden;*/
+	background-repeat: no-repeat;
+	background: linear-gradient(45deg, #ffffff, #dddddd);
+  /*overflow-y: hidden;*/
 }
 
 a {
@@ -11,7 +19,7 @@ a {
 .header {
 	position: absolute;
 	width: 101%;
-	height: 5%;
+	height: 50px;
 	left: -0.5%;
 	top: 0;
 	background: linear-gradient(180deg, #555555, #111111);
@@ -37,13 +45,24 @@ a {
 .header_icon {
 	position: relative;
 	height: 100%;
+	min-width: 80px;
 	max-width: 5vw;
 	margin-right: 10px;
 }
 
-.footer {
+.main_cont {
 	position: absolute;
+	width: 94%;
+	left: 3%;
+	margin-top: 10px;
+	/*border: 1px solid black;*/
+	
+}
+
+.footer {
+	position: fixed;
 	width: 101%;
+	min-height: 200px;
 	height: 12%;
 	bottom: 0;
 	left: -0.5%;
@@ -54,20 +73,102 @@ a {
 .contacts {
 	position: absolute;
 	height: 80%;
-	width: 30%;
+	min-height: 80px;
+	width: 360px;
 	top: 10%;
 	right: 3.5%;
-	border: 1px solid white;
 	padding: 0 10px 0 10px;
-	font-size: 0.7vw;
+}
+
+.text_wrapper {
+	position: absolute;
+	width: 80%;
+	height: 80%;
+	bottom: 0;
+	right: 0;
+}
+
+.label_wrapper {
+	position: absolute;
+	width: 15%;
+	height: 80%;
+	bottom: 0;
+	left: 0;
 }
 
 .text_header {
 	text-align: center;
 }
 
+#form_header {
+	color: rgba(255,255,255, 1);
+}
+
+#contact_header {
+	position: absolute;
+	left: 10px;
+	color: #82B436;
+	opacity: 0.7;
+}
+
 .contact_text {
-	/*position: relative;*/
+	position: relative;
 	text-align: left;
-	color: rgba(255,255,255, 0.9);
+	left: 10px;
+	color: rgba(255,255,255, 0.8);
+	font-size: 85%;
+}
+
+.form_wrapper {
+	position: relative;
+	width: 100%;
+	height: 35vh;
+	min-height: 300px;
+	display: flex;
+	justify-content: center;
+}
+
+.login_form {
+	position: relative;
+	width: 25%;
+	min-width: 250px;
+	max-width: 400px;
+	height: 100%;
+	border-radius: 6px;
+	/*box-shadow: 1px 5px 10px 1px rgba(0,0,0,0.2);*/
+	border: 3px solid rgba(0,0,0,0.1);
+	background-color: rgba(255,255,255,0.8);
+}
+
+.header_wrapper {
+	position: absolute;
+	height: 20%;
+	width: 100%;
+	top: 0;
+	background: linear-gradient(180deg, #6F9C1B, #8CC13D);
+	border-radius: 5px 5px 0 0;
+}
+
+.inner_wrapper {
+	position: absolute;
+	width: 100%;
+	height: 50%;
+	top: 21%;
+	/*border: 1px solid red;*/
+}
+
+.empty_cont {
+	margin-bottom: 10%; 
+}
+
+.form_field {
+	position: relative;
+	width: 90%;
+	left: 5%;
+	height: 15%;
+	margin-top: 15px;
+	border-radius: 5px;
+	border: 2px solid rgba(0,0,0,0.1);
+	/*box-shadow: 1px 5px 10px 1px rgbaa(0,0,0,0.2);*/
+	/*margin-top: 15px;*/
 }

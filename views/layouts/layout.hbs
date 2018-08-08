@@ -12,18 +12,27 @@
 			{{# if logged_user }}
 				<img class="header_icon" src="/images/logout.png">
 			{{ else }}
-				<img class="header_icon" onclick="location.href='login'" src="/images/login.png">
+				<img class="header_icon" onclick="location.href='users/login'" src="/images/login.png">
 			{{/if}}
 		</div>
 	</div>
-	{{{ body }}}
+	<div class="main_cont">
+		{{{ body }}}
+	</div>
 	<div class="footer">
 		<div class="contacts">
-			<strong class="text_header contact_text">Contact us:</strong><br><br>
-			<label class="contact_text">Address:</label><span class="contact_text">Ukraine, Kyiv, str. Dorohozhytska, 3 UNIT FACTORY</span><br>
-			<label class="contact_text">Telephone:</label><span class="contact_text">+38 (063) 754-15-69</span><br>
-			<label class="contact_text">e-mail:</label><span class="contact_text">white_men@bigmir.net</span><br>
-			<span class="contact_text">2018 Created by Roman Malyavchik</span>
+			<strong class="text_header" id="contact_header">Contact us:</strong><br><br>
+			<div class="label_wrapper">
+				<strong class="contact_text">Address:</strong><br>
+				<strong class="contact_text">Telephone:</strong><br>
+				<strong class="contact_text">e-mail:</strong><br>
+			</div>
+			<div class="text_wrapper">
+				<span class="contact_text">Ukraine, Kyiv, 3 Dorohozhytska str. UNIT FACTORY</span><br>
+				<span class="contact_text">+38 (063) 754-15-69</span><br>
+				<span class="contact_text">white_men@bigmir.net</span><br>
+				<span class="contact_text">2018 Created by Roman Malyavchik</span><br>
+			</div>
 		</div>
 	</div>
 </body>
