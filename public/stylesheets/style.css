@@ -6,14 +6,17 @@ body {
 	padding: 50px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	overflow-x: hidden;
-	/*overflow-y: hidden;*/
 	background-repeat: no-repeat;
 	background: linear-gradient(45deg, #ffffff, #dddddd);
-  /*overflow-y: hidden;*/
 }
 
 a {
-  color: #00B7FF;
+  color: #7777FF;
+  text-decoration: none;
+}
+
+a:hover {
+	color: #4444FF;
 }
 
 .header {
@@ -62,8 +65,9 @@ a {
 .footer {
 	position: fixed;
 	width: 101%;
-	min-height: 200px;
-	height: 12%;
+	height: 120px;
+	/*min-height: 1300px;*/
+	/*height: 12%;*/
 	bottom: 0;
 	left: -0.5%;
 	background: linear-gradient(180deg, #555555, #111111);
@@ -101,7 +105,7 @@ a {
 }
 
 #form_header {
-	color: rgba(255,255,255, 1);
+	color: #82B436;
 }
 
 #contact_header {
@@ -132,43 +136,80 @@ a {
 	position: relative;
 	width: 25%;
 	min-width: 250px;
-	max-width: 400px;
+	max-width: 300px;
 	height: 100%;
 	border-radius: 6px;
-	/*box-shadow: 1px 5px 10px 1px rgba(0,0,0,0.2);*/
-	border: 3px solid rgba(0,0,0,0.1);
-	background-color: rgba(255,255,255,0.8);
-}
-
-.header_wrapper {
-	position: absolute;
-	height: 20%;
-	width: 100%;
-	top: 0;
-	background: linear-gradient(180deg, #6F9C1B, #8CC13D);
-	border-radius: 5px 5px 0 0;
-}
-
-.inner_wrapper {
-	position: absolute;
-	width: 100%;
-	height: 50%;
-	top: 21%;
-	/*border: 1px solid red;*/
-}
-
-.empty_cont {
-	margin-bottom: 10%; 
+	/*border: 3px solid rgba(0,0,0,0.1);*/
+	/*background-color: rgba(255,255,255,0.8);*/
 }
 
 .form_field {
 	position: relative;
 	width: 90%;
-	left: 5%;
-	height: 15%;
-	margin-top: 15px;
+	left: 4%;
+	height: 8%;
+	margin-bottom: 15px;
 	border-radius: 5px;
 	border: 2px solid rgba(0,0,0,0.1);
-	/*box-shadow: 1px 5px 10px 1px rgbaa(0,0,0,0.2);*/
-	/*margin-top: 15px;*/
+	padding-left: 2%;
+	/*padding-right: -5px;*/
+	background-color: none;
+}
+
+.submit_button {
+	position: relative;
+	width: 93%;
+	height: 10%;
+	top: 2vh;
+	left: 4%;
+	border: none;
+	border-radius: 5px;
+	/*padding-left: 2%;*/
+	background: linear-gradient(180deg, #6F9C1B, #8CC13D);
+	text-align: center;
+	font-size: 120%;
+}
+
+.button_text {
+	color: rgba(255,255,255,0.8);
+}
+
+.divide_cont {
+	position: relative;
+	width: 85%;
+	left: 8%;
+	top: 5vh;
+	margin-bottom: 6vh;
+	/*border: 1px solid red;*/
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/*.divide {
+	position: relative;
+	width: 100%;
+	height: 0;
+	border: 1px solid rgba(0,0,0,0.2);
+}
+*/
+.green {
+	color: #82B436;
+}
+
+.forgot_wrapper {
+	position: relative;
+	width: 100%;
+	top: 3.5vh;
+	text-align: center;
+	/*border: 1px solid red;*/
+}
+
+.error {
+	position: relative;
+	color: red;
+	left: 6%;
+	top: -12px;
+	font-size: 90%;
+	display: none;
 }

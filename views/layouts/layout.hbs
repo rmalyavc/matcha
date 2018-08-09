@@ -7,12 +7,12 @@
 </head>
 <body>
 	<div class="header">
-		<img class="logo" onclick="location.href='../'" src="/images/logo.png">
+		<img class="logo" onclick="location.href='/'" src="/images/logo.png">
 		<div class="header_tools">
 			{{# if logged_user }}
 				<img class="header_icon" src="/images/logout.png">
 			{{ else }}
-				<img class="header_icon" onclick="location.href='users/login'" src="/images/login.png">
+				<img class="header_icon" onclick="location.href='/users/login'" src="/images/login.png">
 			{{/if}}
 		</div>
 	</div>
