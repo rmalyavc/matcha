@@ -6,6 +6,7 @@ body {
 	padding: 50px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	overflow-x: hidden;
+	overflow-y: hidden;
 	background-repeat: no-repeat;
 	background: linear-gradient(45deg, #ffffff, #dddddd);
 }
@@ -211,5 +212,5 @@ a:hover {
 	left: 6%;
 	top: -12px;
 	font-size: 90%;
-	display: none;
+	/*display: none;*/
 }
