@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/login', function(req, res, next) {
-  res.render('auth/login');
+  res.render('auth/login', {login: true, data: req.session.user});
 });
 
 router.get('/register', function(req, res, next) {

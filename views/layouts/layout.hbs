@@ -9,7 +9,8 @@
 	<div class="header">
 		<img class="logo" onclick="location.href='/'" src="/images/logo.png">
 		<div class="header_tools">
-			{{# if logged_user }}
+			{{# if login}}
+			{{ else if logged_user }}
 				<img class="header_icon" src="/images/logout.png">
 			{{ else }}
 				<img class="header_icon" onclick="location.href='/users/login'" src="/images/login.png">
@@ -17,6 +18,7 @@
 		</div>
 	</div>
 	<div class="main_cont">
+		{{ data }}
 		{{{ body }}}
 	</div>
 	<div class="footer">
