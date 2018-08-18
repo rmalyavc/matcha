@@ -1,6 +1,3 @@
-// import express from 'express';
-// import session from 'express-session';
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -8,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var hbs = require('express-handlebars');
 var session = require('express-session');
+var validator = require('express-validator');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

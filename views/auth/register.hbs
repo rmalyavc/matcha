@@ -1,5 +1,5 @@
 <div class="form_wrapper">
-	<form class="login_form" action="#">
+	<form class="login_form" action="/users/valid" method="POST">
 		<h1 class="text_header" id="form_header">Sign up</h1>
 		<input type="text" class="form_field" id="login" name="login" placeholder="Login" required>
 		<span class="error" id="login_error">User already exists</span>
@@ -10,7 +10,7 @@
 		<span class="error" id="email_error">User already exists</span>
 		<button type="button" class="submit_button" id="signup"><strong class="button_text">Sign up</strong></button>
 	</form>
-	<script type="text/javascript" src="/js/valid.js"></script>
-	<script type="text/javascript" src="/js/listeners.js"></script>
-	
 </div>
+<script type="text/javascript" src="/js/valid.js"></script>
+<script type="text/javascript" src="/js/listeners.js"></script>
+<!-- <h1>{{ data }}</h1> -->
