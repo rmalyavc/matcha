@@ -1,9 +1,9 @@
-<!-- {{# if registred }}
+{{# if registred }}
 	<h1>You are registred now!</h1>
+	<a href="/">Back to Home Page</a>
 {{ else }}
-	<h1>Something went wrong</h1>
+	<!-- <div class="error_container"> -->
+		<h1 class="error_text">Something went wrong</h1>
+		<h2 class="back_link"><a href="register" class="back_link">&lt&lt<span style="margin: 5px;">Back<span></a></h2>
+	<!-- </div> -->
 {{/if}}
- -->
- <h1>{{registred}}</h1>
- <h1>{{ login }}</h1>
- <h1>{{test}}</h1>

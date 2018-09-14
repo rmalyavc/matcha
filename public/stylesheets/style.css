@@ -214,3 +214,13 @@ a:hover {
 	font-size: 90%;
 	display: none;
 }
+
+.error_text {
+	color: rgba(255, 50, 0, 0.7);
+	text-align: center;
+}
+
+.back_link {
+	text-align: center;
+	color: rgba(0, 0, 0, 0.7);
+}
