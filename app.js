@@ -6,7 +6,8 @@ var logger = require('morgan');
 var hbs = require('express-handlebars');
 var session = require('express-session');
 var validator = require('express-validator');
-
+const MongoStore = require('connect-mongo')(session);
+const mongoose = require("mongoose");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -24,10 +25,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-	secret: 'this-is-a-secret-token',
-	cookie: { maxAge: 60000 },
-	resave: true,
-    saveUninitialized: true
+    secret: "11111111",
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 app.use('/', indexRouter);

@@ -54,6 +54,14 @@ function valid_email(submit) {
 	if (!is_email(email.value) && (email.value !== '' ||
 		(submit && (error.innerHTML = 'This field is required'))))
 		res = false;
+	if (email.value !== '') {
+		$.get('/users/unique', {email: email.value}, function(result) {
+			if (!result && (error.innerHTML = 'This email is already used')) {
+				paint_field(email, false);
+				display_error(error, false);
+			}
+		});
+	}
 	if (res)
 		paint_field(email, true);
 	display_error(error, res);
@@ -68,9 +76,17 @@ function valid_login(submit) {
 	error.innerHTML = 'User already exists';
 	if (!login || !error)
 		return (false);
-	if (login.value === '' && submit) {
-		error.innerHTML = 'This field is required';
+	if ((login.value === '' && submit) || (login.value !== '' && login.value.length < 4)) {
+		error.innerHTML = login.value === '' ? 'This field is required' : 'Login should be at least 4 characters';
 		res = false;
+	}
+	if (login.value !== '') {
+		$.get('/users/unique', {login: login.value}, function(result) {
+			if (!result && (error.innerHTML = 'User already exists')) {
+				paint_field(login, false);
+				display_error(error, false);
+			}
+		});
 	}
 	if (res)
 		paint_field(login, res);
@@ -100,6 +116,6 @@ function before_submit() {
 		paint_field(email, false);
 		alert('Invalid email');
 	}
-	else
+	else if (form.checkValidity())
 		form.submit();
 }

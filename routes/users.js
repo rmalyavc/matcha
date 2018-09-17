@@ -18,17 +18,11 @@ router.get('/forgot', function(req, res, next) {
 });
 
 router.post('/valid', function(req, res, next) {
-	data = req.body;
-	user_controller.register(data, res);
-	// var cont = {};
-	// var my_res = false;
-	// if (user.register(data, cont))
-	// 	my_res = true;
-	// res.render('auth/valid', {
-	// 	login: data.login,
-	// 	registred: my_res,
-	// 	test: cont['test']
-	// });
+	user_controller.register(req, res);
+});
+
+router.get('/unique', function(req, res, next) {
+	user_controller.is_unique(req.query, res);
 });
 
 module.exports = router;
