@@ -2,6 +2,12 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true });
 var User = require('../models/User.js');
 var user_validator = require('../validators/User.js');
+var hash = require('password-hash');
+
+function is_email(email) {
+	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return re.test(String(email).toLowerCase());
+}
 
 module.exports = {
 	register: function(req, res) {
@@ -15,7 +21,7 @@ module.exports = {
 		else {
 			var new_user = {
 				login: data['login'],
-				password: data['password'],
+				password: hash.generate(data['password'], {algorithm: 'sha256'}),
 				email: data['email']
 			}
 			user = new User(new_user);
@@ -35,7 +41,29 @@ module.exports = {
 			});
 		}
 	},
+	login: function(req, res) {
+		var cond = {};
 
+		if (is_email(req.body.login))
+			cond.email = req.body.login;
+		else if (req.body.login !== '' && req.body.login.length > 3)
+			cond.login = req.body.login;
+		else
+			res.redirect('/users/login?error=Invalid login or email');
+		User.findOne(cond, function (err, doc) {
+			if (doc) {
+				if (hash.verify(req.body.password, doc.password)) {
+					req.session.user_id = doc.id;
+					req.session.user_login = doc.login;
+					res.redirect('/');
+				}
+				else
+					res.redirect('/users/login?error=Invalid password');
+			}
+			else
+				res.redirect('/users/login?error=Invalid login, email or password');
+		});
+	},
 	is_unique: function(data, res) {
 		var cond;
 

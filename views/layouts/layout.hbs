@@ -11,7 +11,7 @@
 		<div class="header_tools">
 			{{# if login}}
 			{{ else if logged_user }}
-				<img class="header_icon" src="/images/logout.png">
+				<img class="header_icon" id="logout_icon" onclick="location.href='/users/logout'" src="/images/logout.png">
 			{{ else }}
 				<img class="header_icon" onclick="location.href='/users/login'" src="/images/login.png">
 			{{/if}}

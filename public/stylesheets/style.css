@@ -54,6 +54,10 @@ a:hover {
 	margin-right: 10px;
 }
 
+#logout_icon {
+	min-width: 0;
+}
+
 .main_cont {
 	position: absolute;
 	width: 94%;

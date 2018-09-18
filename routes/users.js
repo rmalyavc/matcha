@@ -6,7 +6,13 @@ var user_controller = require('./controllers/User.js');
 var user = require('./models/User.js');
 
 router.get('/login', function(req, res, next) {
-  res.render('auth/login', {login: true, data: req.session.user});
+  	res.render('auth/login', {error: req.query['error']});
+});
+
+router.get('/logout', function(req, res, next) {
+	req.session.user_id = null;
+	req.session.user_login = null;
+	res.redirect('/users/login');
 });
 
 router.get('/register', function(req, res, next) {
@@ -18,7 +24,12 @@ router.get('/forgot', function(req, res, next) {
 });
 
 router.post('/valid', function(req, res, next) {
-	user_controller.register(req, res);
+	if (req.body.page === 'register')
+		user_controller.register(req, res);
+	else if (req.body.page === 'login')
+		user_controller.login(req, res);
+	else
+		res.redirect('/users/login');
 });
 
 router.get('/unique', function(req, res, next) {

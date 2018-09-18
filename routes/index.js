@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 		title: 'Matcha',
 		created_by: 'Roman Malyavchik',
 		logged_user: req.session.user_login,
+		user_id: req.session.user_id,
 	});
 });
 
