@@ -64,18 +64,26 @@ module.exports = {
 				res.redirect('/users/login?error=Invalid login, email or password');
 		});
 	},
-	is_unique: function(data, res) {
+	is_unique: function(req, res) {
 		var cond;
 
-		if (data.login)
-			cond = {login: data.login};
-		else if (data.email)
-			cond = {email: data.email};
+		if (req.query.login)
+			cond = {login: req.query.login};
+		else if (req.query.email)
+			cond = {email: req.query.email};
 		User.findOne(cond, function (err, doc) {
-			if (err || doc)
+			if (err || (doc && doc.id !== req.session.user_id))
 				res.send(false);
 			else
 				res.send(true);
+		});
+	},
+	get_user: function(id, res) {
+		User.findById(id, function (err, doc) {
+			if (err || !doc)
+				res.send(false);
+			else
+				res.send(doc);
 		});
 	}
 }

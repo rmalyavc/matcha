@@ -81,7 +81,7 @@ function valid_login(submit) {
 		res = false;
 	}
 	if (login.value !== '') {
-		$.get('/users/unique', {login: login.value}, function(result) {
+		$.get('/users/ajax', {login: login.value, action: 'is_unique'}, function(result) {
 			if (!result && (error.innerHTML = 'User already exists')) {
 				paint_field(login, false);
 				display_error(error, false);

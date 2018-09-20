@@ -137,6 +137,7 @@ a:hover {
 	justify-content: center;
 }
 
+
 .login_form {
 	position: relative;
 	width: 25%;
@@ -146,6 +147,19 @@ a:hover {
 	border-radius: 6px;
 	/*border: 3px solid rgba(0,0,0,0.1);*/
 	/*background-color: rgba(255,255,255,0.8);*/
+}
+
+#profile_form_wrapper {
+	height: 75vh;
+	overflow-y: auto;
+}
+
+#profile_form {
+	max-width: unset;
+	width: 30%;
+	/*height: 75vh;*/
+	/*border: 1px solid red;*/
+	text-align: right;
 }
 
 .form_field {
@@ -159,6 +173,29 @@ a:hover {
 	padding-left: 2%;
 	/*padding-right: -5px;*/
 	background-color: none;
+}
+
+.profile_input {
+	width: 70%;
+	height: 6%;
+	left: unset;
+	right: 4%;
+	/*margin-left: 2%;*/
+}
+
+#about {
+	width: 70% !important;
+	height: 25%;
+}
+
+label {
+	font-size: 1rem;
+	font-weight: 550;
+	margin-right: 6%;
+}
+
+label, textarea {
+	vertical-align: middle;
 }
 
 .submit_button {
@@ -177,6 +214,13 @@ a:hover {
 
 .button_text {
 	color: rgba(255,255,255,0.8);
+}
+
+#save_changes {
+	width: 50%;
+	height: 7%;
+	left: unset;
+	right: 15%;
 }
 
 .divide_cont {

@@ -26,7 +26,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     secret: "11111111",
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use('/', indexRouter);
