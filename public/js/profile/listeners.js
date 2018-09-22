@@ -19,9 +19,21 @@ function email_listener() {
 	});
 }
 
+function ownership_listeners() {
+	var fields = document.getElementsByClassName('form_field profile_input');
+
+	if (!fields)
+		return ;
+	for (var i = 0; i < fields.length; i++)
+		fields[i].addEventListener('keyup', function() {
+			check_ownership();
+		});
+}
+
 function set_listeners() {
 	login_listener();
 	email_listener();
+	check_ownership();
 }
 
 set_listeners();

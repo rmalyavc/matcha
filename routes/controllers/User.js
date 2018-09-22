@@ -64,6 +64,40 @@ module.exports = {
 				res.redirect('/users/login?error=Invalid login, email or password');
 		});
 	},
+	update: function (req, res) {
+		var data = req.body;
+		var error = '';
+		if (data['user_id'] !== req.session.user_id) {
+			res.render('error', {
+				error: 'You cannot change another user\'s data!',
+				image: '/images/fuck.png',
+				logged_user: req.session.user_id
+			});
+			return ;
+		}
+		User.findById(data['user_id'], function (err, doc) {
+			var error = '';
+			var url = '/users/profile/' + data['user_id'] + '/';
+			if ((err || !doc) && (url += '?err='))
+				error = err ? err : 'User does not exist';
+			else {
+				doc.login = data['login'];
+				doc.email = data['email'];
+				doc.first_name = data['first_name'];
+				doc.last_name = data['last_name'];
+				doc.about = data['about'];
+				doc.save().then(function() {
+					res.redirect(url);
+				}, function(err) {
+					res.redirect(url + '?err=' + err);
+				}).catch(function(error_catch) {
+					if (error_catch)
+						console.log(error_catch);
+				});
+			}
+			res.redirect(url + error);
+		});
+	},
 	is_unique: function(req, res) {
 		var cond;
 
@@ -85,5 +119,8 @@ module.exports = {
 			else
 				res.send(doc);
 		});
+	},
+	is_owner: function(id, res, req) {
+		res.send(id === req.session.user_id);
 	}
 }

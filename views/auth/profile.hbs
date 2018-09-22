@@ -1,23 +1,42 @@
-
 <div class="form_wrapper" id="profile_form_wrapper">
-	<form class="login_form" id="profile_form" action="#">
+	<form class="login_form" id="profile_form" action="/users/update" method="POST">
 		{{#user}}
-		<h1 class="text_header" id="form_header">{{login}}'s Profile</h1>
+		<h1 class="text_header" id="form_header">{{ login }}'s Profile</h1>
+		<h3 class="text_header green">{{ login }}'s Photo</h3>
+		<div class="album_preview">
+			<button class="prev_next" id="prev" type="button">
+				<img src="/images/prev.png" class="prev_next_img">
+			</button>
+			<div class="preview_wrapper">
+				<img class="preview_img" src="/images/login.png">
+				<img class="preview_img" src="/images/logo.png">
+				<img class="preview_img" src="/images/logout.png">
+				<img class="preview_img" src="/images/back.png">
+				<img class="preview_img" src="/images/login.png">
+			</div>
+			<button class="prev_next" id="next" type="button">
+				<img src="/images/next.png" class="prev_next_img">
+			</button>
+		</div>
+		<label for="upload">New image</label><input type="file" class="form_field profile_input" name="upload" id="upload"><br>
+		<input type="hidden" name="user_id" value="{{ id }}">
 		<label for="login">Login:</label><input type="text" class="form_field profile_input" id="login" name="login" minlength="4" value="{{ login }}" required><br>
-		<span class="error" id="login_error">User already exists</span>
+		<span class="error profile_error" id="login_error">User already exists</span>
 		<label for="first_name">First Name:</label><input type="text" class="form_field profile_input" id="first_name" name="first_name" value="{{ first_name }}" minlength="3"><br>
 		<label for="last_name">Last Name:</label><input type="text" class="form_field profile_input" id="last_name" name="last_name" value="{{ last_name }}" minlength="3" ><br>
 		<label for="email">Email:</label><input type="email" class="form_field profile_input" id="email" name="email" value="{{ email }}"><br>
-		<span class="error" id="email_error">User already exists</span>
-		<label for="about">About:</label><textarea class="form_field profile_input" id="about" name="about"></textarea><br>
+		<span class="error profile_error" id="email_error">User already exists</span>
+		<label for="about">About:</label><textarea class="form_field profile_input" id="about" name="about">{{ about }}</textarea><br>
 		{{/user}}
 		{{#if is_owner }}
-			<button type="button" class="submit_button" id="save_changes" disabled><strong class="button_text">Save</strong></button>
+			<button type="submit" class="submit_button" id="save_changes"><strong class="button_text">Save</strong></button>
 		{{/if}}
 	</form>
 </div>
 <script type="text/javascript" src="/js/auth/valid.js"></script>
+<script type="text/javascript" src="/js/profile/valid.js"></script>
 <script type="text/javascript" src="/js/profile/listeners.js"></script>
+
 <script type="text/javascript">
 
 </script>

@@ -54,6 +54,12 @@ a:hover {
 	margin-right: 10px;
 }
 
+#profile_link {
+	position: relative;
+	font-size: 100%;
+	top: 20%;
+}
+
 #logout_icon {
 	min-width: 0;
 }
@@ -63,16 +69,12 @@ a:hover {
 	width: 94%;
 	left: 3%;
 	margin-top: 10px;
-	/*border: 1px solid black;*/
-	
 }
 
 .footer {
 	position: fixed;
 	width: 101%;
 	height: 120px;
-	/*min-height: 1300px;*/
-	/*height: 12%;*/
 	bottom: 0;
 	left: -0.5%;
 	background: linear-gradient(180deg, #555555, #111111);
@@ -110,6 +112,10 @@ a:hover {
 }
 
 #form_header {
+	color: #82B436;
+}
+
+.green {
 	color: #82B436;
 }
 
@@ -157,6 +163,8 @@ a:hover {
 #profile_form {
 	max-width: unset;
 	width: 30%;
+	min-width: 300px;
+	min-height: 350px;
 	/*height: 75vh;*/
 	/*border: 1px solid red;*/
 	text-align: right;
@@ -189,7 +197,7 @@ a:hover {
 }
 
 label {
-	font-size: 1rem;
+	font-size: 0.7rem;
 	font-weight: 550;
 	margin-right: 6%;
 }
@@ -263,6 +271,13 @@ label, textarea {
 	display: none;
 }
 
+.profile_error {
+	width: 72%;
+	left: 24%;
+	right: 0;
+	text-align: left;
+}
+
 .error_text {
 	color: rgba(255, 50, 0, 0.7);
 	text-align: center;
@@ -271,4 +286,72 @@ label, textarea {
 .back_link {
 	text-align: center;
 	color: rgba(0, 0, 0, 0.7);
+}
+
+#fuck_wrapper {
+	position: relative;
+	height: 60vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#fuck_image {
+	position: relative;
+	height: 100%;
+}
+
+.album_preview {
+	position: relative;
+	width: 150%;
+	height: 25%;
+	left: -25%;
+	margin-bottom: 5%;
+	/*border: 1px solid red;*/
+}
+
+.prev_next {
+	position: absolute;
+	width: 4%;
+	height: 100%;
+	background: none;
+	border: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#prev {
+	left: 0;
+}
+
+#next {
+	right: 0;
+}
+
+.prev_next_img {
+	position: relative;
+	width: 100%;
+}
+
+.preview_wrapper {
+	position: absolute;
+	width: 92%;
+	height: 100%;
+	left: 4%;
+	display: flex;
+	align-items: center;
+	/*border: 1px solid blue;*/
+}
+
+.preview_img {
+	position: relative;
+	width: 18%;
+	margin: 1%;
+	max-height: 100%;
+}
+
+#upload {
+	border: none;
 }

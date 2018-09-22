@@ -55,7 +55,7 @@ function valid_email(submit) {
 		(submit && (error.innerHTML = 'This field is required'))))
 		res = false;
 	if (email.value !== '') {
-		$.get('/users/unique', {email: email.value}, function(result) {
+		$.get('/users/ajax', {email: email.value, action: 'is_unique'}, function(result) {
 			if (!result && (error.innerHTML = 'This email is already used')) {
 				paint_field(email, false);
 				display_error(error, false);

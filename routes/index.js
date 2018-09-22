@@ -8,8 +8,8 @@ router.get('/', function(req, res, next) {
 	res.render('index', {
 		title: 'Matcha',
 		created_by: 'Roman Malyavchik',
-		logged_user: req.session.user_login,
-		user_id: req.session.user_id,
+		logged_user: req.session.user_id,
+		user_login: req.session.user_login
 	});
 });
 

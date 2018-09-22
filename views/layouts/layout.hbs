@@ -13,7 +13,16 @@
 			{{# if login}}
 			{{ else if logged_user }}
 				<img class="header_icon" id="logout_icon" onclick="location.href='/users/logout'" src="/images/logout.png">
-				<a class="header_icon" id="profile_link" href="/users/profile/{{ user_id }}">{{ logged_user }}</a>
+				<a id="profile_link" href="/users/profile/{{ logged_user }}"></a>
+				<script type="text/javascript">
+					var id = '{{ logged_user }}';
+					
+					$.get('/users/ajax', {id: id, action: 'get_user'}, function(result) {
+						if (!result)
+							return ;
+						document.getElementById('profile_link').innerHTML = result.login;
+					});
+				</script>
 			{{ else }}
 				<img class="header_icon" onclick="location.href='/users/login'" src="/images/login.png">
 			{{/if}}
