@@ -1,8 +1,12 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true });
+mongoose.connect('mongodb://127.0.0.1/test', { useNewUrlParser: true });
 var User = require('../models/User.js');
+var Photo = require('../models/Photo.js');
 var user_validator = require('../validators/User.js');
 var hash = require('password-hash');
+var fs = require('fs');
+var shell = require('shelljs');
+
 
 function is_email(email) {
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -97,6 +101,37 @@ module.exports = {
 			}
 			res.redirect(url + error);
 		});
+	},
+	upload: function(req, res) {
+		var data = req.body;
+		var today = new Date();
+		var path = '/uploads/' + session.user_id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/';
+		if (!data['id'] || data['id'] !== req.session.user_id || !req.files.upload)
+			res.send(false);
+		else {
+			User.findById(data['id'], function(err, doc) {
+				if (err || !doc)
+					res.send(false);
+				else {
+					if (!fs.existsSync(path))
+						shell.mkdir('-p', path);
+					req.files.upload.mv(path + req.files.upload.name, function(err) {
+						if (err)
+							res.send(false);
+						else {
+							photo = new Photo({url: path + req.files.upload.name});
+							doc.push(photo);
+							doc.save().then(function() {
+								res.send(doc);
+							}).catch(function(err) {
+								res.send(false);
+							});
+						}
+					});
+				}
+			});
+			// res.send(true);
+		}
 	},
 	is_unique: function(req, res) {
 		var cond;

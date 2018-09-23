@@ -69,6 +69,9 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_user(req.query['id'], res);
 });
 
-
+router.post('/ajax', function(req, rex, next) {
+	if (req.body.action == 'upload')
+		user_controller.upload(req, res);
+});
 
 module.exports = router;

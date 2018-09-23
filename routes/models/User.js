@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Photo = require('Photo.js');
+var Photo = require('./Photo.js');
 
 var UserSchema = new Schema({
 	login: {type: String, unique: true, required: true, minlength: 4, maxlength: 50},
