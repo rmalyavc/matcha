@@ -67,11 +67,14 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.is_owner(req.query['id'], res, req);
 	else if (req.query['action'] === 'get_user' && req.query['id'])
 		user_controller.get_user(req.query['id'], res);
+	else if (req.query['action'] === 'get_all_users')
+		user_controller.get_all(req, res);
 });
 
-router.post('/ajax', function(req, rex, next) {
-	if (req.body.action == 'upload')
-		user_controller.upload(req, res);
+router.post('/ajax_post', function(req, res, next) {
+	console.log(req.body);
+	// if (req.body['action'] == 'upload')
+	// 	user_controller.upload(req, res);
 });
 
 module.exports = router;

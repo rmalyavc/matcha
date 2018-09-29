@@ -14,3 +14,15 @@ function check_ownership() {
 			button.outerHTML = '';
 	});
 }
+
+function upload_button() {
+	var field = document.getElementById('upload');
+	var button = document.getElementById('confirm_upload');
+
+	if (!field || !button)
+		return ;
+	if (field.value)
+		button.style.display = 'unset';
+	else
+		button.style.display = 'none';
+}

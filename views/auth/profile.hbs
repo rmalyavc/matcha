@@ -18,8 +18,11 @@
 				<img src="/images/next.png" class="prev_next_img">
 			</button>
 		</div>
-		<label for="upload">New image</label><input type="file" class="form_field profile_input" name="upload" id="upload"><br>
-		<input type="hidden" name="user_id" value="{{ id }}">
+		<label for="upload">New image</label><input type="file" class="form_field profile_input" name="upload" id="upload">
+		<button type="button" id="confirm_upload">
+			<img src="/images/ok.png" class="ok_img">
+		</button><br>
+		<br><input type="hidden" name="user_id" id="user_id" value="{{ id }}">
 		<label for="login">Login:</label><input type="text" class="form_field profile_input" id="login" name="login" minlength="4" value="{{ login }}" required><br>
 		<span class="error profile_error" id="login_error">User already exists</span>
 		<label for="first_name">First Name:</label><input type="text" class="form_field profile_input" id="first_name" name="first_name" value="{{ first_name }}" minlength="3"><br>
@@ -31,12 +34,11 @@
 		{{#if is_owner }}
 			<button type="submit" class="submit_button" id="save_changes"><strong class="button_text">Save</strong></button>
 		{{/if}}
+		<button type="button" onclick="get_all_users();">Get Users</button>
 	</form>
+
 </div>
 <script type="text/javascript" src="/js/auth/valid.js"></script>
 <script type="text/javascript" src="/js/profile/valid.js"></script>
 <script type="text/javascript" src="/js/profile/listeners.js"></script>
-
-<script type="text/javascript">
-
-</script>
+<script type="text/javascript" src="/js/profile/logic.js"></script>

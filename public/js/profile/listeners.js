@@ -30,10 +30,25 @@ function ownership_listeners() {
 		});
 }
 
+function file_listeners() {
+	var field = document.getElementById('upload');
+	var button = document.getElementById('confirm_upload');
+
+	if (!field)
+		return ;
+	field.addEventListener('change', function() {
+		upload_button();
+	});
+	button.addEventListener('click', function() {
+		upload_image();
+	});
+}
+
 function set_listeners() {
 	login_listener();
 	email_listener();
 	check_ownership();
+	file_listeners();
 }
 
 set_listeners();
