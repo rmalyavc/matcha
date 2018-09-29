@@ -104,35 +104,41 @@ module.exports = {
 	},
 	upload: function(req, res) {
 		var data = req.body;
-		console.log(data);
-		// var today = new Date();
-		// var path = '/uploads/' + session.user_id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/';
-		// if (!data['id'] || data['id'] !== req.session.user_id || !req.files.upload)
-		// 	res.send(false);
-		// else {
-		// 	User.findById(data['id'], function(err, doc) {
-		// 		if (err || !doc)
-		// 			res.send(false);
-		// 		else {
-		// 			if (!fs.existsSync(path))
-		// 				shell.mkdir('-p', path);
-		// 			req.files.upload.mv(path + req.files.upload.name, function(err) {
-		// 				if (err)
-		// 					res.send(false);
-		// 				else {
-		// 					photo = new Photo({url: path + req.files.upload.name});
-		// 					doc.push(photo);
-		// 					doc.save().then(function() {
-		// 						res.send(doc);
-		// 					}).catch(function(err) {
-		// 						res.send(false);
-		// 					});
-		// 				}
-		// 			});
-		// 		}
-		// 	});
-		// 	// res.send(true);
-		// }
+		console.log(req.files.upload);
+		var today = new Date();
+		console.log('This is my second test!');
+		var file = req.files[0];
+		console.log('This is my third test!');
+		console.log('/uploads/' + req.session.user_id);
+		var path = '/uploads/' + req.session.user_id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/';
+		console.log('This is a test!');
+		if (!data['user_id'] || data['user_id'] !== req.session.user_id || !req.files)
+			res.send(false);
+		else {
+			
+			User.findById(data['user_id'], function(err, doc) {
+				if (err || !doc)
+					res.send(false);
+				else {
+					if (!fs.existsSync(path))
+						shell.mkdir('-p', path);
+					file.upload.mv(path + file.name, function(err) {
+						if (err)
+							res.send(false);
+						else {
+							photo = new Photo({url: path + file.name});
+							doc.push(photo);
+							doc.save().then(function() {
+								res.send(doc);
+							}).catch(function(err) {
+								res.send(false);
+							});
+						}
+					});
+				}
+			});
+			res.send(true);
+		}
 	},
 	is_unique: function(req, res) {
 		var cond;

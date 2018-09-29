@@ -1,4 +1,6 @@
 var express = require('express');
+var multer  = require('multer');
+var upload = multer({ dest: 'uploads/' });
 var router = express.Router();
 var user_controller = require('./controllers/User.js');
 
@@ -71,10 +73,11 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_all(req, res);
 });
 
-router.post('/ajax_post', function(req, res, next) {
+router.post('/ajax_post', upload.any(), function(req, res, next) {
 	console.log(req.body);
-	// if (req.body['action'] == 'upload')
-	// 	user_controller.upload(req, res);
+	console.log(req.files);
+	if (req.body['action'] == 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
+		user_controller.upload(req, res);
 });
 
 module.exports = router;

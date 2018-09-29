@@ -9,33 +9,19 @@ function upload_image() {
 	}
 	console.log( $('#upload'));
 	form_data.append('file', $('#upload')[0].files[0]);
-	form_data.append('id', user_id.value);
-	form_data.append('action', 'upload');
-	// form_data.append('processData', false);
-	// form_data.append('contentType', false)
-	// form_data.append('pictureFile', input.files[0]);
-
-	// $.ajax({
-	//   url: 'upload.php',
-	//   type: 'POST',
-	//   processData: false, // important
-	//   contentType: false, // important
-	//   dataType : 'json',
-	//   data: myFormData
-	// });
-	// $.post('/users/ajax', form_data, function(result) {
-	// 	alert('test');
-	// });
+	form_data.append('action', 'upload_photo');
+	form_data.append('user_id', user_id.value);
 	$.ajax({
 		url: '/users/ajax_post',
 		type: 'POST',
-		processData: false, // important
-		contentType: false, // important
-		// dataType : 'json',
+		processData: false,
+		contentType: false,
+		dataType : 'json',
 		data: form_data,
-		success: function(result) {
-			alert('test');
-		}
+	}).done(function() {
+		alert('Done!');
+	}).always(function() {
+		alert('Always!');
 	});
 }
 
