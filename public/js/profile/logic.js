@@ -18,8 +18,13 @@ function upload_image() {
 		contentType: false,
 		dataType : 'json',
 		data: form_data,
-	}).done(function() {
-		alert('Done!');
+	}).done(function(res) {
+		if (res) {
+			alert('Done!');
+			console.log(res);
+		}
+		else
+			alert('res is empty...');
 	}).always(function() {
 		alert('Always!');
 	});
