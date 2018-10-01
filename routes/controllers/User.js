@@ -6,11 +6,26 @@ var user_validator = require('../validators/User.js');
 var hash = require('password-hash');
 var fs = require('fs');
 var shell = require('shelljs');
+var multer  = require('multer');
 
 
 function is_email(email) {
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(String(email).toLowerCase());
+}
+
+function get_upload_path(id) {
+	if (!id)
+		return (false);
+	var today = new Date();
+	return ('public/uploads/' + id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/');
+}
+
+function get_extension(file) {
+	if (!file)
+		return (null);
+	var ext = file.mimetype.split("/");
+    return (ext[ext.length - 1]);
 }
 
 module.exports = {
@@ -104,14 +119,9 @@ module.exports = {
 	},
 	upload: function(req, res) {
 		var data = req.body;
-		console.log(req.files.upload);
-		var today = new Date();
-		console.log('This is my second test!');
 		var file = req.files[0];
-		console.log('This is my third test!');
-		console.log('/uploads/' + req.session.user_id);
-		var path = '/uploads/' + req.session.user_id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/';
-		console.log('This is a test!');
+		var path = get_upload_path(req.session.user_id);
+		console.log(file);
 		if (!data['user_id'] || data['user_id'] !== req.session.user_id || !req.files)
 			res.send(false);
 		else {
@@ -122,19 +132,30 @@ module.exports = {
 				else {
 					if (!fs.existsSync(path))
 						shell.mkdir('-p', path);
-					file.upload.mv(path + file.name, function(err) {
-						if (err)
-							res.send(false);
-						else {
-							photo = new Photo({url: path + file.name});
-							doc.push(photo);
-							doc.save().then(function() {
-								res.send(doc);
-							}).catch(function(err) {
-								res.send(false);
-							});
-						}
+					shell.mv(file.path, path + file.filename + '.' + get_extension(file));
+					doc.photo.push(new Photo({
+						url: path + file.filename + '.' + get_extension(file),
+						avatar: false,
+					}));
+					doc.save().then(function() {
+						res.send(doc);
+					}).catch(function(err) {
+						res.send(false);
 					});
+					// res.send('It\'s OK!');
+					// file.upload.mv(path + file.name, function(err) {
+					// 	if (err)
+					// 		res.send(false);
+					// 	else {
+					// 		photo = new Photo({url: path + file.name});
+					// 		doc.push(photo);
+					// 		doc.save().then(function() {
+					// 			res.send(doc);
+					// 		}).catch(function(err) {
+					// 			res.send(false);
+					// 		});
+					// 	}
+					// });
 				}
 			});
 			res.send(true);
@@ -172,5 +193,5 @@ module.exports = {
 	},
 	is_owner: function(id, res, req) {
 		res.send(id !== '' && id === req.session.user_id);
-	}
+	},
 }

@@ -25,8 +25,6 @@ function upload_image() {
 		}
 		else
 			alert('res is empty...');
-	}).always(function() {
-		alert('Always!');
 	});
 }
 
