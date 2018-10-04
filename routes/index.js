@@ -13,4 +13,12 @@ router.get('/', function(req, res, next) {
 	});
 });
 
+router.get('/error', function(req, res, next) {
+	res.render('error', {
+		logged_user: req.session.user_id,
+		error: req.query.error,
+		image: req.query.image
+	});
+});
+
 module.exports = router;

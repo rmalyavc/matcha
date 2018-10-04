@@ -11,7 +11,7 @@ var UserSchema = new Schema({
 	admin: {type: Boolean, default: false},
 	active: {type: Boolean, default: true},
 	about: {type: String, default: '', required: false, maxlength: 500},
-	photo: [{type: Schema.Types.ObjectId, ref: 'Photo'}]
+	photo: [{type: Schema.Types.Object, ref: 'Photo'}]
 }, {collection: 'users'});
 
 module.exports = mongoose.model('User', UserSchema);

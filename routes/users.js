@@ -75,10 +75,15 @@ router.get('/ajax', function(req, res, next) {
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {
-	console.log(req.body);
-	console.log(req.files);
-	if (req.body['action'] == 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
+	// console.log(req.body);
+	console.log(req.body['id_list[]']);
+	// console.log(req.files);
+	if (req.body['action'] === 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
 		user_controller.upload(req, res);
+	else if (req.body['action'] === 'get_images' && req.body['id_list[]'] && req.body['id_list[]'].length > 0) {
+		console.log('CONDITION PASSED');
+		user_controller.get_images(req.body['id_list[]'], res);
+	}
 });
 
 module.exports = router;
