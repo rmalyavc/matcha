@@ -357,3 +357,88 @@ label, textarea {
 #upload {
 	border: none;
 }
+
+.admin_container {
+	position: relative;
+	width: 80%;
+	height: 74vh;
+	left: 10%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	/*border: 1px solid red;*/
+	overflow: hidden;
+}
+
+.admin_form {
+	position: absolute;
+	width: 100%;
+	height: 90%;
+	/*border: 1px solid yellow;*/
+	overflow-y: auto;
+	bottom: 0;
+}
+
+.button_cont {
+	position: fixed;
+	width: 15%;
+	height: 100%;
+	/*border: 1px solid green;*/
+}
+
+.admin_button {
+	position: relative;
+	width: 98%;
+	background: none;
+	border: 0px;
+	border-radius: 8px;
+	box-shadow: 2px 4px 4px 2px rgba(0,0,0,0.5);
+	left: 1%;
+	height: 10%;
+	margin-top: 5px; 
+}
+
+#admin_content {
+	position: absolute;
+	width: 79%;
+	height: 100%;
+	right: 0;
+	/*border: 1px solid blue;*/
+}
+
+.user_cont {
+	position: relative;
+	width: 99%;
+	height: 25%;
+	/*left: 1%;*/
+	/*border: 1px solid black;*/
+
+}
+
+.avatar_wrapper {
+	position: absolute;
+	width: 15%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.avatar {
+	position: relative;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.user_info {
+	position: absolute;
+	width: 75%;
+	height: 100%;
+	left: 15%;
+}
+
+.user_tools {
+	position: absolute;
+	width: 10%;
+	height: 100%;
+	right: 0;
+}

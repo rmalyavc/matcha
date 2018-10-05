@@ -197,14 +197,7 @@ module.exports = {
 				res.send(doc);
 		});
 	},
-	get_all: function(req, res) {
-		User.find({}, function(err, docs) {
-			if (err)
-				res.send(err);
-			else
-				res.send(docs);
-		});
-	},
+	
 	is_owner: function(id, res, req) {
 		res.send(id !== '' && id === req.session.user_id);
 	},

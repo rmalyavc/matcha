@@ -4,6 +4,7 @@ var multer  = require('multer');
 var upload = multer({ dest: 'tmp/' });
 var router = express.Router();
 var user_controller = require('./controllers/User.js');
+var Admin = require('./controllers/Admin.js');
 
 // var valid = require('./controllers/validators/user/valid_user.js');
 var User = require('./models/User.js');
@@ -71,7 +72,7 @@ router.get('/ajax', function(req, res, next) {
 	else if (req.query['action'] === 'get_user' && req.query['id'])
 		user_controller.get_user(req.query['id'], res);
 	else if (req.query['action'] === 'get_all_users')
-		user_controller.get_all(req, res);
+		Admin.get_all_users(req, res);
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {
