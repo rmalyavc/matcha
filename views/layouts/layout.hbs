@@ -28,6 +28,15 @@
 			{{/if}}
 		</div>
 	</div>
+	<div class="fog" id="fog">
+		<div class="confirm_window">
+			<h2 class="text_header error_text" id="confirm_question">Do you really want to do it?</h2>
+			<input type="hidden" id="action" value="">
+			<input type="hidden" id="action_data" value="">
+			<button class="confirm_button" id="yes_button"><strong>Yes</strong></button>
+			<button class="confirm_button" id="no_button"><strong>No</strong></button>
+		</div>
+	</div>
 	<div class="main_cont">
 		{{{ body }}}
 	</div><br>

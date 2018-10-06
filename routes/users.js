@@ -73,6 +73,10 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_user(req.query['id'], res);
 	else if (req.query['action'] === 'get_all_users')
 		Admin.get_all_users(req, res);
+	else if (req.query['action'] === 'del_user' && req.query['id']) {
+		// Admin.check_access(req, res);
+		Admin.del_user(req, res);
+	}
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {

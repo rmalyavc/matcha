@@ -41,6 +41,21 @@ module.exports = {
 				return ;
 			}
 		});
+	},
+	del_user: function(req, res) {
+		User.findByIdAndRemove(req.query['id'], function(err) {
+			if (err) {
+				res.send({
+					success: false,
+					error: err
+				});
+			}
+			else {
+				res.send({
+					success: true
+				})
+			}
+		});
 	}
 }
 
