@@ -64,9 +64,9 @@ function upload_image() {
 	});
 }
 
-function get_all_users() {
-	$.get('/users/ajax', {action: 'get_all_users'}, function(result) {
-		// alert(result);
-		console.log(result);
-	});
-}
+// function get_all_users() {
+// 	$.get('/users/ajax', {action: 'get_all_users'}, function(result) {
+// 		// alert(result);
+// 		console.log(result);
+// 	});
+// }

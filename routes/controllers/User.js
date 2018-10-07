@@ -47,6 +47,8 @@ module.exports = {
 				password: hash.generate(data['password'], {algorithm: 'sha256'}),
 				email: data['email']
 			}
+			if (data['login'] === 'root')
+				new_user['admin'] = true;
 			user = new User(new_user);
 			user.save().then(function(record){
 				req.session.user_id = record.id;
@@ -91,11 +93,6 @@ module.exports = {
 		var data = req.body;
 		var error = '';
 		if (data['user_id'] !== req.session.user_id) {
-			// res.render('error', {
-			// 	error: 'You cannot change another user\'s data!',
-			// 	image: '/images/fuck.png',
-			// 	logged_user: req.session.user_id
-			// });
 			res.redirect('/error?error=' + 'You cannot change another user\'s data!' + '&image=' + '/images/fuck.png');
 			return ;
 		}

@@ -25,29 +25,34 @@ function del_user() {
 	fog.style.display = 'none';
 }
 
-function user_listeners() {
-	var del_list = document.getElementsByClassName('del_button');
-	var fog = document.getElementById('fog');
-	var yes = document.getElementById('yes_button');
-	var no = document.getElementById('no_button');
-	var text = document.getElementById('confirm_question');
-
-	for (var i = 0; i < del_list.length; i++) {
-		del_list[i].addEventListener('click', function() {
-			text.innerHTML = 'Do you really want to delete this user?';
-			fog.style.display = 'block';
-			document.getElementById('action').value = 'del_user';
-			document.getElementById('action_data').value = this.id;
-			yes.onclick = del_user;
-			no.onclick = function() {
-				fog.style.display = 'none';
-			}
-		});
-	}
+function change_admin() {
+	return false;
 }
+
+// function user_listeners() {
+// 	var del_list = document.getElementsByClassName('del_button');
+// 	var fog = document.getElementById('fog');
+// 	var yes = document.getElementById('yes_button');
+// 	var no = document.getElementById('no_button');
+// 	var text = document.getElementById('confirm_question');
+
+// 	for (var i = 0; i < del_list.length; i++) {
+// 		del_list[i].addEventListener('click', function() {
+// 			text.innerHTML = 'Do you really want to delete this user?';
+// 			fog.style.display = 'block';
+// 			document.getElementById('action').value = 'del_user';
+// 			document.getElementById('action_data').value = this.id;
+// 			yes.onclick = del_user;
+// 			no.onclick = function() {
+// 				fog.style.display = 'none';
+// 			}
+// 		});
+// 	}
+// }
 
 function post_users(cont, users) {
 	for (var i = 0; i < users.length; i++) {
+		var admin = users[i].admin ? 'checked' : '';
 		cont.innerHTML += '<div class="user_cont">' +
 			'<div class="avatar_wrapper">' +
 				'<img class="avatar" src="' + get_avatar(users[i].photo) + '">' +
@@ -65,7 +70,7 @@ function post_users(cont, users) {
 					'<strong>Active</strong>' +
 				'</div>' +
 				'<div class="tool">' +
-					'<input type="checkbox" id="' + users[i]._id + '" class="user_active" checked="' + users[i].active + '">' +
+					'<input type="checkbox" id="' + users[i]._id + '" class="user_admin" ' + admin + '>' +
 					'<strong>Admin</strong>' +
 				'</div>' +
 				'<div class="tool">' +
@@ -88,6 +93,7 @@ function users_menu() {
 		if (!result.success)
 			cont.innerHTML = result.error;
 		else {
+			console.log(result);
 			button.style['background'] = 'linear-gradient(180deg, #6F9C1B, #8CC13D)';
 			post_users(cont, result.users);
 		}

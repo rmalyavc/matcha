@@ -28,19 +28,16 @@ module.exports = {
 				res.send('Collection removed');
 		});
 	},
-	check_access: function(req, res) {
-		if (!req.session.user_id)
+	check_access: function(req, res, curr_user) {
+		if (!req.session.user_id || !curr_user) {
 			res.redirect('/users/login');
-		User.findById(req.session.user_id, function(err, doc) {
-			if (err || !doc) {
-				res.redirect('/error?error=' + err);
-				return ;
-			}
-			if (!doc.admin) {
-				res.redirect('/error?error=' + 'Access denied' + '&image=' + '/images/forbidden.png');
-				return ;
-			}
-		});
+			return (false);
+		}
+		else if (!curr_user.admin) {
+			res.redirect('/error?image=' + '/images/forbidden.png');
+			return (false);
+		}
+		return (true);
 	},
 	del_user: function(req, res) {
 		User.findByIdAndRemove(req.query['id'], function(err) {
@@ -53,11 +50,8 @@ module.exports = {
 			else {
 				res.send({
 					success: true
-				})
+				});
 			}
 		});
 	}
 }
-
-// res.redirect('/error?error=' + 'You cannot change another user\'s data!' + '&image=' + '/images/fuck.png');
-			// return ;

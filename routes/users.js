@@ -63,7 +63,7 @@ router.get('/profile/:id', function(req, res, next) {
 	});
 });
 
-router.get('/ajax', function(req, res, next) {
+router.get('/ajax', async function(req, res, next) {
 	console.log(req.query);
 	if (req.query['action'] === 'is_unique')
 		user_controller.is_unique(req, res);
@@ -74,7 +74,9 @@ router.get('/ajax', function(req, res, next) {
 	else if (req.query['action'] === 'get_all_users')
 		Admin.get_all_users(req, res);
 	else if (req.query['action'] === 'del_user' && req.query['id']) {
-		// Admin.check_access(req, res);
+		var curr_user = await User.findById(req.session.user_id).exec();
+		if (!Admin.check_access(req, res, curr_user))
+			return ;
 		Admin.del_user(req, res);
 	}
 });

@@ -22,11 +22,13 @@ router.get('/error', function(req, res, next) {
 	});
 });
 
-router.get('/admin', function(req, res, next) {
-	// Admin.check_access(req, res);
+router.get('/admin', async function(req, res, next) {
+	var curr_user = await User.findById(req.session.user_id).exec();
+	if (!Admin.check_access(req, res, curr_user))
+		return ;
 	res.render('admin', {
 		logged_user: req.session.user_id,
-		user_login: req.session.user_login 
+		user_login: req.session.user_login
 	});
 });
 
