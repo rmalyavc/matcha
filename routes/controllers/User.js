@@ -18,7 +18,7 @@ function get_upload_path(id) {
 	if (!id)
 		return (false);
 	var today = new Date();
-	return ('public/uploads/' + id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/');
+	return ('/uploads/' + id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/');
 }
 
 function get_extension(file) {
@@ -96,7 +96,7 @@ module.exports = {
 			res.redirect('/error?error=' + 'You cannot change another user\'s data!' + '&image=' + '/images/fuck.png');
 			return ;
 		}
-		User.findById(data['user_id'], function (err, doc) {
+		User.findById(data['user_id'], function(err, doc) {
 			var error = '';
 			var url = '/users/profile/' + data['user_id'] + '/';
 			if ((err || !doc) && (url += '?err='))
@@ -147,9 +147,9 @@ module.exports = {
 					return ;
 				}
 				else {
-					if (!fs.existsSync(path))
-						shell.mkdir('-p', path);
-					shell.mv(file.path, path + file.filename + get_extension(file));
+					if (!fs.existsSync('public' + path))
+						shell.mkdir('-p', 'public' + path);
+					shell.mv(file.path, 'public' + path + file.filename + get_extension(file));
 					doc.photo.push(new Photo({
 						url: path + file.filename + get_extension(file),
 						avatar: false,
@@ -220,3 +220,4 @@ module.exports = {
 		});
 	}
 }
+

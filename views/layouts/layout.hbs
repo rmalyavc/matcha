@@ -21,6 +21,11 @@
 						if (!result)
 							return ;
 						document.getElementById('profile_link').innerHTML = result.login;
+						if (result.admin) {
+							var cont = document.getElementsByClassName('header_tools')[0];
+							cont.innerHTML = '<img class="header_icon" id="admin_link" onclick="location.href=' + "'/admin'" +
+								'" src="/images/admin.png">' + cont.innerHTML;
+						}
 					});
 				</script>
 			{{ else }}

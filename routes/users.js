@@ -63,7 +63,7 @@ router.get('/profile/:id', function(req, res, next) {
 	});
 });
 
-router.get('/ajax', async function(req, res, next) {
+router.get('/ajax', function(req, res, next) {
 	console.log(req.query);
 	if (req.query['action'] === 'is_unique')
 		user_controller.is_unique(req, res);
@@ -73,23 +73,26 @@ router.get('/ajax', async function(req, res, next) {
 		user_controller.get_user(req.query['id'], res);
 	else if (req.query['action'] === 'get_all_users')
 		Admin.get_all_users(req, res);
-	else if (req.query['action'] === 'del_user' && req.query['id']) {
-		var curr_user = await User.findById(req.session.user_id).exec();
-		if (!Admin.check_access(req, res, curr_user))
-			return ;
-		Admin.del_user(req, res);
-	}
 });
 
-router.post('/ajax_post', upload.any(), function(req, res, next) {
-	// console.log(req.body);
+router.post('/ajax_post', upload.any(), async function(req, res, next) {
 	console.log(req.body['id_list[]']);
-	// console.log(req.files);
 	if (req.body['action'] === 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
 		user_controller.upload(req, res);
 	else if (req.body['action'] === 'get_images' && req.body['id_list[]'] && req.body['id_list[]'].length > 0) {
 		console.log('CONDITION PASSED');
 		user_controller.get_images(req.body['id_list[]'], res);
+	}
+	else if ((req.body['action'] === 'del_user' || req.body['action'] === 'change_admin' || req.body['action'] === 'change_active') && req.body['id']) {
+		var curr_user = await User.findById(req.session.user_id).exec();
+		if (!Admin.check_access(req, res, curr_user))
+			return ;
+		if (req.body['action'] === 'del_user')
+			Admin.del_user(req, res);
+		else if (req.body['action'] === 'change_admin' || req.body['action'] === 'change_active')
+			Admin.change_admin_active(req, res);
+		// else
+		// 	Admin.change_active(req, res);
 	}
 });
 

@@ -44,11 +44,31 @@ function file_listeners() {
 	});
 }
 
+function scroll_listeners() {
+	var prev = document.getElementById('prev');
+	var next = document.getElementById('next');
+
+	if (!prev || !next)
+		return ;
+	prev.addEventListener('click', function() {
+		scroll_preview('left');
+		// cont.scrollLeft -= 30;
+		// console.log(cont.scrollLeft);
+	});
+	next.addEventListener('click', function() {
+		scroll_preview('right');
+		// cont.scrollLeft += 30;
+		
+	});
+}
+
 function set_listeners() {
 	login_listener();
 	email_listener();
 	check_ownership();
 	file_listeners();
+	scroll_listeners();
+	post_images();
 }
 
 set_listeners();

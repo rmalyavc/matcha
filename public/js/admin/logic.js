@@ -6,28 +6,39 @@ function get_avatar(album) {
 	return ('/images/default_avatar.png');
 }
 
-function del_user() {
+function proceed() {
 	var fog = document.getElementById('fog');
 	var action = document.getElementById('action');
 	var user_id = document.getElementById('action_data');
 
-	if (!fog || !action || !user_id || action.value != 'del_user' || user_id.value == '') {
-		console.log('Something went wrong. User is not deleted');
+	if (!fog || !action || !user_id || action.value == '' || user_id.value == '') {
+		console.log('Something went wrong.');
 		fog.style.display = 'none';
 		return ;
 	}
-	$.get('/users/ajax', {action: 'del_user', id: user_id.value}, function(res) {
+	$.post('/users/ajax_post', {action: action.value, id: user_id.value}, function(res) {
 		if (!res.success)
-			console.log(res.error);
-		else
+			window.location = '/error?error=' + err + '&image=/images/error';
+		else {
+			console.log(res);
 			users_menu();
+		}
+	}).catch(function(err) {
+		window.location = '/error?error=' + err + '&image=/images/error';
 	});
+	// $.get('/users/ajax', {action: 'del_user', id: user_id.value}, function(res) {
+	// 	if (!res.success)
+	// 		console.log(res.error);
+	// 	else
+	// 		users_menu();
+	// });
 	fog.style.display = 'none';
 }
 
-function change_admin() {
-	return false;
-}
+// function change_admin() {
+// 	var fog = document.getElementById('fog')
+// 	return false;
+// }
 
 // function user_listeners() {
 // 	var del_list = document.getElementsByClassName('del_button');
@@ -53,6 +64,7 @@ function change_admin() {
 function post_users(cont, users) {
 	for (var i = 0; i < users.length; i++) {
 		var admin = users[i].admin ? 'checked' : '';
+		var active = users[i].active ? 'checked' : '';
 		cont.innerHTML += '<div class="user_cont">' +
 			'<div class="avatar_wrapper">' +
 				'<img class="avatar" src="' + get_avatar(users[i].photo) + '">' +
@@ -66,7 +78,7 @@ function post_users(cont, users) {
 			'</div>' +
 			'<div class="user_tools">' +
 				'<div class="tool">' +
-					'<input type="checkbox" id="' + users[i]._id + '" class="user_active" checked="' + users[i].active + '">' +
+					'<input type="checkbox" id="' + users[i]._id + '" class="user_active" ' + active + '>' +
 					'<strong>Active</strong>' +
 				'</div>' +
 				'<div class="tool">' +

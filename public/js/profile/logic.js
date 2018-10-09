@@ -1,27 +1,44 @@
-// function get_images(id_list) {
+function scroll_preview(direction) {
+	var cont = document.getElementById('preview_cont');
+	var offset;
 
-// }
-
-function post_images(id_list) {
-	var container = document.getElementById('preview_cont');
-
-	console.log('POST IMAGES ENTERED!');
-	console.log(id_list);
-	console.log(container);
-	if (!container)
+	if (!cont || !(offset = cont.offsetWidth))
 		return ;
-	container.innerHTML = '';
-	$.post('/users/ajax_post', {
-		action: 'get_images',
-		id_list: id_list
-	}, function (res, err) {
+	console.log(offset);
+	console.log(direction);
+	var target = direction === 'right' ? cont.scrollLeft + offset : cont.scrollLeft - offset;
+	// cont.scrollLeft = target;
+	console.log(target);
+	console.log(cont.scrollLeft);
+	if (direction === 'right')
+		for (var i = cont.scrollLeft; i < target; i++) {
+			// console.log(i);
+			cont.scrollLeft += 100;
+			console.log(cont.scrollLeft);
+		}
+	else if (direction === 'left')
+		for (var i = cont.scrollLeft; i > target; i--) {
+			cont.scrollLeft -= 100;
+			console.log(cont.scrollLeft);
+		}
 
-	// }).done(function(res) {
-		console.log(res);
-		if (err || !res || res.success === false || !res['images'] || res['images'].length < 1)
+	// cont.scrollLeft += direction == 'right' ? offset : -offset;
+}
+
+function post_images() {
+	var container = document.getElementById('preview_cont');
+	var url = window.location.href;
+	var user_id = url.substring(url.lastIndexOf('/') + 1);
+
+	console.log(url);
+	console.log(user_id);
+
+	$.get('/users/ajax', {id: user_id, action: 'get_user'}, function(res) {
+		if (!res || !res.photo || res.photo.length < 1 || !container)
 			return ;
-		for (var i = 0; i < res['images'].length; i++) {
-			container.innerHTML += '<img class="preview_img" src="' + res['images'][i].url + '">';
+		container.innerHTML = '';
+		for (var i = 0; i < res.photo.length; i++) {
+			container.innerHTML += '<img class="preview_img" src="' + res.photo[i].url + '">';
 		}
 	}).catch(function(err) {
 		console.log(err);
@@ -37,7 +54,6 @@ function upload_image() {
 		console.log('Input\'s not found');
 		return ;
 	}
-	// console.log( $('#upload'));
 	form_data.append('file', $('#upload')[0].files[0]);
 	form_data.append('action', 'upload_photo');
 	form_data.append('user_id', user_id.value);
@@ -54,7 +70,7 @@ function upload_image() {
 			console.log(res);
 			if (res.success === true && res.data.photo && res.data.photo.length > 0) {
 				alert('test!');
-				post_images(res.data.photo);
+				post_images();
 			}
 		}
 		else
@@ -62,11 +78,5 @@ function upload_image() {
 	}).catch(function(err) {
 		alert(err);
 	});
+	input.value = '';
 }
-
-// function get_all_users() {
-// 	$.get('/users/ajax', {action: 'get_all_users'}, function(result) {
-// 		// alert(result);
-// 		console.log(result);
-// 	});
-// }

@@ -60,6 +60,17 @@ a:hover {
 	top: 20%;
 }
 
+#admin_link {
+	height: 120%;
+	top: -10%;
+	min-width: 0;
+	border-radius: 50%;
+}
+
+#admin_link:hover {
+	background-color: #556b2f;
+}
+
 #logout_icon {
 	min-width: 0;
 }
@@ -343,6 +354,7 @@ label, textarea {
 	width: 92%;
 	height: 100%;
 	left: 4%;
+	overflow: hidden;
 	display: flex;
 	align-items: center;
 }
@@ -350,7 +362,7 @@ label, textarea {
 .preview_img {
 	position: relative;
 	width: 18%;
-	margin: 1%;
+	margin-left: 2%;
 	max-height: 100%;
 }
 

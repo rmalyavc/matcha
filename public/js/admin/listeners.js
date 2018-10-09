@@ -6,40 +6,64 @@ function buttons_listeners() {
 	});
 }
 
-function user_listeners() {
-	var del_list = document.getElementsByClassName('del_button');
-	var admin_list = document.getElementsByClassName('user_admin');
+function user_listener(message, action, list) {
 	var fog = document.getElementById('fog');
 	var yes = document.getElementById('yes_button');
 	var no = document.getElementById('no_button');
 	var text = document.getElementById('confirm_question');
 
-	for (var i = 0; i < del_list.length; i++) {
-		del_list[i].addEventListener('click', function() {
-			text.innerHTML = 'Do you really want to delete this user?';
+	for (var i = 0; i < list.length; i++) {
+		list[i].addEventListener('click', function() {
+			text.innerHTML = message;
 			fog.style.display = 'block';
-			document.getElementById('action').value = 'del_user';
+			document.getElementById('action').value = action;
 			document.getElementById('action_data').value = this.id;
-			yes.onclick = del_user;
+			yes.onclick = proceed;
 			no.onclick = function() {
 				fog.style.display = 'none';
 			}
 		});
 	}
+}
 
-	for (var i = 0; i < admin_list.length; i++) {
-		admin_list[i].addEventListener('click', function() {
-			text.innerHTML = 'Do you really want to change admin rights for this user?';
-			fog.style.display = 'block';
-			document.getElementById('action').value = 'change_admin';
-			document.getElementById('action_data').value = this.id;
-			yes.onclick = change_admin;
-			no.onclick = function() {
-				fog.style.display = 'none';
-				users_menu();
-			}
-		});
-	}
+function user_listeners() {
+	var del_list = document.getElementsByClassName('del_button');
+	var admin_list = document.getElementsByClassName('user_admin');
+	var active_list = document.getElementsByClassName('user_active');
+
+	user_listener('Do you really want to delete this user?', 'del_user', del_list);
+	user_listener('Do you really want to change admin rights for this user?', 'change_admin', admin_list);
+	user_listener('Do you really want to deactivate this user?', 'change_active', active_list);
+	// for (var i = 0; i < del_list.length; i++) {
+	// 	del_list[i].addEventListener('click', function() {
+	// 		text.innerHTML = 'Do you really want to delete this user?';
+	// 		fog.style.display = 'block';
+	// 		document.getElementById('action').value = 'del_user';
+	// 		document.getElementById('action_data').value = this.id;
+	// 		yes.onclick = proceed;
+	// 		no.onclick = function() {
+	// 			fog.style.display = 'none';
+	// 		}
+	// 	});
+	// }
+
+	// for (var i = 0; i < admin_list.length; i++) {
+	// 	admin_list[i].addEventListener('click', function() {
+	// 		text.innerHTML = 'Do you really want to change admin rights for this user?';
+	// 		fog.style.display = 'block';
+	// 		document.getElementById('action').value = 'change_admin';
+	// 		document.getElementById('action_data').value = this.id;
+	// 		yes.onclick = proceed;
+	// 		no.onclick = function() {
+	// 			fog.style.display = 'none';
+	// 			// users_menu();
+	// 		}
+	// 	});
+	// }
+
+	// for (var i = 0; i < active.length; i++) {
+
+	// }
 }
 
 function set_listeners() {

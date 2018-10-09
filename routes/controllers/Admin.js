@@ -34,13 +34,13 @@ module.exports = {
 			return (false);
 		}
 		else if (!curr_user.admin) {
-			res.redirect('/error?image=' + '/images/forbidden.png');
+			res.redirect('/error?image=/images/forbidden.png');
 			return (false);
 		}
 		return (true);
 	},
 	del_user: function(req, res) {
-		User.findByIdAndRemove(req.query['id'], function(err) {
+		User.findByIdAndRemove(req.body['id'], function(err) {
 			if (err) {
 				res.send({
 					success: false,
@@ -52,6 +52,34 @@ module.exports = {
 					success: true
 				});
 			}
+		});
+	},
+	change_admin_active: function(req, res) {
+		User.findById(req.body['id'], function(err, doc) {
+			if (err || !doc) {
+				res.send({
+					success: false,
+					error: err
+				});
+				return ;
+			}
+			if (req.body['action'] === 'change_admin') {
+				doc.admin = !doc.admin ? true : false;
+				console.log('Admin is: ' + doc.admin);
+			}
+			else if (req.body['action'] === 'change_active') {
+				doc.active = !doc.active ? true : false;
+				console.log('Active is: ' + doc.active);
+			}
+			doc.save().then(function() {
+				res.send({success: true});
+				return ;
+			}).catch(function(err) {
+				res.send({
+					success: false,
+					error: err
+				});
+			});
 		});
 	}
 }
