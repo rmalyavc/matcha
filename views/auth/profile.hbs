@@ -1,3 +1,25 @@
+<div class="full_size" id="full_size">
+	<img type="button" id="close_full" class="close_button" src="/images/delete.png">
+	<button class="prev_next slider_button" id="prev_slide" type="button">
+		<img src="/images/prev.png" class="prev_next_img">
+	</button>
+	<button class="prev_next slider_button" id="next_slide" type="button">
+		<img src="/images/next.png" class="prev_next_img">
+	</button>
+	<div class="slider_tools">
+		<div class="tools_wrapper">
+			<img class="tool_button" src="/images/like.png">
+		</div>
+	</div>
+	<div class="full_photo" id="full_photo"></div>
+	<div class="preview_wrapper" id="full_preview"></div>
+	<div class="comments">
+		<h2 class="text_header green">Comments</h2>
+		<div class="comment_list" id="comment_list">
+			
+		</div>
+	</div>
+</div>
 <div class="form_wrapper" id="profile_form_wrapper">
 	<form class="login_form" id="profile_form" action="/users/update" method="POST">
 		{{#user}}
@@ -7,7 +29,10 @@
 			<button class="prev_next" id="prev" type="button">
 				<img src="/images/prev.png" class="prev_next_img">
 			</button>
-			<div class="preview_wrapper" id="preview_cont"></div>
+			<input type="hidden" id="delta" value="0">
+			<div class="preview_wrapper" id="preview_cont">
+				
+			</div>
 			<button class="prev_next" id="next" type="button">
 				<img src="/images/next.png" class="prev_next_img">
 			</button>
@@ -31,7 +56,9 @@
 	</form>
 
 </div>
+<script src="https://hammerjs.github.io/dist/hammer.js"></script>
 <script type="text/javascript" src="/js/auth/valid.js"></script>
 <script type="text/javascript" src="/js/profile/valid.js"></script>
 <script type="text/javascript" src="/js/profile/logic.js"></script>
 <script type="text/javascript" src="/js/profile/listeners.js"></script>
+

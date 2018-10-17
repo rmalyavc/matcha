@@ -4,7 +4,6 @@ function login_listener() {
 	if (!login)
 		return ;
 	login.addEventListener('keyup', function() {
-		console.log('Login listener');
 		valid_login(false);
 	});
 }
@@ -44,23 +43,63 @@ function file_listeners() {
 	});
 }
 
+function swipe_listener(cont) {
+	var mc = new Hammer(cont);
+		
+	mc.on('panleft panright panend', function(event) {
+		if (event.type === 'panend') {
+			document.getElementById('delta').value = 0;
+			return ;
+		}
+		scroll_preview(event.deltaX, 0, cont.id);
+	});
+}
+
 function scroll_listeners() {
 	var prev = document.getElementById('prev');
 	var next = document.getElementById('next');
+	var conts = document.getElementsByClassName('preview_wrapper');
+	var close = document.getElementById('close_full');
+	var prev_next = document.getElementsByClassName('prev_next slider_button');
 
-	if (!prev || !next)
-		return ;
 	prev.addEventListener('click', function() {
-		scroll_preview('left');
-		// cont.scrollLeft -= 30;
-		// console.log(cont.scrollLeft);
+		scroll_preview(-1, 500, 'preview_cont');
 	});
 	next.addEventListener('click', function() {
-		scroll_preview('right');
-		// cont.scrollLeft += 30;
-		
+		scroll_preview(0, 500, 'preview_cont');
 	});
+	for (var i = 0; i < conts.length; i++) {
+		swipe_listener(conts[i]);
+	}
+	close.addEventListener('click', function() {
+		hide_full();
+	});
+	for (var i = 0; i < prev_next.length; i++) {
+		prev_next[i].addEventListener('click', function() {
+			change_slide(this.id);
+		});
+	}
 }
+
+function photo_listeners() {
+	var photos = document.getElementsByClassName('img_wrapper');
+
+	for (var i = 0; i < photos.length; i++) {
+		photos[i].addEventListener('click', function() {
+			show_photo(this);
+		});
+	} 
+}
+
+// function full_screen_listeners() {
+// 	var buttons = document.getElementsByClassName('full_screen');
+
+// 	for (var i = 0; i < buttons.length; i++) {
+// 		buttons[i].addEventListener('click', function() {
+// 			full_screen(this.id);
+// 		});
+// 	}
+// }
 
 function set_listeners() {
 	login_listener();
@@ -68,7 +107,8 @@ function set_listeners() {
 	check_ownership();
 	file_listeners();
 	scroll_listeners();
-	post_images();
+	// full_screen_listeners();
+	post_images('preview_cont', 'img_wrapper');
 }
 
 set_listeners();
