@@ -66,21 +66,6 @@ function upload_image() {
 	input.value = '';
 }
 
-// function draw_full() {
-	
-
-	
-// 	fog.innerHTML = '';
-// 	fog.style.display = 'block';
-// 	cont.style.display = 'block';
-// }
-
-// function get_url(id) {
-// 	var img = document.getElementById(id);
-// 	style = img.currentStyle || window.getComputedStyle(img, false);
-// 	return (style.backgroundImage.slice(4, -1).replace(/"/g, ""));
-// }
-
 function hide_full() {
 	document.getElementById('fog').style.display = 'none';
 	document.getElementById('full_size').style.display = 'none';
@@ -101,6 +86,7 @@ function show_photo(elem) {
 	cont.style.display = 'block';
 	full_photo.style.backgroundImage = elem.style.backgroundImage;
 	full_photo.setAttribute('name', elem.id);
+	comments();
 }
 
 function change_slide(elem_id) {
@@ -118,12 +104,79 @@ function change_slide(elem_id) {
 	}
 }
 
-// function full_screen(id) {
-// 	var full = document.getElementById('full_photo');
-// 	var minimize = document.getElementById('minimize');
 
-// 	// if (id === 'full_screen') {
-// 	// 	full.style
-// 	// }
-// }
-// full_photo.setAttribute('name', elem.id);
+// $.post('/users/ajax_post', {action: action.value, id: user_id.value}, function(res) {
+// 		if (!res.success)
+// 			window.location = '/error?error=' + err + '&image=/images/error';
+// 		else {
+// 			console.log(res);
+// 			users_menu();
+// 		}
+// 	}).catch(function(err) {
+// 		window.location = '/error?error=' + err + '&image=/images/error';
+// 	});
+
+function draw_comment(comment, author) {
+	var cont = document.getElementById('comment_list');
+
+	cont.innerHTML += '<div class="comment">' +
+		'<div class="avatar" id="avatar" style="background-image: url(' + "'" + get_avatar(author.photo) + "'" +
+		');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>' +
+		'<div class="comment_wrapper">' +
+			'<p>' + author.login + '</p>' +
+			'<p>' + comment.text + '</p>' +
+			'<span>' + comment.time + '</span>' +
+		'</div>' +
+	'</div>';
+}
+
+
+function draw_comments(comms) {
+	$.post('/users/ajax_post', {action: 'get_users', authors: get_authors(comms)}, function(res) {
+		console.log(res);
+		if (!res.success)
+			console.log(res.error);
+		else {
+			document.getElementById('comment_list').innerHTML = '';
+			for (var i = 0; i < comms.length; i++) {
+				draw_comment(comms[i], get_elem(comms[i].author, res.data));
+			}
+		}
+	});
+}
+
+function comments() {
+	var photo_id = document.getElementById('full_photo').getAttribute('name');
+
+	$.get('/users/ajax', {photo_id: photo_id, action: 'get_comments'}, function(res) {
+		if (res.success && res.data && res.data.length > 0)
+			draw_comments(res.data);
+		else
+			console.log(res.error);
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
+
+function add_comment() {
+	var url = window.location.href;
+	var user_id = url.substring(url.lastIndexOf('/') + 1);
+	var photo = document.getElementById('full_photo');
+	var input = document.getElementById('comment_input');
+
+	if (!input || !photo || input.value == '')
+		return ;
+	$.get('/users/ajax', {
+		photo_id: photo.getAttribute('name'),
+		owner_id: user_id,
+		text: input.value,
+		action: 'add_comment'
+	}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else
+			comments();
+	}).catch(function(err) {
+		console.log(err);
+	});
+}

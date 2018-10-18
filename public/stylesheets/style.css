@@ -123,6 +123,10 @@ a:hover {
 	text-align: center;
 }
 
+.comments .text_header {
+	font-size: 3vh;
+}
+
 #form_header {
 	color: #82B436;
 }
@@ -195,6 +199,16 @@ a:hover {
 	height: 6%;
 	left: unset;
 	right: 4%;
+}
+
+.comment_input {
+	position: relative;
+	width: 97%;
+	height: 23%;
+	margin-top: 0.5%;
+	border: 2px solid rgba(0,0,0,0.1);
+	font-size: 70%;
+	/*left: -0.5%;*/
 }
 
 #confirm_upload {
@@ -340,10 +354,11 @@ label, textarea {
 .slider_button {
 	width: 3%;
 	height: 79.7%;
+	background-color: rgba(200,200,200,0.1);
 }
 
 .slider_button:hover {
-	background-color: rgba(200,200,200,0.1);
+	background-color: rgba(200,200,200,0.2);
 }
 
 #prev {
@@ -471,9 +486,10 @@ label, textarea {
 }
 
 .avatar {
-	position: relative;
-	max-height: 100%;
-	max-width: 100%;
+	position: absolute;
+	height: 90%;
+	width: 20%;
+	top: 5%;
 }
 
 .user_info {
@@ -539,7 +555,7 @@ label, textarea {
 	top: 0;
 	left: 0;
 	z-index: 2;
-	background: rgba(0,0,0,0.95);
+	background: rgba(0,0,0,0.9);
 	display: none;
 }
 
@@ -581,6 +597,7 @@ label, textarea {
 	height: 115%;
 	left: 10%;
 	z-index: 3;
+	background-color: white;
 	/*background: rgba(0,0,0,0.2);*/
 
 	display: none;
@@ -600,10 +617,16 @@ label, textarea {
 
 .close_button {
 	position: absolute;
-	width: 2%;
-	top: 1%;
-	right: 1%;
+	width: 2.5%;
+	top: 1.5%;
+	right: 0.5%;
 	z-index: 3;
+	background-color: rgba(200,200,200,0.1);
+	border-radius: 50%;
+}
+
+.close_button:hover {
+	background-color: rgba(200,200,200,0.4);
 }
 
 .slider_tools {
@@ -659,4 +682,21 @@ label, textarea {
 	height: 60%;
 	width: 99%;
 	border: 1px solid rgba(0,0,0,0.1);
+	overflow-y: auto;
+}
+
+.comment {
+	position: relative;
+	width: 98%;
+	height: 25%;
+	left: 1%;
+	font-size: 70%;
+	/*border: 1px solid red;*/
+}
+
+.comment_wrapper {
+	position: absolute;
+	width: 78%;
+	height: 100%;
+	right: 0;
 }

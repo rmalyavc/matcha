@@ -73,10 +73,14 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_user(req.query['id'], res);
 	else if (req.query['action'] === 'get_all_users')
 		Admin.get_all_users(req, res);
+	else if (req.query['action'] === 'add_comment' && req.query['photo_id'] && req.query['owner_id'] && req.query['text'])
+		user_controller.add_comment(req, res);
+	else if (req.query['action'] === 'get_comments' && req.query['photo_id'])
+		user_controller.get_comments(req, res);
 });
 
 router.post('/ajax_post', upload.any(), async function(req, res, next) {
-	console.log(req.body['id_list[]']);
+	console.log(req.body['authors[]']);
 	if (req.body['action'] === 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
 		user_controller.upload(req, res);
 	else if (req.body['action'] === 'get_images' && req.body['id_list[]'] && req.body['id_list[]'].length > 0) {
@@ -94,6 +98,8 @@ router.post('/ajax_post', upload.any(), async function(req, res, next) {
 		// else
 		// 	Admin.change_active(req, res);
 	}
+	else if (req.body['action'] === 'get_users' && req.body['authors[]'])
+		user_controller.get_users(req, res);
 });
 
 module.exports = router;

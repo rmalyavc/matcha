@@ -88,7 +88,17 @@ function photo_listeners() {
 		photos[i].addEventListener('click', function() {
 			show_photo(this);
 		});
-	} 
+	}
+}
+
+function comment_listeners() {
+	var input = document.getElementById('comment_input');
+
+	input.addEventListener('keyup', function(event) {
+		console.log('Key is: ' + event.keyCode);
+		if (event.keyCode == 13 && input.value != '')
+			add_comment();
+	});
 }
 
 // function full_screen_listeners() {

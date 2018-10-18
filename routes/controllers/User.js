@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/test', { useNewUrlParser: true });
 var User = require('../models/User.js');
 var Photo = require('../models/Photo.js');
+var Comment = require('../models/COmment.js');
 var user_validator = require('../validators/User.js');
 var hash = require('password-hash');
 var fs = require('fs');
@@ -218,6 +219,82 @@ module.exports = {
 				});
 			}
 		});
+	},
+	add_comment: function(req, res) {
+		if (!req.session.user_id) {
+			res.send({
+				success: false,
+				error: 'No logged user'
+			});
+			return ;
+		}
+		var comment = new Comment({
+			author: req.session.user_id,
+			photo: req.query.photo_id,
+			owner: req.query.owner_id,
+			text: req.query.text
+		});
+		comment.save().then(function(rec) {
+			res.send({success: true});
+			return ;
+		}).catch(function(err) {
+			res.send({
+				success: false,
+				error: err
+			});
+		});
+	},
+	get_comments: function(req, res) {
+		Comment.find({photo: req.query.photo_id}, function(err, docs) {
+			if (err || !docs) {
+				res.send({
+					success: false,
+					error: err
+				});
+				return ;
+			}
+			res.send({
+				success: true,
+				data: docs
+			});
+		});
+	},
+	get_users: function(req, res) {
+		console.log(req.body['authors[]']);
+		User.find({_id: { $in: req.body['authors[]']}}, function(err, docs) {
+			if (err || !docs || docs.length < 1) {
+				res.send({
+					success: false,
+					error: err
+				});
+				return ;
+			}
+			res.send({
+				success: true,
+				data: docs
+			});
+		});
 	}
 }
-
+// var new_user = {
+// 				login: data['login'],
+// 				password: hash.generate(data['password'], {algorithm: 'sha256'}),
+// 				email: data['email']
+// 			}
+// 			if (data['login'] === 'root')
+// 				new_user['admin'] = true;
+// 			user = new User(new_user);
+// 			user.save().then(function(record){
+// 				req.session.user_id = record.id;
+// 				req.session.user_login = record.login;
+// 				res.render('./auth/valid', {
+// 					registred: true,
+// 					login: new_user['login']
+// 				});
+// 			}, function(err) {
+// 				console	.log('test   ' + err);
+// 				res.render('./auth/valid', {
+// 					registred: false,
+// 					error: err
+// 				});
+// 			});
