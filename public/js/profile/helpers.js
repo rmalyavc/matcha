@@ -22,3 +22,14 @@ function get_avatar(album) {
 	}
 	return ('/images/avatar.png');
 }
+
+function up_to_date() {
+	var full = document.getElementById('full_preview');
+	var mini = document.getElementById('preview_cont');
+
+	if (!full || !mini)
+		return (false);
+	var full_list = full.getElementsByClassName('img_wrapper long');
+	var mini_list = mini.getElementsByClassName('img_wrapper');
+	return (full_list != null && mini_list != null && full_list.length === mini_list.length);
+}

@@ -1,3 +1,17 @@
+<div class="full_size" id="choose_avatar">
+	<div class="fog" id="avatar_fog">
+		<div class="confirm_window">
+			<h2 class="text_header error_text" id="confirm_question">Do you really want to choose this image?</h2>
+			<!-- <input type="hidden" id="action" value=""> -->
+			<!-- <input type="hidden" id="avatar_id" value=""> -->
+			<button class="confirm_button" id="yes_avatar"><strong>Yes</strong></button>
+			<button class="confirm_button" id="no_avatar"><strong>No</strong></button>
+		</div>
+	</div>
+	<img id="close_avatar" class="close_button" src="/images/delete.png">
+	<p class="text_header green">Choose photo for avatar</p>
+	<div class="choose_avatar_wrapper" id="choose_avatar_wrapper"></div>
+</div>
 <div class="full_size" id="full_size">
 	<img type="button" id="close_full" class="close_button" src="/images/delete.png">
 	<button class="prev_next slider_button" id="prev_slide" type="button">
@@ -38,11 +52,13 @@
 				<img src="/images/next.png" class="prev_next_img">
 			</button>
 		</div>
+
 		<label for="upload">New image</label><input type="file" class="form_field profile_input" name="upload" id="upload">
 		<button type="button" id="confirm_upload">
 			<img src="/images/ok.png" class="ok_img">
 		</button><br>
 		<br><input type="hidden" name="user_id" id="user_id" value="{{ id }}">
+		<div class="profile_avatar_wrapper"><label for="avatar">Avatar:</label><img class="profile_avatar" id="profile_avatar" src="/images/avatar.png"></div>
 		<label for="login">Login:</label><input type="text" class="form_field profile_input" id="login" name="login" minlength="4" value="{{ login }}" required><br>
 		<span class="error profile_error" id="login_error">User already exists</span>
 		<label for="first_name">First Name:</label><input type="text" class="form_field profile_input" id="first_name" name="first_name" value="{{ first_name }}" minlength="3"><br>
@@ -55,7 +71,6 @@
 			<button type="submit" class="submit_button" id="save_changes"><strong class="button_text">Save</strong></button>
 		{{/if}}
 	</form>
-
 </div>
 <script src="https://hammerjs.github.io/dist/hammer.js"></script>
 <script type="text/javascript" src="/js/auth/valid.js"></script>

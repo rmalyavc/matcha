@@ -182,6 +182,12 @@ a:hover {
 	text-align: right;
 }
 
+.profile_avatar {
+	position: relative;
+	height: 10%;
+	left: 0;
+}
+
 .form_field {
 	position: relative;
 	width: 90%;
@@ -199,6 +205,21 @@ a:hover {
 	height: 6%;
 	left: unset;
 	right: 4%;
+}
+
+.profile_avatar_wrapper {
+	position: relative;
+	width: 70%;
+	height: 10%;
+	margin-bottom: 15px;
+	left: 15.8%;
+	display: flex;
+	align-items: center;
+}
+
+.profile_avatar {
+	position: relative;
+	height: 100%;
 }
 
 .comment_input {
@@ -239,6 +260,7 @@ label {
 	font-size: 0.7rem;
 	font-weight: 550;
 	margin-right: 6%;
+	display: inline;
 }
 
 label, textarea {
@@ -394,7 +416,6 @@ label, textarea {
 	bottom: 0;
 	height: 20%;
 	border-top: 1px solid rgba(0,0,0,0.3);
-	/*border: 1px solid green;*/
 }
 
 .preview_img {
@@ -416,6 +437,16 @@ label, textarea {
 	margin-right: 0.5%;
 	height: 99%;
 	top: 0;
+}
+
+.avatar_list {
+	position: relative;
+	height: 26%;
+	width: 18%;
+	min-width: unset;
+	display: inline-block;
+	margin: 1%;
+	/*top: 5%;*/
 }
 
 .long {
@@ -635,16 +666,9 @@ label, textarea {
 	height: 8%;
 	top: 72%;
 	left: 3%;
-	/*border-radius: 3px 3px 0 0;*/
 	z-index: 1;
-	/*background-color: rgba(0,0,0,0.5);*/
-	/*background: linear-gradient(0deg, #ffffff, #cccccc);*/
 	opacity: 1;
 }
-
-/*.slider_tools:hover {
-	opacity: 1;
-}*/
 
 .tools_wrapper {
 	position: relative;
@@ -654,7 +678,6 @@ label, textarea {
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
-	/*border: 1px solid yellow;*/
 }
 
 .tool_button {
@@ -669,7 +692,7 @@ label, textarea {
 
 .comments {
 	position: absolute;
-	width: 23%;
+	width: 22.5%;
 	height: 80%;
 	top: 0;
 	right: 0;
@@ -691,7 +714,6 @@ label, textarea {
 	height: 25%;
 	left: 1%;
 	font-size: 70%;
-	/*border: 1px solid red;*/
 }
 
 .comment_wrapper {
@@ -699,4 +721,21 @@ label, textarea {
 	width: 78%;
 	height: 100%;
 	right: 0;
+	display: flex;
+	align-items: center;
+}
+
+.comment_author {
+	font-size: 160%;
+}
+
+.comment_text, .comment_time {
+	font-size: 120%;
+}
+
+.choose_avatar_wrapper {
+	position: absolute;
+	width: 100%;
+	height: 93%;
+	bottom: 0;
 }

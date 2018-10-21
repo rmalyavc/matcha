@@ -94,11 +94,44 @@ function photo_listeners() {
 function comment_listeners() {
 	var input = document.getElementById('comment_input');
 
-	input.addEventListener('keyup', function(event) {
-		console.log('Key is: ' + event.keyCode);
-		if (event.keyCode == 13 && input.value != '')
+	input.addEventListener('keypress', function(event) {
+		if (event.keyCode == 13 && input.value != '') {
 			add_comment();
+			input.value = '';
+		}
 	});
+}
+
+function avatar_listener() {
+	var avatar = document.getElementById('profile_avatar');
+	var url = window.location.href;
+	var user_id = url.substring(url.lastIndexOf('/') + 1);
+	var close = document.getElementById('close_avatar');
+	var choose_win = document.getElementById('choose_avatar');
+
+	close.addEventListener('click', function() {
+		choose_win.style.display = 'none';
+	});
+	$.get('/users/ajax', {action: 'is_owner', id: user_id}, function(res) {
+		if (res) {
+			avatar.addEventListener('click', function() {
+				choose_avatar();
+			});
+		}
+	});
+}
+
+function avatar_list_listeners() {
+	var list = document.getElementsByClassName('avatar_list');
+
+	// if (!list || list.length < 1)
+	// 	return ;
+	for (var i = 0; i < list.length; i++) {
+		console.log(i);
+		list[i].addEventListener('click', function() {
+			set_avatar(this);
+		});
+	}
 }
 
 // function full_screen_listeners() {
@@ -117,7 +150,8 @@ function set_listeners() {
 	check_ownership();
 	file_listeners();
 	scroll_listeners();
-	// full_screen_listeners();
+	comment_listeners();
+	avatar_listener();
 	post_images('preview_cont', 'img_wrapper');
 }
 

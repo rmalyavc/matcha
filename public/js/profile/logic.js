@@ -77,7 +77,8 @@ function show_photo(elem) {
 	var cont = document.getElementById('full_size');
 	var fog = document.getElementById('fog');
 
-	if (photos.length < 1) {
+	console.log('Up to date is: ' + up_to_date());
+	if (!up_to_date()) {
 		post_images('full_preview', 'img_wrapper long');
 		photos = document.getElementsByClassName('img_wrapper long');
 		fog.innerHTML = '';
@@ -99,6 +100,7 @@ function change_slide(elem_id) {
 			console.log('I = ' + i + '\n Add = ' + add);
 			full.style.backgroundImage = photos[i + add].style.backgroundImage;
 			full_photo.setAttribute('name', photos[i + add].id);
+			comments();
 			return ;
 		}
 	}
@@ -119,13 +121,16 @@ function change_slide(elem_id) {
 function draw_comment(comment, author) {
 	var cont = document.getElementById('comment_list');
 
+	var date = new Date(comment.time);
 	cont.innerHTML += '<div class="comment">' +
 		'<div class="avatar" id="avatar" style="background-image: url(' + "'" + get_avatar(author.photo) + "'" +
 		');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>' +
 		'<div class="comment_wrapper">' +
-			'<p>' + author.login + '</p>' +
-			'<p>' + comment.text + '</p>' +
-			'<span>' + comment.time + '</span>' +
+			'<div>' +
+				'<p class="comment_author">' + author.login + '</p>' +
+				'<p class="comment_text">' + comment.text + '</p>' +
+				'<p class="comment_time">' + date.toLocaleString(); + '</p>' +
+			'</div>' +
 		'</div>' +
 	'</div>';
 }
@@ -133,11 +138,10 @@ function draw_comment(comment, author) {
 
 function draw_comments(comms) {
 	$.post('/users/ajax_post', {action: 'get_users', authors: get_authors(comms)}, function(res) {
-		console.log(res);
 		if (!res.success)
 			console.log(res.error);
 		else {
-			document.getElementById('comment_list').innerHTML = '';
+			
 			for (var i = 0; i < comms.length; i++) {
 				draw_comment(comms[i], get_elem(comms[i].author, res.data));
 			}
@@ -148,10 +152,11 @@ function draw_comments(comms) {
 function comments() {
 	var photo_id = document.getElementById('full_photo').getAttribute('name');
 
+	document.getElementById('comment_list').innerHTML = '';
 	$.get('/users/ajax', {photo_id: photo_id, action: 'get_comments'}, function(res) {
 		if (res.success && res.data && res.data.length > 0)
 			draw_comments(res.data);
-		else
+		else if (res.error)
 			console.log(res.error);
 	}).catch(function(err) {
 		console.log(err);
@@ -178,5 +183,38 @@ function add_comment() {
 			comments();
 	}).catch(function(err) {
 		console.log(err);
+	});
+}
+
+function choose_avatar() {
+	var cont = document.getElementById('choose_avatar');
+
+	post_images('choose_avatar_wrapper', 'avatar_list');
+	cont.style.display = 'block';
+	console.log(document.getElementsByClassName('avatar_list'));
+	avatar_list_listeners();
+	// set_avatar(elem);
+}
+
+function set_avatar(elem) {
+	var fog = document.getElementById('avatar_fog');
+	var yes = document.getElementById('yes_avatar');
+	var no = document.getElementById('no_avatar');
+	var cont = document.getElementById('choose_avatar');
+	var url = window.location.href;
+	var user_id = url.substring(url.lastIndexOf('/') + 1);
+
+	no.addEventListener('click', function() {
+		fog.style.display = 'none';
+	});
+	yes.addEventListener('click', function() {
+		$.get('/users/ajax', {action: set_avatar, user_id: user_id, photo_id: elem.id}, function(res) {
+			if (!res.success) {
+				console.log(res.error);
+				return ;
+			}
+			fog.style.display = 'none';
+			cont.style.display = 'none';
+		});
 	});
 }

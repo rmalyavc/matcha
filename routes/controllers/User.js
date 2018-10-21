@@ -274,6 +274,26 @@ module.exports = {
 				data: docs
 			});
 		});
+	},
+	set_avatar: function(req, res) {
+		User.findById(req.query['user_id'], function(doc) {
+			if (!doc) {
+				res.send({
+					success: false,
+					error: 'User is not found', 
+				});
+				return ;
+			}
+			for (var i = 0; i < doc.photo.length; i++) {
+				if (doc.photo[i].avatar === req.query['photo_id'])
+					doc.photo[i].avatar = true;
+				else
+					doc.photo[i].avatar = false;
+			}
+			res.send({success: true});
+		}).catch(function(err) {
+			res.send({success: false, error: err});
+		});
 	}
 }
 // var new_user = {
