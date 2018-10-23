@@ -90,7 +90,6 @@ router.post('/ajax_post', upload.any(), async function(req, res, next) {
 	if (req.body['action'] === 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
 		user_controller.upload(req, res);
 	else if (req.body['action'] === 'get_images' && req.body['id_list[]'] && req.body['id_list[]'].length > 0) {
-		console.log('CONDITION PASSED');
 		user_controller.get_images(req.body['id_list[]'], res);
 	}
 	else if ((req.body['action'] === 'del_user' || req.body['action'] === 'change_admin' || req.body['action'] === 'change_active') && req.body['id']) {
@@ -101,8 +100,6 @@ router.post('/ajax_post', upload.any(), async function(req, res, next) {
 			Admin.del_user(req, res);
 		else if (req.body['action'] === 'change_admin' || req.body['action'] === 'change_active')
 			Admin.change_admin_active(req, res);
-		// else
-		// 	Admin.change_active(req, res);
 	}
 	else if (req.body['action'] === 'get_users' && req.body['authors[]'])
 		user_controller.get_users(req, res);

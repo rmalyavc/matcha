@@ -286,14 +286,10 @@ module.exports = {
 				return ;
 			}
 			for (var i = 0; i < doc.photo.length; i++) {
-				if (doc.photo[i]._id == req.query['photo_id']) {
-					console.log('IF WORKED');
+				if (doc.photo[i]._id == req.query['photo_id'])
 					doc.photo[i].avatar = true;
-				}
-				else {
-					console.log('ELSE WORKED');
+				else
 					doc.photo[i].avatar = false;
-				}
 			}
 			doc.markModified('photo');
 			doc.save().then(function(doc) {
