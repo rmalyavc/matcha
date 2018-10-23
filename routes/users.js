@@ -64,6 +64,7 @@ router.get('/profile/:id', function(req, res, next) {
 });
 
 router.get('/ajax', function(req, res, next) {
+	console.log('Query is:');
 	console.log(req.query);
 	if (req.query['action'] === 'is_unique')
 		user_controller.is_unique(req, res);
@@ -77,8 +78,11 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.add_comment(req, res);
 	else if (req.query['action'] === 'get_comments' && req.query['photo_id'])
 		user_controller.get_comments(req, res);
-	else if (req.query['action'] === 'set_avatar' && req.query['photo_id'] && req.query['user_id'] && req.query['user_id'] === req.session.user_id)
+	else if (req.query['action'] === 'set_avatar' && req.query['photo_id'] && req.query['user_id'] && req.query['user_id'] === req.session.user_id) {
 		user_controller.set_avatar(req, res);
+	}
+	else if (req.query['action'] === 'like_photo' && req.query['photo_id'] && req.query['user_id'])
+		user.controller.like_photo(req, res);
 });
 
 router.post('/ajax_post', upload.any(), async function(req, res, next) {

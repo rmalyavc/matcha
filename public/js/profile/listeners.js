@@ -124,14 +124,19 @@ function avatar_listener() {
 function avatar_list_listeners() {
 	var list = document.getElementsByClassName('avatar_list');
 
-	// if (!list || list.length < 1)
-	// 	return ;
 	for (var i = 0; i < list.length; i++) {
-		console.log(i);
 		list[i].addEventListener('click', function() {
-			set_avatar(this);
+			set_avatar(this.id);
 		});
 	}
+}
+
+function like_listeners() {
+	var like = document.getElementById('like_button');
+
+	like.addEventListener('click', function() {
+		like_photo();
+	});
 }
 
 // function full_screen_listeners() {
@@ -152,6 +157,8 @@ function set_listeners() {
 	scroll_listeners();
 	comment_listeners();
 	avatar_listener();
+	draw_avatar();
+	like_listeners();
 	post_images('preview_cont', 'img_wrapper');
 }
 

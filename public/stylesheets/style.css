@@ -610,11 +610,11 @@ label, textarea {
 	bottom: 20%;
 }
 
-#yes_button {
+#yes_button, #yes_avatar {
 	left: 10%;
 }
 
-#no_button {
+#no_button, #no_avatar {
 	right: 10%;
 }
 

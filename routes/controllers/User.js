@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/test', { useNewUrlParser: true });
 var User = require('../models/User.js');
 var Photo = require('../models/Photo.js');
-var Comment = require('../models/COmment.js');
+var Comment = require('../models/Comment.js');
+var Like = require('../models/Like.js');
 var user_validator = require('../validators/User.js');
 var hash = require('password-hash');
 var fs = require('fs');
@@ -276,26 +277,39 @@ module.exports = {
 		});
 	},
 	set_avatar: function(req, res) {
-		User.findById(req.query['user_id'], function(doc) {
-			if (!doc) {
+		User.findById(req.query['user_id'], function(err, doc) {
+			if (!doc || err) {
 				res.send({
 					success: false,
-					error: 'User is not found', 
+					error: err ? err : 'User is not found', 
 				});
 				return ;
 			}
 			for (var i = 0; i < doc.photo.length; i++) {
-				if (doc.photo[i].avatar === req.query['photo_id'])
+				if (doc.photo[i]._id == req.query['photo_id']) {
+					console.log('IF WORKED');
 					doc.photo[i].avatar = true;
-				else
+				}
+				else {
+					console.log('ELSE WORKED');
 					doc.photo[i].avatar = false;
+				}
 			}
-			res.send({success: true});
-		}).catch(function(err) {
-			res.send({success: false, error: err});
+			doc.markModified('photo');
+			doc.save().then(function(doc) {
+				res.send({success: true});
+				return ;	
+			}).catch(function(err) {
+				res.send({succes: false, error: err});
+			});
 		});
+	},
+	like_photo: function(req, res) {
+		console.log(req.query);
+		// Like.find()
 	}
 }
+
 // var new_user = {
 // 				login: data['login'],
 // 				password: hash.generate(data['password'], {algorithm: 'sha256'}),

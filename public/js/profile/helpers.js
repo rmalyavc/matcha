@@ -33,3 +33,11 @@ function up_to_date() {
 	var mini_list = mini.getElementsByClassName('img_wrapper');
 	return (full_list != null && mini_list != null && full_list.length === mini_list.length);
 }
+
+function get_avatar(album) {
+	for (var i = 0; i < album.length; i++) {
+		if (album[i].avatar === true)
+			return (album[i].url);
+	}
+	return ('/images/default_avatar.png');
+}

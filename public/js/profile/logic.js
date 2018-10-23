@@ -191,12 +191,15 @@ function choose_avatar() {
 
 	post_images('choose_avatar_wrapper', 'avatar_list');
 	cont.style.display = 'block';
-	console.log(document.getElementsByClassName('avatar_list'));
-	avatar_list_listeners();
-	// set_avatar(elem);
+	var interval_id = setInterval(function() {
+		if (document.getElementsByClassName('avatar_list').length > 0) {
+			avatar_list_listeners();
+			clearInterval(interval_id);
+		}
+	}, 100);
 }
 
-function set_avatar(elem) {
+function set_avatar(elem_id) {
 	var fog = document.getElementById('avatar_fog');
 	var yes = document.getElementById('yes_avatar');
 	var no = document.getElementById('no_avatar');
@@ -204,17 +207,44 @@ function set_avatar(elem) {
 	var url = window.location.href;
 	var user_id = url.substring(url.lastIndexOf('/') + 1);
 
+	fog.style.display = 'block';
 	no.addEventListener('click', function() {
 		fog.style.display = 'none';
 	});
-	yes.addEventListener('click', function() {
-		$.get('/users/ajax', {action: set_avatar, user_id: user_id, photo_id: elem.id}, function(res) {
+	yes.onclick = function() {
+		$.get('/users/ajax', {action: 'set_avatar', user_id: user_id, photo_id: elem_id}, function(res) {
+			console.log(res);
 			if (!res.success) {
 				console.log(res.error);
 				return ;
 			}
 			fog.style.display = 'none';
 			cont.style.display = 'none';
+			draw_avatar();
+		}).catch(function(err) {
+			console.log(err);
 		});
+	};
+}
+
+function draw_avatar() {
+	var url = window.location.href;
+	var user_id = url.substring(url.lastIndexOf('/') + 1);
+	var avatar = document.getElementById('profile_avatar');
+
+	$.get('/users/ajax', {action: 'get_user', id: user_id}, function(res) {
+		console.log(res);
+		if (!res) {
+			console.log('Cannot get user');
+			return;
+		}
+		avatar.src = get_avatar(res.photo);
 	});
+}
+
+function like_photo() {
+	var photo = document.getElementById('full_photo');
+	var button = document.getElementById('like_button');
+
+	// TODO
 }
