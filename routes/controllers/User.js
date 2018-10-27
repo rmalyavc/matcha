@@ -111,6 +111,7 @@ module.exports = {
 				doc.about = data['about'];
 				doc.save().then(function() {
 					res.redirect(url);
+					return ;
 				}, function(err) {
 					res.redirect(url + '?err=' + err);
 				}).catch(function(error_catch) {
@@ -301,8 +302,88 @@ module.exports = {
 		});
 	},
 	like_photo: function(req, res) {
-		console.log(req.query);
-		// Like.find()
+		if (!req.session.user_id || req.session.user_id == '') {
+			res.send({success: false, error: 'No logged user'});
+			return ;
+		}
+		Like.deleteMany({author: req.session.user_id, photo_id: req.query['photo_id']}, function(err, result) {
+			if (err)
+				res.send({success: false, error: err});
+			else if (result.n > 0)
+				res.send({success: true, res: result});
+			else {
+				var like = new Like({author: req.session.user_id, owner: req.query['user_id'], photo_id: req.query['photo_id']});
+				like.save().then(function(rec) {
+					res.send({success: true, res: result});
+					return ;
+				}).catch(function(err) {
+					res.send({success: false, error: err});
+				});
+			}
+			return ;
+		}).catch(function(err) {
+			res.send({success: false, error: err});
+		});
+	},
+	get_likes: function(req, res) {
+		Like.find({photo_id: req.query['photo_id']}, function(err, docs) {
+			if (err) {
+				res.send({success: false, error: err});
+				return ;
+			}
+			var liked = false;
+			for (var i = 0; i < docs.length; i++) {
+				console.log('I = ' + i + ' Author is: ' + docs[i].author + ' Logged user is: ' + req.session.user_id);
+				if (docs[i].author == req.session.user_id && (liked = true))
+					break ;
+			}
+			res.send({success: true, qty: docs.length, liked: liked});
+		})
+	},
+	del_photo: function(req, res) {
+		User.findById(req.session.user_id, function(err, doc) {
+			if (err || !doc) {
+				res.send({
+					success: false, 
+					error: err ? err : 'User is not found'
+				});
+				return ;
+			}
+			var i = -1;
+			while (++i < doc.photo.length) {
+				if (doc.photo[i]._id == req.body['photo_id'])
+					break ;
+			}
+			if (i == doc.photo.length || doc.photo.length == 0) {
+				res.send({success: false, error: 'Photo is not found'});
+				return ;
+			}
+			fs.unlink('./public' + doc.photo[i].url, function(err) {
+				if (err) {
+					res.send({success: false, err: 'Cannot delete the file'});
+					return ;
+				}
+			});
+			doc.photo.splice(i, 1);
+			doc.markModified('photo');
+			doc.save().then(function(doc) {
+				Comment.remove({photo: req.body['photo_id']}, function(err) {
+					if (err) {
+						res.send({success: false, error: err});
+						return ;
+					}
+					Like.remove({photo_id: req.body['photo_id']}, function(err) {
+						if (err) {
+							res.send({success: false, error: err});
+							return ;
+						}
+						res.send({success: true});
+					});
+				});
+			}).catch(function(err) {
+				res.send({success: false, error: err});
+			});
+		});
 	}
 }
 

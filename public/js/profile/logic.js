@@ -1,3 +1,6 @@
+var url = window.location.href;
+var user_id = url.substring(url.lastIndexOf('/') + 1);
+
 function scroll_preview(offset, timeout, cont_id) {
 	var cont = document.getElementById(cont_id);
 	var delta = parseInt(document.getElementById('delta').value);
@@ -15,8 +18,6 @@ function scroll_preview(offset, timeout, cont_id) {
 
 function post_images(cont_id, type) {
 	var cont = document.getElementById(cont_id);
-	var url = window.location.href;
-	var user_id = url.substring(url.lastIndexOf('/') + 1);
 
 	$.get('/users/ajax', {id: user_id, action: 'get_user'}, function(res) {
 		if (!res || !res.photo || res.photo.length < 1 || !cont)
@@ -34,7 +35,6 @@ function post_images(cont_id, type) {
 
 function upload_image() {
 	var input = document.getElementById('upload');
-	var user_id = document.getElementById('user_id');
 	var form_data = new FormData();
 
 	if (!input || !user_id) {
@@ -43,7 +43,7 @@ function upload_image() {
 	}
 	form_data.append('file', $('#upload')[0].files[0]);
 	form_data.append('action', 'upload_photo');
-	form_data.append('user_id', user_id.value);
+	form_data.append('user_id', user_id);
 	$.ajax({
 		url: '/users/ajax_post',
 		type: 'POST',
@@ -81,13 +81,15 @@ function show_photo(elem) {
 	if (!up_to_date()) {
 		post_images('full_preview', 'img_wrapper long');
 		photos = document.getElementsByClassName('img_wrapper long');
-		fog.innerHTML = '';
+		fog.getElementsByClassName('confirm_window')[0].style.display = 'none';
+		// fog.innerHTML = '';
 	}
 	fog.style.display = 'block';
 	cont.style.display = 'block';
 	full_photo.style.backgroundImage = elem.style.backgroundImage;
 	full_photo.setAttribute('name', elem.id);
 	comments();
+	draw_likes();
 }
 
 function change_slide(elem_id) {
@@ -96,27 +98,19 @@ function change_slide(elem_id) {
 	var photos = document.getElementsByClassName('img_wrapper long');
 
 	for (var i = 0; i < photos.length; i++) {
-		if (photos[i].id == full.getAttribute('name') && i + add >= 0 && i + add < photos.length) {
-			console.log('I = ' + i + '\n Add = ' + add);
-			full.style.backgroundImage = photos[i + add].style.backgroundImage;
-			full_photo.setAttribute('name', photos[i + add].id);
-			comments();
-			return ;
+		if (photos[i].id == full.getAttribute('name')) {
+			if (i + add < 0 || i + add >= photos.length)
+				return (false);
+			else {
+				console.log('I = ' + i + '\n Add = ' + add);
+				full.style.backgroundImage = photos[i + add].style.backgroundImage;
+				full_photo.setAttribute('name', photos[i + add].id);
+				comments();
+				return (true);
+			}
 		}
 	}
 }
-
-
-// $.post('/users/ajax_post', {action: action.value, id: user_id.value}, function(res) {
-// 		if (!res.success)
-// 			window.location = '/error?error=' + err + '&image=/images/error';
-// 		else {
-// 			console.log(res);
-// 			users_menu();
-// 		}
-// 	}).catch(function(err) {
-// 		window.location = '/error?error=' + err + '&image=/images/error';
-// 	});
 
 function draw_comment(comment, author) {
 	var cont = document.getElementById('comment_list');
@@ -164,8 +158,6 @@ function comments() {
 }
 
 function add_comment() {
-	var url = window.location.href;
-	var user_id = url.substring(url.lastIndexOf('/') + 1);
 	var photo = document.getElementById('full_photo');
 	var input = document.getElementById('comment_input');
 
@@ -204,9 +196,8 @@ function set_avatar(elem_id) {
 	var yes = document.getElementById('yes_avatar');
 	var no = document.getElementById('no_avatar');
 	var cont = document.getElementById('choose_avatar');
-	var url = window.location.href;
-	var user_id = url.substring(url.lastIndexOf('/') + 1);
 
+	document.getElementById('confirm_question').innerHTML = 'Do you really want to choose this photo?';
 	fog.style.display = 'block';
 	no.addEventListener('click', function() {
 		fog.style.display = 'none';
@@ -228,8 +219,6 @@ function set_avatar(elem_id) {
 }
 
 function draw_avatar() {
-	var url = window.location.href;
-	var user_id = url.substring(url.lastIndexOf('/') + 1);
 	var avatar = document.getElementById('profile_avatar');
 
 	$.get('/users/ajax', {action: 'get_user', id: user_id}, function(res) {
@@ -242,9 +231,69 @@ function draw_avatar() {
 	});
 }
 
+function draw_likes() {
+	var photo = document.getElementById('full_photo');
+	var button = document.getElementById('like_button');
+	var qty = document.getElementById('like_qty');
+
+	console.log('Draw Likes!');
+	$.get('/users/ajax', {action: 'get_likes', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
+		console.log(res);
+		if (!res.success) {
+			console.log(res.error);
+			return ;
+		}
+		qty.innerHTML = res.qty;
+		button.setAttribute('liked', res.liked);
+		button.style['background'] = res.liked ? 'linear-gradient(0deg, #ff3232, #CD2421)' : 'none';
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
+
 function like_photo() {
 	var photo = document.getElementById('full_photo');
 	var button = document.getElementById('like_button');
 
-	// TODO
+	$.get('/users/ajax', {action: 'like_photo', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
+		console.log(res);
+		if (!res.success)
+			console.log(res.error);
+		draw_likes();
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
+
+function del_photo() {
+	var photo = document.getElementById('full_photo');
+	var fog = document.getElementById('del_fog');
+	var yes = document.getElementById('yes_del');
+	var no = document.getElementById('no_del');
+
+	alert('Del Photo');
+	fog.style.display = 'block';
+	no.onclick = function() {
+		fog.style.display = 'none';
+	}
+	yes.onclick = function() {
+		$.post('/users/ajax_post', {action: 'del_photo', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
+			console.log(res);
+			if (!res.success)
+				console.log(res.error);
+			else if (!change_slide('next_slide'))
+				change_slide('prev_slide');
+			post_images('preview_cont', 'img_wrapper');
+			post_images('full_preview', 'img_wrapper long');
+		}).catch(function(err) {
+			console.log(err);
+		});
+		fog.style.display = 'none';
+	}
+}
+
+function like_hover(event, button) {
+	if (button.getAttribute('liked') === 'true')
+		return ;
+	button.style['background'] = event.type === 'mouseover' ? 'linear-gradient(0deg, #ff3232, #CD2421)' : 'none';
 }

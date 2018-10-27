@@ -2,6 +2,7 @@ function check_ownership() {
 	var url = window.location.href;
 	var page_id = url.substring(url.lastIndexOf('/') + 1);
 	var button = document.getElementById('save_changes');
+	var del = document.getElementById('del_photo');
 	var fields;
 
 	$.get('/users/ajax', {id: page_id, action: 'is_owner'}, function(result) {
@@ -12,6 +13,7 @@ function check_ownership() {
 			fields[i].disabled = true;
 		if (button)
 			button.outerHTML = '';
+		del.outerHTML = '';
 	});
 }
 

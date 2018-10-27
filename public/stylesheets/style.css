@@ -585,7 +585,7 @@ label, textarea {
 	height: 100%;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	z-index: 3;
 	background: rgba(0,0,0,0.9);
 	display: none;
 }
@@ -610,11 +610,11 @@ label, textarea {
 	bottom: 20%;
 }
 
-#yes_button, #yes_avatar {
+#yes_button, #yes_avatar, #yes_del {
 	left: 10%;
 }
 
-#no_button, #no_avatar {
+#no_button, #no_avatar, #no_del {
 	right: 10%;
 }
 
@@ -677,17 +677,27 @@ label, textarea {
 	left: 35%;
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: center;
 }
 
 .tool_button {
 	position: relative;
 	height: 70%;
+	margin-left: 2%;
+	margin-right: 2%;
 	border-radius: 50%;
 }
 
-.tool_button:hover {
-	background: linear-gradient(0deg, #CD6461, #CD2421);
+.like_qty {
+	margin-left: 0.5%;
+}
+
+#del_photo {
+	border-radius: 20%;
+}
+
+#del_photo:hover {
+	background: linear-gradient(0deg, #ff3232, #CD2421);
 }
 
 .comments {

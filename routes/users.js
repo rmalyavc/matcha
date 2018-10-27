@@ -82,7 +82,9 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.set_avatar(req, res);
 	}
 	else if (req.query['action'] === 'like_photo' && req.query['photo_id'] && req.query['user_id'])
-		user.controller.like_photo(req, res);
+		user_controller.like_photo(req, res);
+	else if (req.query['action'] === 'get_likes' && req.query['photo_id'] && req.query['user_id'])
+		user_controller.get_likes(req, res);
 });
 
 router.post('/ajax_post', upload.any(), async function(req, res, next) {
@@ -103,6 +105,8 @@ router.post('/ajax_post', upload.any(), async function(req, res, next) {
 	}
 	else if (req.body['action'] === 'get_users' && req.body['authors[]'])
 		user_controller.get_users(req, res);
+	else if (req.body['action'] === 'del_photo' && req.body['photo_id'] && req.body['user_id'] === req.session.user_id)
+		user_controller.del_photo(req, res);
 });
 
 module.exports = router;

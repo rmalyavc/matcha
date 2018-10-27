@@ -8,12 +8,19 @@
 			<button class="confirm_button" id="no_avatar"><strong>No</strong></button>
 		</div>
 	</div>
-	<img id="close_avatar" class="close_button" src="/images/delete.png">
+	<img id="close_avatar" class="close_button" src="/images/close.png">
 	<p class="text_header green">Choose photo for avatar</p>
 	<div class="choose_avatar_wrapper" id="choose_avatar_wrapper"></div>
 </div>
 <div class="full_size" id="full_size">
-	<img type="button" id="close_full" class="close_button" src="/images/delete.png">
+	<div class="fog" id="del_fog">
+		<div class="confirm_window">
+			<h2 class="text_header error_text" id="confirm_question">Do you really want to delete this image?</h2>
+			<button class="confirm_button" id="yes_del"><strong>Yes</strong></button>
+			<button class="confirm_button" id="no_del"><strong>No</strong></button>
+		</div>
+	</div>
+	<img type="button" id="close_full" class="close_button" src="/images/close.png">
 	<button class="prev_next slider_button" id="prev_slide" type="button">
 		<img src="/images/prev.png" class="prev_next_img">
 	</button>
@@ -22,7 +29,9 @@
 	</button>
 	<div class="slider_tools">
 		<div class="tools_wrapper">
+			<img class="tool_button" src="/images/delete.png" id="del_photo">
 			<img class="tool_button" src="/images/like.png" id="like_button">
+			<strong class="like_qty" id="like_qty"></strong>
 		</div>
 	</div>
 	<div class="full_photo" id="full_photo"></div>

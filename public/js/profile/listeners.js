@@ -72,6 +72,7 @@ function scroll_listeners() {
 		swipe_listener(conts[i]);
 	}
 	close.addEventListener('click', function() {
+		fog.getElementsByClassName('confirm_window')[0].style.display = 'block';
 		hide_full();
 	});
 	for (var i = 0; i < prev_next.length; i++) {
@@ -137,8 +138,23 @@ function like_listeners() {
 	like.addEventListener('click', function() {
 		like_photo();
 	});
+	like.addEventListener('mouseover', function(event) {
+		like_hover(event, this);
+	});
+	like.addEventListener('mouseleave', function(event) {
+		like_hover(event, this);
+	});
 }
 
+function del_listener() {
+	var del = document.getElementById('del_photo');
+
+	if (!del)
+		return ;
+	del.addEventListener('click', function() {
+		del_photo();
+	});
+}
 // function full_screen_listeners() {
 // 	var buttons = document.getElementsByClassName('full_screen');
 
@@ -159,6 +175,7 @@ function set_listeners() {
 	avatar_listener();
 	draw_avatar();
 	like_listeners();
+	del_listener();
 	post_images('preview_cont', 'img_wrapper');
 }
 
