@@ -5,6 +5,7 @@ var upload = multer({ dest: 'tmp/' });
 var router = express.Router();
 var user_controller = require('./controllers/User.js');
 var Admin = require('./controllers/Admin.js');
+var db = require('./config/connection.js');
 
 // var valid = require('./controllers/validators/user/valid_user.js');
 var User = require('./models/User.js');
@@ -46,66 +47,86 @@ router.post('/valid', function(req, res, next) {
 });
 
 router.get('/profile/:id', function(req, res, next) {
-	var is_owner = (req.params.id === req.session.user_id);
+	// console.log('Params id = ' + )
+	var is_owner = (req.params.id == req.session.user_id);
+	var sql = "SELECT * FROM users WHERE id = ?;";
 
-	User.findById(req.params.id, function (err, doc) {
-		if (err || !doc)
-			res.render('error', {message: 'User is not found'});
+	db.query(sql, req.params.id, function(err, rows) {
+		if (err || rows.length < 1) {
+			res.render('error', {
+				message: err ? err : 'User is not found'
+			});
+		}
 		else {
 			var error = req.query['err'] ? req.query['err'] : false;
 			res.render('auth/profile', {
-				user: doc,
+				user: rows[0],
 				is_owner: is_owner,
 				err: error,
 				logged_user: req.session.user_id
 			});
 		}
 	});
+
+	// User.findById(req.params.id, function (err, doc) {
+	// 	if (err || !doc)
+	// 		res.render('error', {message: 'User is not found'});
+	// 	else {
+	// 		var error = req.query['err'] ? req.query['err'] : false;
+	// 		res.render('auth/profile', {
+	// 			user: doc,
+	// 			is_owner: is_owner,
+	// 			err: error,
+	// 			logged_user: req.session.user_id
+	// 		});
+	// 	}
+	// });
 });
 
 router.get('/ajax', function(req, res, next) {
 	console.log('Query is:');
 	console.log(req.query);
-	if (req.query['action'] === 'is_unique')
+	if (req.query['action'] == 'is_unique')
 		user_controller.is_unique(req, res);
-	else if (req.query['action'] === 'is_owner' && req.query['id'])
+	else if (req.query['action'] == 'is_owner' && req.query['id'])
 		user_controller.is_owner(req.query['id'], res, req);
-	else if (req.query['action'] === 'get_user' && req.query['id'])
+	else if (req.query['action'] == 'get_user' && req.query['id'])
 		user_controller.get_user(req.query['id'], res);
-	else if (req.query['action'] === 'get_all_users')
+	else if (req.query['action'] == 'get_all_users')
 		Admin.get_all_users(req, res);
-	else if (req.query['action'] === 'add_comment' && req.query['photo_id'] && req.query['owner_id'] && req.query['text'])
+	else if (req.query['action'] == 'add_comment' && req.query['photo_id'] && req.query['owner_id'] && req.query['text'])
 		user_controller.add_comment(req, res);
-	else if (req.query['action'] === 'get_comments' && req.query['photo_id'])
+	else if (req.query['action'] == 'get_comments' && req.query['photo_id'])
 		user_controller.get_comments(req, res);
-	else if (req.query['action'] === 'set_avatar' && req.query['photo_id'] && req.query['user_id'] && req.query['user_id'] === req.session.user_id) {
+	else if (req.query['action'] == 'set_avatar' && req.query['photo_id'] && req.query['user_id'] && req.query['user_id'] == req.session.user_id) {
 		user_controller.set_avatar(req, res);
 	}
-	else if (req.query['action'] === 'like_photo' && req.query['photo_id'] && req.query['user_id'])
+	else if (req.query['action'] == 'like_photo' && req.query['photo_id'] && req.query['user_id'])
 		user_controller.like_photo(req, res);
-	else if (req.query['action'] === 'get_likes' && req.query['photo_id'] && req.query['user_id'])
+	else if (req.query['action'] == 'get_likes' && req.query['photo_id'] && req.query['user_id'])
 		user_controller.get_likes(req, res);
+	else if (req.query['action'] == 'get_avatar' && req.query['user_id'])
+		user_controller.get_avatar(req, res);
 });
 
 router.post('/ajax_post', upload.any(), async function(req, res, next) {
-	console.log(req.body['authors[]']);
-	if (req.body['action'] === 'upload_photo' && req.body['user_id'] === req.session.user_id && req.files)
+	console.log(req.body);
+	if (req.body['action'] == 'upload_photo' && req.body['user_id'] == req.session.user_id && req.files)
 		user_controller.upload(req, res);
-	else if (req.body['action'] === 'get_images' && req.body['id_list[]'] && req.body['id_list[]'].length > 0) {
-		user_controller.get_images(req.body['id_list[]'], res);
-	}
-	else if ((req.body['action'] === 'del_user' || req.body['action'] === 'change_admin' || req.body['action'] === 'change_active') && req.body['id']) {
+	else if (req.body['action'] == 'get_album' && req.body['user_id'])
+		user_controller.get_album(req, res);
+	else if ((req.body['action'] == 'del_user' || req.body['action'] == 'change_admin' || req.body['action'] == 'change_active') && req.body['id']) {
 		var curr_user = await User.findById(req.session.user_id).exec();
 		if (!Admin.check_access(req, res, curr_user))
 			return ;
 		if (req.body['action'] === 'del_user')
 			Admin.del_user(req, res);
-		else if (req.body['action'] === 'change_admin' || req.body['action'] === 'change_active')
+		else if (req.body['action'] == 'change_admin' || req.body['action'] == 'change_active')
 			Admin.change_admin_active(req, res);
 	}
-	else if (req.body['action'] === 'get_users' && req.body['authors[]'])
+	else if (req.body['action'] == 'get_users' && req.body['authors[]'])
 		user_controller.get_users(req, res);
-	else if (req.body['action'] === 'del_photo' && req.body['photo_id'] && req.body['user_id'] === req.session.user_id)
+	else if (req.body['action'] == 'del_photo' && req.body['photo_id'] && req.body['user_id'] == req.session.user_id)
 		user_controller.del_photo(req, res);
 });
 

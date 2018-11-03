@@ -19,13 +19,13 @@ function scroll_preview(offset, timeout, cont_id) {
 function post_images(cont_id, type) {
 	var cont = document.getElementById(cont_id);
 
-	$.get('/users/ajax', {id: user_id, action: 'get_user'}, function(res) {
-		if (!res || !res.photo || res.photo.length < 1 || !cont)
+	$.post('/users/ajax_post', {user_id: user_id, action: 'get_album'}, function(res) {
+		if (!res.success || res.album.length < 1)
 			return ;
 		cont.innerHTML = '';
-		for (var i = 0; i < res.photo.length; i++) {
-			cont.innerHTML += '<div class="' + type + '" id="' + res.photo[i]._id + '" style="background-image: url(' +
-				"'"  + res.photo[i].url + "'" + ');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>';
+		for (var i = 0; i < res.album.length; i++) {
+			cont.innerHTML += '<div class="' + type + '" id="' + res.album[i].id + '" style="background-image: url(' +
+				"'"  + res.album[i].url + "'" + ');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>';
 		}
 		photo_listeners();
 	}).catch(function(err) {
@@ -54,14 +54,14 @@ function upload_image() {
 	}).done(function(res) {
 		if (res) {
 			alert('Done!');
-			if (res.success === true && res.data.photo && res.data.photo.length > 0) {
+			if (res.success === true) {
 				post_images('preview_cont', 'img_wrapper');
 			}
 		}
 		else
 			alert('res is empty...');
 	}).catch(function(err) {
-		alert(err);
+		console.log(err);
 	});
 	input.value = '';
 }
@@ -116,17 +116,33 @@ function draw_comment(comment, author) {
 	var cont = document.getElementById('comment_list');
 
 	var date = new Date(comment.time);
-	cont.innerHTML += '<div class="comment">' +
-		'<div class="avatar" id="avatar" style="background-image: url(' + "'" + get_avatar(author.photo) + "'" +
-		');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>' +
-		'<div class="comment_wrapper">' +
-			'<div>' +
-				'<p class="comment_author">' + author.login + '</p>' +
-				'<p class="comment_text">' + comment.text + '</p>' +
-				'<p class="comment_time">' + date.toLocaleString(); + '</p>' +
+	$.get('/users/ajax', {action: 'get_avatar', user_id: author.id}, function(res) {
+		var avatar = res.success ? res.data : '/images/avatar.png';
+		cont.innerHTML += '<div class="comment">' +
+			'<div class="avatar" id="avatar" style="background-image: url(' + "'" + avatar + "'" +
+			');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>' +
+			'<div class="comment_wrapper">' +
+				'<div>' +
+					'<p class="comment_author">' + author.login + '</p>' +
+					'<p class="comment_text">' + comment.text + '</p>' +
+					'<p class="comment_time">' + date.toLocaleString(); + '</p>' +
+				'</div>' +
 			'</div>' +
-		'</div>' +
-	'</div>';
+		'</div>';
+	}).catch(function(err) {
+		console.log(err);
+	});
+	// cont.innerHTML += '<div class="comment">' +
+	// 	'<div class="avatar" id="avatar" style="background-image: url(' + "'" + get_avatar(author.id) + "'" +
+	// 	');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>' +
+	// 	'<div class="comment_wrapper">' +
+	// 		'<div>' +
+	// 			'<p class="comment_author">' + author.login + '</p>' +
+	// 			'<p class="comment_text">' + comment.text + '</p>' +
+	// 			'<p class="comment_time">' + date.toLocaleString(); + '</p>' +
+	// 		'</div>' +
+	// 	'</div>' +
+	// '</div>';
 }
 
 
@@ -221,13 +237,14 @@ function set_avatar(elem_id) {
 function draw_avatar() {
 	var avatar = document.getElementById('profile_avatar');
 
-	$.get('/users/ajax', {action: 'get_user', id: user_id}, function(res) {
-		console.log(res);
-		if (!res) {
-			console.log('Cannot get user');
-			return;
-		}
-		avatar.src = get_avatar(res.photo);
+	$.get('/users/ajax', {action: 'get_avatar', user_id: user_id}, function(res) {
+		var user_avatar = res.success ? res.data : '/images/avatar.png';
+		// console.log(res);
+		// if (!res) {
+		// 	console.log('Cannot get user');
+		// 	return;
+		// }
+		avatar.src = user_avatar;
 	});
 }
 

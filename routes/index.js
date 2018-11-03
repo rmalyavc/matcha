@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Admin = require('./controllers/Admin.js');
 var User = require('./models/User.js');
+var install = require('./config/install.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -31,6 +32,11 @@ router.get('/admin', async function(req, res, next) {
 		logged_user: req.session.user_id,
 		user_login: req.session.user_login
 	});
+});
+
+router.get('/install', function(req, res) {
+	install.install();
+	res.redirect('/');
 });
 
 module.exports = router;

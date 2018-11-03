@@ -15,11 +15,14 @@ function get_elem(_id, list) {
 	return (false);
 }
 
-function get_avatar(album) {
-	for (var i = 0; i < album.length; i++) {
-		if (album[i].avatar)
-			return (album[i].url);
-	}
+function get_avatar(user_id) {
+	// $.get('/users/ajax', {action: 'get_avatar', user_id: user_id}, function(res) {
+	// 	if (res.success)
+	// });
+	// for (var i = 0; i < album.length; i++) {
+	// 	if (album[i].avatar)
+	// 		return (album[i].url);
+	// }
 	return ('/images/avatar.png');
 }
 

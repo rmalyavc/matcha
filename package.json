@@ -24,6 +24,7 @@
     "mongoose-connect": "0.0.3",
     "morgan": "~1.9.0",
     "multer": "^1.4.0",
+    "mysql": "^2.16.0",
     "password-hash": "^1.2.2",
     "qs": "^6.5.2",
     "require": "^2.4.20",
