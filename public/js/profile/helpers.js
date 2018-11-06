@@ -7,9 +7,18 @@ function get_authors(comms) {
 	return (ids);
 }
 
+function get_user_ids(users) {
+	var list = [];
+
+	for (var i = 0; i < users.length; i++) {
+		list.push(users[i].id);
+	}
+	return (list);
+}
+
 function get_elem(_id, list) {
 	for (var i = 0; i < list.length; i++) {
-		if (list[i]._id == _id)
+		if (list[i].id == _id)
 			return (list[i]);
 	}
 	return (false);
@@ -37,10 +46,10 @@ function up_to_date() {
 	return (full_list != null && mini_list != null && full_list.length === mini_list.length);
 }
 
-function get_avatar(album) {
-	for (var i = 0; i < album.length; i++) {
-		if (album[i].avatar === true)
-			return (album[i].url);
-	}
-	return ('/images/default_avatar.png');
-}
+// function get_avatar(album) {
+// 	for (var i = 0; i < album.length; i++) {
+// 		if (album[i].avatar === true)
+// 			return (album[i].url);
+// 	}
+// 	return ('/images/default_avatar.png');
+// }

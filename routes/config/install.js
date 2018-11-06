@@ -49,7 +49,7 @@ function create_likes() {
 	var sql = "CREATE TABLE likes (\
 		id INT(6) AUTO_INCREMENT PRIMARY KEY,\
 		photo_id INT(6) NOT NULL,\
-		author INT(6) NOT NULL,\
+		author INT(6) NOT NULL\
 	)";
 	conn.query(sql, function(err) {
 		if (err)

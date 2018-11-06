@@ -362,10 +362,13 @@ module.exports = {
 		// });
 	},
 	get_users: function(req, res) {
+		console.log('AUTHORS ARE: ');
 		console.log(req.body['authors[]']);
-		var sql = "SELECT * FROM users WHERE id IN (?);";
+		console.log(req.body['authors[]'].length);
+		var list = Array.isArray(req.body['authors[]']) ? req.body['authors[]'].join("', '") : req.body['authors[]'];
+		var sql = "SELECT * FROM users WHERE id IN ('" + list + "');";
 
-		db.query(sql, req.body['authors[]'].join("', '"), function(err, rows) {
+		db.query(sql, function(err, rows) {
 			if (err || rows.length < 1) {
 				res.send({
 					success: false,
@@ -444,6 +447,16 @@ module.exports = {
 					data: rows[0].url
 				});
 			}
+		});
+	},
+	get_avatars: function(req, res) {
+		var sql = "SELECT user_id, url FROM photo WHERE avatar = 1 AND user_id IN ('" + req.body['list[]'].join("', '") + "');";
+
+		db.query(sql, function(err, rows) {
+			if (err)
+				res.send({success: false, error: err});
+			else
+				res.send({success: true, data: rows});
 		});
 	},
 	like_photo: function(req, res) {

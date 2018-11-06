@@ -1,3 +1,20 @@
+function get_user_ids(users) {
+	var list = [];
+
+	for (var i = 0; i < users.length; i++) {
+		list.push(users[i].id);
+	}
+	return (list);
+}
+
+function get_elem(_id, list) {
+	for (var i = 0; i < list.length; i++) {
+		if (list[i].user_id == _id)
+			return (list[i].url);
+	}
+	return (false);
+}
+
 function get_avatar(album) {
 	for (var i = 0; i < album.length; i++) {
 		if (album[i].avatar === true)
@@ -14,11 +31,12 @@ function proceed() {
 	if (!fog || !action || !user_id || action.value == '' || user_id.value == '') {
 		console.log('Something went wrong.');
 		fog.style.display = 'none';
+		users_menu();
 		return ;
 	}
 	$.post('/users/ajax_post', {action: action.value, id: user_id.value}, function(res) {
 		if (!res.success)
-			window.location = '/error?error=' + err + '&image=/images/error';
+			window.location = '/error?error=' + res.error + '&image=/images/error';
 		else {
 			console.log(res);
 			users_menu();
@@ -62,36 +80,48 @@ function proceed() {
 // }
 
 function post_users(cont, users) {
-	for (var i = 0; i < users.length; i++) {
-		var admin = users[i].admin ? 'checked' : '';
-		var active = users[i].active ? 'checked' : '';
-		cont.innerHTML += '<div class="user_cont">' +
-			'<div class="avatar_wrapper">' +
-				'<img class="avatar" src="' + get_avatar(users[i].photo) + '">' +
-			'</div>' +
-			'<div class="user_info">' +
-				'<div class="user_info_wrapper">' +
-					'<label class="admin_label">Login:</label><strong>' + users[i].login + '</strong><br>' +
-					'<label class="admin_label">Full Name:</label><strong>' + users[i].first_name + ' ' + users[i].last_name + '</strong><br>' +
-					'<label class="admin_label">Email:</label><strong>' + users[i].email + '</strong>' +
+	console.log('POST USERS ARE: ');
+	console.log(users);
+	$.post('/users/ajax_post', {action: 'get_avatars', list: get_user_ids(users)}, function(res) {
+		if (!res.success) {
+			console.log(res.error);
+			return ;
+		}
+		for (var i = 0; i < users.length; i++) {
+			var admin = users[i].admin ? 'checked' : '';
+			var active = users[i].active ? 'checked' : '';
+			console.log('RES.DATA IS: ');
+			console.log(res.data);
+			var avatar = get_elem(users[i].id, res.data) ? get_elem(users[i].id, res.data) : '/images/avatar.png';
+
+			cont.innerHTML += '<div class="user_cont">' +
+				'<div class="avatar_wrapper">' +
+					'<img class="avatar" src="' + avatar + '">' +
 				'</div>' +
-			'</div>' +
-			'<div class="user_tools">' +
-				'<div class="tool">' +
-					'<input type="checkbox" id="' + users[i]._id + '" class="user_active" ' + active + '>' +
-					'<strong>Active</strong>' +
+				'<div class="user_info">' +
+					'<div class="user_info_wrapper">' +
+						'<label class="admin_label">Login:</label><strong>' + users[i].login + '</strong><br>' +
+						'<label class="admin_label">Full Name:</label><strong>' + users[i].first_name + ' ' + users[i].last_name + '</strong><br>' +
+						'<label class="admin_label">Email:</label><strong>' + users[i].email + '</strong>' +
+					'</div>' +
 				'</div>' +
-				'<div class="tool">' +
-					'<input type="checkbox" id="' + users[i]._id + '" class="user_admin" ' + admin + '>' +
-					'<strong>Admin</strong>' +
+				'<div class="user_tools">' +
+					'<div class="tool">' +
+						'<input type="checkbox" id="' + users[i]._id + '" class="user_active" ' + active + '>' +
+						'<strong>Active</strong>' +
+					'</div>' +
+					'<div class="tool">' +
+						'<input type="checkbox" id="' + users[i]._id + '" class="user_admin" ' + admin + '>' +
+						'<strong>Admin</strong>' +
+					'</div>' +
+					'<div class="tool">' +
+						'<button type="button" class="del_button" id="' + users[i]._id + '"><img class="tool_image" src="/images/delete.png"><strong>Delete</strong></button>' +
+					'</div>' +
 				'</div>' +
-				'<div class="tool">' +
-					'<button type="button" class="del_button" id="' + users[i]._id + '"><img class="tool_image" src="/images/delete.png"><strong>Delete</strong></button>' +
-				'</div>' +
-			'</div>' +
-		'</div>';
-	}
-	user_listeners();
+			'</div>';
+		}
+		user_listeners();
+	});
 }
 
 function users_menu() {

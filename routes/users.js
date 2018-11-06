@@ -116,7 +116,10 @@ router.post('/ajax_post', upload.any(), async function(req, res, next) {
 	else if (req.body['action'] == 'get_album' && req.body['user_id'])
 		user_controller.get_album(req, res);
 	else if ((req.body['action'] == 'del_user' || req.body['action'] == 'change_admin' || req.body['action'] == 'change_active') && req.body['id']) {
-		var curr_user = await User.findById(req.session.user_id).exec();
+		
+		var sql = "SELECT * FROM users WHERE id = ?;";
+		var curr_user = await db.query(sql, req.session.user_id);
+		// var curr_user = await User.findById(req.session.user_id).exec();
 		if (!Admin.check_access(req, res, curr_user))
 			return ;
 		if (req.body['action'] === 'del_user')
@@ -126,6 +129,8 @@ router.post('/ajax_post', upload.any(), async function(req, res, next) {
 	}
 	else if (req.body['action'] == 'get_users' && req.body['authors[]'])
 		user_controller.get_users(req, res);
+	else if (req.body['action'] == 'get_avatars' && req.body['list[]'])
+		user_controller.get_avatars(req, res);
 	else if (req.body['action'] == 'del_photo' && req.body['photo_id'] && req.body['user_id'] == req.session.user_id)
 		user_controller.del_photo(req, res);
 });

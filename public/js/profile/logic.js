@@ -148,6 +148,10 @@ function draw_comment(comment, author) {
 
 function draw_comments(comms) {
 	$.post('/users/ajax_post', {action: 'get_users', authors: get_authors(comms)}, function(res) {
+		console.log('RES IS: ');
+		console.log(res);
+		console.log('COMMENTS ARE: ');
+		console.log(comms);
 		if (!res.success)
 			console.log(res.error);
 		else {
