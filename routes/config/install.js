@@ -10,7 +10,9 @@ function create_users() {
 		last_name VARCHAR(50),\
 		admin TINYINT(1) NOT NULL DEFAULT 0,\
 		active TINYINT(1) NOT NULL DEFAULT 1,\
-		about VARCHAR(500)\
+		about VARCHAR(500),\
+		age INT(3) UNSIGNED,\
+		gender ENUM('Male', 'Female', 'Other')\
 	)";
 	conn.query(sql, function(err) {
 		if (err)

@@ -177,7 +177,7 @@ a:hover {
 #profile_form {
 	max-width: unset;
 	width: 30%;
-	min-width: 300px;
+	min-width: 500px;
 	min-height: 350px;
 	text-align: right;
 }
@@ -205,6 +205,10 @@ a:hover {
 	height: 6%;
 	left: unset;
 	right: 4%;
+}
+
+select.form_field.profile_input {
+	width: 72.8%;
 }
 
 .profile_avatar_wrapper {
@@ -713,17 +717,21 @@ label, textarea {
 .comment_list {
 	position: relative;
 	height: 60%;
-	width: 99%;
-	border: 1px solid rgba(0,0,0,0.1);
+	width: 100%;
+	/*border: 1px solid rgba(0,0,0,0.1);*/
 	overflow-y: auto;
 }
 
 .comment {
 	position: relative;
-	width: 98%;
+	width: 96%;
 	height: 25%;
-	left: 1%;
+	left: 0.5%;
 	font-size: 70%;
+	border: 1px solid rgba(0,0,0,0.1);
+	padding: 5px;
+	/*border-bottom: 1px solid rgba(0,0,0,0.1);*/
+	margin-top: 5px;
 }
 
 .comment_wrapper {

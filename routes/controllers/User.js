@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/test', { useNewUrlParser: true });
-var User = require('../models/User.js');
-var Photo = require('../models/Photo.js');
-var Comment = require('../models/Comment.js');
-var Like = require('../models/Like.js');
+// var User = require('../models/User.js');
+// var Photo = require('../models/Photo.js');
+// var Comment = require('../models/Comment.js');
+// var Like = require('../models/Like.js');
 var user_validator = require('../validators/User.js');
 var hash = require('password-hash');
 var fs = require('fs');
@@ -107,11 +107,15 @@ module.exports = {
 			email: data['email'],
 			first_name: data['first_name'],
 			last_name: data['last_name'],
-			about: data['about']
+			about: data['about'],
+			gender: data['gender']
 		}
+		data['age'] ? user.age = data['age'] : false;
 		db.query(sql, [user, data['user_id']], function(err) {
-			if (err)
-				res.redirect(url + '?err=' + err);
+			if (err) {
+				// console.log(err);
+				res.redirect('/error?error=' + err);
+			}
 			else
 				res.redirect(url);
 		});
@@ -362,9 +366,9 @@ module.exports = {
 		// });
 	},
 	get_users: function(req, res) {
-		console.log('AUTHORS ARE: ');
-		console.log(req.body['authors[]']);
-		console.log(req.body['authors[]'].length);
+		// console.log('AUTHORS ARE: ');
+		// console.log(req.body['authors[]']);
+		// console.log(req.body['authors[]'].length);
 		var list = Array.isArray(req.body['authors[]']) ? req.body['authors[]'].join("', '") : req.body['authors[]'];
 		var sql = "SELECT * FROM users WHERE id IN ('" + list + "');";
 

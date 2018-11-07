@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/test', { useNewUrlParser: true });
-var User = require('../models/User.js');
-var Photo = require('../models/Photo.js');
+// var User = require('../models/User.js');
+// var Photo = require('../models/Photo.js');
 var db = require('../config/connection.js');
 
 module.exports = {
@@ -92,10 +92,11 @@ module.exports = {
 
 		var sql = "UPDATE users SET " + field + "= CASE WHEN " + field + "= 0 THEN 1 ELSE 0 END WHERE id = ?;";
 		db.query(sql, req.body['id'], function(err) {
+			console.log('ERR IS ' + err);
 			if (err)
-				res.send({succes: false, error: err});
+				res.send({success: false, error: err});
 			else
-				res.send({succes: true});
+				res.send({success: true});
 		})
 		// User.findById(req.body['id'], function(err, doc) {
 		// 	if (err || !doc) {

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Admin = require('./controllers/Admin.js');
-var User = require('./models/User.js');
+// var User = require('./models/User.js');
 var install = require('./config/install.js');
 var db = require('./config/connection.js');
 

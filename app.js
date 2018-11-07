@@ -14,7 +14,20 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 // view engine setup
-app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutDir: __dirname + '/views/layouts/'}));
+// hbs.registerHelper("is", function(val1, val2)
+// {
+//     return (val1 == val2);
+// });
+app.engine('hbs', hbs({
+  extname: 'hbs',
+  defaultLayout: 'layout',
+  layoutDir: __dirname + '/views/layouts/',
+  helpers: {
+    selected: function(val1, val2) {
+      return (val1 == val2 ? 'selected' : '');
+    }
+  }
+}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 

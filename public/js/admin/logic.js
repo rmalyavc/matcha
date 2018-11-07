@@ -37,51 +37,15 @@ function proceed() {
 	$.post('/users/ajax_post', {action: action.value, id: user_id.value}, function(res) {
 		if (!res.success)
 			window.location = '/error?error=' + res.error + '&image=/images/error';
-		else {
-			console.log(res);
+		else
 			users_menu();
-		}
 	}).catch(function(err) {
 		window.location = '/error?error=' + err + '&image=/images/error';
 	});
-	// $.get('/users/ajax', {action: 'del_user', id: user_id.value}, function(res) {
-	// 	if (!res.success)
-	// 		console.log(res.error);
-	// 	else
-	// 		users_menu();
-	// });
 	fog.style.display = 'none';
 }
 
-// function change_admin() {
-// 	var fog = document.getElementById('fog')
-// 	return false;
-// }
-
-// function user_listeners() {
-// 	var del_list = document.getElementsByClassName('del_button');
-// 	var fog = document.getElementById('fog');
-// 	var yes = document.getElementById('yes_button');
-// 	var no = document.getElementById('no_button');
-// 	var text = document.getElementById('confirm_question');
-
-// 	for (var i = 0; i < del_list.length; i++) {
-// 		del_list[i].addEventListener('click', function() {
-// 			text.innerHTML = 'Do you really want to delete this user?';
-// 			fog.style.display = 'block';
-// 			document.getElementById('action').value = 'del_user';
-// 			document.getElementById('action_data').value = this.id;
-// 			yes.onclick = del_user;
-// 			no.onclick = function() {
-// 				fog.style.display = 'none';
-// 			}
-// 		});
-// 	}
-// }
-
 function post_users(cont, users) {
-	console.log('POST USERS ARE: ');
-	console.log(users);
 	$.post('/users/ajax_post', {action: 'get_avatars', list: get_user_ids(users)}, function(res) {
 		if (!res.success) {
 			console.log(res.error);
@@ -90,9 +54,9 @@ function post_users(cont, users) {
 		for (var i = 0; i < users.length; i++) {
 			var admin = users[i].admin ? 'checked' : '';
 			var active = users[i].active ? 'checked' : '';
-			console.log('RES.DATA IS: ');
-			console.log(res.data);
 			var avatar = get_elem(users[i].id, res.data) ? get_elem(users[i].id, res.data) : '/images/avatar.png';
+			var full_name = users[i].first_name ? users[i].first_name : '';
+			full_name += users[i].last_name ? ' ' + users[i].last_name : '';
 
 			cont.innerHTML += '<div class="user_cont">' +
 				'<div class="avatar_wrapper">' +
@@ -101,17 +65,17 @@ function post_users(cont, users) {
 				'<div class="user_info">' +
 					'<div class="user_info_wrapper">' +
 						'<label class="admin_label">Login:</label><strong>' + users[i].login + '</strong><br>' +
-						'<label class="admin_label">Full Name:</label><strong>' + users[i].first_name + ' ' + users[i].last_name + '</strong><br>' +
+						'<label class="admin_label">Full Name:</label><strong>' + full_name + '</strong><br>' +
 						'<label class="admin_label">Email:</label><strong>' + users[i].email + '</strong>' +
 					'</div>' +
 				'</div>' +
 				'<div class="user_tools">' +
 					'<div class="tool">' +
-						'<input type="checkbox" id="' + users[i]._id + '" class="user_active" ' + active + '>' +
+						'<input type="checkbox" id="' + users[i].id + '" class="user_active" ' + active + '>' +
 						'<strong>Active</strong>' +
 					'</div>' +
 					'<div class="tool">' +
-						'<input type="checkbox" id="' + users[i]._id + '" class="user_admin" ' + admin + '>' +
+						'<input type="checkbox" id="' + users[i].id + '" class="user_admin" ' + admin + '>' +
 						'<strong>Admin</strong>' +
 					'</div>' +
 					'<div class="tool">' +
