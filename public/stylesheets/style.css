@@ -174,12 +174,72 @@ a:hover {
 	overflow-y: auto;
 }
 
-#profile_form {
+#index_wrapper {
+	position: absolute;
+	top: 10%;
+	z-index: 4;
+	display: none;
+	height: 75vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.search_results {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	z-index: 10;
+}
+
+.results_cont {
+	position: absolute;
+	width: 100%;
+	height: 80%;
+	bottom: 10%;
+	overflow-y: auto;
+	border: 1px solid red;
+}
+
+.result {
+	position: relative;
+	width: 100%;
+	height: 15%;
+}
+
+#profile_form, #index_form {
 	max-width: unset;
 	width: 30%;
 	min-width: 500px;
 	min-height: 350px;
 	text-align: right;
+}
+
+#index_form {
+	top: 2%;
+	height: 80%;
+	background-color: white;
+	box-shadow: 2px -2px 20px 0px white;
+	padding-top: 20px;
+}
+
+.fields_wrapper {
+	position: absolute;
+	width: 100%;
+	height: 85%;
+	bottom: 0;
+	/*border: 1px solid green;*/
+}
+
+.fields_wrapper > input, .fields_wrapper > select {
+	height: 8%;
+	margin-top: 1.5%;
+	margin-right: 6%;
+}
+
+.fields_wrapper > select {
+	height: 8.5%;
+	line-height: 8.5%;
 }
 
 .profile_avatar {
@@ -209,6 +269,7 @@ a:hover {
 
 select.form_field.profile_input {
 	width: 72.8%;
+	text-indent: 10px;
 }
 
 .profile_avatar_wrapper {
@@ -284,8 +345,30 @@ label, textarea {
 	font-size: 120%;
 }
 
+.search_button {
+	position: absolute;
+	width: 50%;
+	height: 10%;
+	top: unset;
+	bottom: 4%;
+	left: 25%;
+	/*border-radius: 0;*/
+	opacity: 0.7;
+}
+
 .button_text {
 	color: rgba(255,255,255,0.8);
+}
+
+#start_button {
+	width: 20%;
+	top: 87%;
+	left: 40%;
+	opacity: 0.5;
+}
+
+#start_button:hover, .search_button:hover {
+	opacity: 0.8;
 }
 
 #save_changes {
@@ -383,7 +466,7 @@ label, textarea {
 	background-color: rgba(200,200,200,0.1);
 }
 
-.slider_button:hover {
+.prev_next:hover, .slider_button:hover {
 	background-color: rgba(200,200,200,0.2);
 }
 
@@ -633,6 +716,7 @@ label, textarea {
 	left: 10%;
 	z-index: 3;
 	background-color: white;
+	box-shadow: 2px -2px 20px 0px white;
 	/*background: rgba(0,0,0,0.2);*/
 
 	display: none;
@@ -658,6 +742,12 @@ label, textarea {
 	z-index: 3;
 	background-color: rgba(200,200,200,0.1);
 	border-radius: 50%;
+}
+
+#close_search {
+	top: 0.5vw;
+	right: 0.5vw;
+	width: 1vw;
 }
 
 .close_button:hover {
@@ -756,4 +846,19 @@ label, textarea {
 	width: 100%;
 	height: 93%;
 	bottom: 0;
+}
+
+.main_slider {
+	position: relative;
+	width: 100vw;
+	height: 33.33vw;
+	left: -3vw;
+	/*border: 1px solid red;*/
+}
+
+.slider_photo {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
 }

@@ -1,6 +1,73 @@
 <h1>Welcome to {{ title }}</h1>
 <h2>Created by {{ created_by }}</h2>
+<div class="main_slider">
+	<button class="prev_next" id="prev" type="button">
+		<img src="/images/prev.png" class="prev_next_img">
+	</button>
+	<button class="prev_next" id="next" type="button">
+		<img src="/images/next.png" class="prev_next_img">
+	</button>
+	<img src="/images/slider2.jpg" class="slider_photo">
+	<button class="submit_button" id="start_button" type="button"><strong class="button_text">Find your match now!</strong></button>
+</div>
 {{# if logged_user }}
+	<div class="form_wrapper" id="index_wrapper">
+		<!-- <div class="search_results">
+			<h1 class="text_header green">Search Results</h1>
+			<div class="results_cont">
+				<div class="result">
+					<div class="user_cont">
+						<div class="avatar_wrapper">
+							<img class="avatar" src="/images/avatar.png">
+						</div>
+						<div class="user_info">
+							<div class="user_info_wrapper">
+								<label class="admin_label">Login:</label><strong>root</strong><br>
+								<label class="admin_label">Full Name:</label><strong>Root Rootovich</strong><br>
+								<label class="admin_label">Email:</label><strong>root@example.com</strong>
+							</div>
+						</div>
+						<div class="user_tools">
+							<div class="tool">
+								<button type="button" class="del_button" id="' + users[i]._id + '"><img class="tool_image" src="/images/delete.png"></button>
+							</div>
+						</div>
+					</div>;
+				</div>
+			</div>
+		</div> -->
+		<form class="login_form" id="index_form" action="#" submit="false">
+			<img type="button" id="close_search" class="close_button" src="/images/close.png">
+			<h2 class="text_header green">Who are you looking for?</h2>
+			<div class="fields_wrapper">
+				<label for="login">Login:</label><input type="text" class="form_field profile_input" id="login" name="login"><br>
+				<label for="first_name">First Name:</label><input type="text" class="form_field profile_input" id="first_name" name="first_name"><br>
+				<label for="last_name">Last Name:</label><input type="text" class="form_field profile_input" id="last_name" name="last_name"><br>
+				<label for="email">Email:</label><input type="email" class="form_field profile_input" id="email" name="email"><br>
+				<label for="age">Age:</label><input type="number" class="form_field profile_input" id="age" name="age" min="12" max="120"><br>
+				<label for="gender">Gender:</label><select class="form_field profile_input" name="gender" id="gender">
+					<option value=""></option>
+					<option value="Male">Male</option>
+					<option value="Female">Female</option>
+					<option value="Other">Other</option>
+				</select><br>
+				<label for="orientation">Orientation:</label><select class="form_field profile_input" name="orientation" id="orientation">
+					<option value=""></option>
+					<option value="Heterosexual">Heterosexual</option>
+					<option value="Homosexual">Homosexual</option>
+					<option value="Bisexual">Bisexual</option>
+					<option value="Asexual">Asexual</option>
+					<option value="Other">Other</option>
+				</select><br>
+				<button class="submit_button search_button" type="button"><strong class="button_text">Find Matches</strong></button>
+			</div>	
+		</form>
+	</div>
+{{/if}}
+<script type="text/javascript" src="/js/index/logic.js"></script>
+<script type="text/javascript" src="/js/index/listeners.js"></script>
+
+<!-- {{# if logged_user }}
 <h2>Hi, {{ user_login }}</h2>
 <h3>Your ID is: {{ logged_user }}</h3>
-{{/if}}
+{{/if}} -->

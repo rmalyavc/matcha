@@ -12,7 +12,8 @@ function create_users() {
 		active TINYINT(1) NOT NULL DEFAULT 1,\
 		about VARCHAR(500),\
 		age INT(3) UNSIGNED,\
-		gender ENUM('Male', 'Female', 'Other')\
+		gender ENUM('Male', 'Female', 'Other'),\
+		orientation ENUM('Heterosexual','Homosexual','Bisexual','Asexual','Other'),\
 	)";
 	conn.query(sql, function(err) {
 		if (err)

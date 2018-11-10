@@ -108,7 +108,8 @@ module.exports = {
 			first_name: data['first_name'],
 			last_name: data['last_name'],
 			about: data['about'],
-			gender: data['gender']
+			gender: data['gender'],
+			orientation: data['orientation']
 		}
 		data['age'] ? user.age = data['age'] : false;
 		db.query(sql, [user, data['user_id']], function(err) {

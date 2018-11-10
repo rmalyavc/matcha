@@ -81,6 +81,14 @@
 			<option value="Female" {{#selected gender "Female"}}{{/selected}}>Female</option>
 			<option value="Other" {{#selected gender "Other"}}{{/selected}}>Other</option>
 		</select><br>
+		<label for="orientation">Orientation:</label><select class="form_field profile_input" name="orientation" id="orientation">
+			<option value=""></option>
+			<option value="Heterosexual" {{#selected orientation "Heterosexual"}}{{/selected}}>Heterosexual</option>
+			<option value="Homosexual" {{#selected orientation "Homosexual"}}{{/selected}}>Homosexual</option>
+			<option value="Bisexual" {{#selected orientation "Bisexual"}}{{/selected}}>Bisexual</option>
+			<option value="Asexual" {{#selected orientation "Asexual"}}{{/selected}}>Asexual</option>
+			<option value="Other" {{#selected orientation "Other"}}{{/selected}}>Other</option>
+		</select><br>
 		<label for="about">About:</label><textarea class="form_field profile_input" id="about" name="about">{{ about }}</textarea><br>
 		{{/user}}
 		{{#if is_owner }}
