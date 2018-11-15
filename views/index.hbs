@@ -12,30 +12,27 @@
 </div>
 {{# if logged_user }}
 	<div class="form_wrapper" id="index_wrapper">
-		<!-- <div class="search_results">
+		<div class="search_results">
 			<h1 class="text_header green">Search Results</h1>
 			<div class="results_cont">
-				<div class="result">
-					<div class="user_cont">
-						<div class="avatar_wrapper">
-							<img class="avatar" src="/images/avatar.png">
-						</div>
+				<div class="search_result">
+					<a href="/">
+						<!-- <div class="avatar_wrapper" style="background-image: url('/images/avatar.png');background-position: center;background-size: 100%;background-repeat: no-repeat;"> -->
+						<img class="avatar" src="/images/avatar.png">
+						<!-- </div> -->
 						<div class="user_info">
 							<div class="user_info_wrapper">
 								<label class="admin_label">Login:</label><strong>root</strong><br>
 								<label class="admin_label">Full Name:</label><strong>Root Rootovich</strong><br>
-								<label class="admin_label">Email:</label><strong>root@example.com</strong>
+								<label class="admin_label">Age:</label><strong>42</strong><br>
+								<label class="admin_label" id="about_label">About me:</label>
+								<div class="search_about">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento</div>
 							</div>
 						</div>
-						<div class="user_tools">
-							<div class="tool">
-								<button type="button" class="del_button" id="' + users[i]._id + '"><img class="tool_image" src="/images/delete.png"></button>
-							</div>
-						</div>
-					</div>;
+					</a>
 				</div>
 			</div>
-		</div> -->
+		</div>
 		<form class="login_form" id="index_form" action="#" submit="false">
 			<img type="button" id="close_search" class="close_button" src="/images/close.png">
 			<h2 class="text_header green">Who are you looking for?</h2>
@@ -45,7 +42,8 @@
 				<label for="last_name">Last Name:</label><input type="text" class="form_field profile_input" id="last_name" name="last_name"><br>
 				<label for="email">Email:</label><input type="email" class="form_field profile_input" id="email" name="email"><br>
 				<label for="age">Age:</label><input type="number" class="form_field profile_input" id="age" name="age" min="12" max="120"><br>
-				<label for="gender">Gender:</label><select class="form_field profile_input" name="gender" id="gender">
+				<label for="gender">Gender:</label>
+				<select class="form_field profile_input" name="gender" id="gender">
 					<option value=""></option>
 					<option value="Male">Male</option>
 					<option value="Female">Female</option>
@@ -59,7 +57,7 @@
 					<option value="Asexual">Asexual</option>
 					<option value="Other">Other</option>
 				</select><br>
-				<button class="submit_button search_button" type="button"><strong class="button_text">Find Matches</strong></button>
+				<button class="submit_button search_button" type="button" id="search_button"><strong class="button_text">Find Matches</strong></button>
 			</div>	
 		</form>
 	</div>

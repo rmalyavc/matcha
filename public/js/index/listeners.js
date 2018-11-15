@@ -1,11 +1,3 @@
-function start_listener() {
-	var start = document.getElementById('start_button');
-
-	start.addEventListener('click', function() {
-		start_search();
-	});
-}
-
 function slider_listeners() {
 	var buttons = document.getElementsByClassName('prev_next');
 
@@ -17,17 +9,24 @@ function slider_listeners() {
 }
 
 function search_listeners() {
+	var start = document.getElementById('start_button');
+	var search = document.getElementById('search_button');
 	var close = document.getElementById('close_search');
 
 	if (!close)
 		return ;
+	search.addEventListener('click', function() {
+		find_users();
+	});
 	close.addEventListener('click', function() {
 		close_search();
+	});
+	start.addEventListener('click', function() {
+		start_search();
 	});
 }
 
 function set_listeners() {
-	start_listener();
 	slider_listeners();
 	search_listeners();
 }

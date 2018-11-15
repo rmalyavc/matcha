@@ -405,8 +405,8 @@ module.exports = {
 		var sql = "UPDATE photo SET avatar = 1 WHERE id = ?;";
 
 		db.query(sql, req.query['photo_id'], function(err) {
-			sql = "UPDATE photo SET avatar = 0 WHERE id <> ?;";
-			db.query(sql, req.query['photo_id'], function(error) {
+			sql = "UPDATE photo SET avatar = 0 WHERE id <> ? AND user_id = ?;";
+			db.query(sql, [req.query['photo_id'], req.query['user_id']], function(error) {
 				if (err || error) {
 					res.send({
 						success: false,
@@ -635,6 +635,26 @@ module.exports = {
 	// 			res.send({success: false, error: err});
 	// 		});
 	// 	});
+	},
+	find_users: function(req, res) {
+		var sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url FROM users u\
+			LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
+				WHERE u.id <> ?";
+
+		db.query(sql, req.query['user_id'], function(err, rows) {
+			if (err || !rows || rows.length < 1) {
+				res.send({
+					success: false,
+					error: err ? err : 'No users found'
+				});
+			}
+			else {
+				res.send({
+					success: true,
+					data: rows
+				});
+			}
+		});
 	}
 }
 

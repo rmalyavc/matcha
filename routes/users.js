@@ -107,6 +107,14 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_likes(req, res);
 	else if (req.query['action'] == 'get_avatar' && req.query['user_id'])
 		user_controller.get_avatar(req, res);
+	else if (req.query['action'] == 'find_users' && req.query['user_id'])
+		user_controller.find_users(req, res);
+	else {
+		res.send({
+			success: false,
+			error: 'Invalid request'
+		});
+	}
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {
