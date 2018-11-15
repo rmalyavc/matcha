@@ -83,12 +83,12 @@ a:hover {
 }
 
 .footer {
-	position: absolute;
-	width: 101%;
+	position: relative;
+	width: 100.5vw;
 	height: 120px;
 	/*top: 80%;*/
-	bottom: 0;
-	left: -0.5%;
+	top: 81%;
+	left: -3vw;
 	background: linear-gradient(180deg, #555555, #111111);
 	min-height: 60px;
 }
