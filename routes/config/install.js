@@ -60,11 +60,20 @@ function create_likes() {
 	});
 }
 
+function create_friends() {
+	var sql = "CREATE TABLE friends (\
+		id1 INT(6) NOT NULL,\
+		id2 INT(6) NOT NULL,\
+		active TINYINT(1) NOT NULL DEFAULT 0\
+	)";
+}
+
 module.exports = {
 	install: function() {
 		create_users();
 		create_photo();
 		create_comments();
 		create_likes();
+		create_friends();
 	}
 }

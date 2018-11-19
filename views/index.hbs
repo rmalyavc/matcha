@@ -12,14 +12,13 @@
 </div>
 {{# if logged_user }}
 	<div class="form_wrapper" id="index_wrapper">
-		<div class="search_results">
+		<div class="search_results" id="search_results">
 			<h1 class="text_header green">Search Results</h1>
+			<img type="button" id="close_results" class="close_button" src="/images/close.png">
 			<div class="results_cont">
-				<div class="search_result">
+			<!-- 	<div class="search_result">
 					<a href="/">
-						<!-- <div class="avatar_wrapper" style="background-image: url('/images/avatar.png');background-position: center;background-size: 100%;background-repeat: no-repeat;"> -->
 						<img class="avatar" src="/images/avatar.png">
-						<!-- </div> -->
 						<div class="user_info">
 							<div class="user_info_wrapper">
 								<label class="admin_label">Login:</label><strong>root</strong><br>
@@ -30,7 +29,10 @@
 							</div>
 						</div>
 					</a>
-				</div>
+				</div> -->
+			</div>
+			<div class="results_tools">
+				<button class="close_button submit_button" type="button" id="back_button"><strong class="button_text">Back to search</strong></button>
 			</div>
 		</div>
 		<form class="login_form" id="index_form" action="#" submit="false">

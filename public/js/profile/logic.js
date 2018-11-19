@@ -148,10 +148,6 @@ function draw_comment(comment, author) {
 
 function draw_comments(comms) {
 	$.post('/users/ajax_post', {action: 'get_users', authors: get_authors(comms)}, function(res) {
-		console.log('RES IS: ');
-		console.log(res);
-		console.log('COMMENTS ARE: ');
-		console.log(comms);
 		if (!res.success)
 			console.log(res.error);
 		else {
@@ -317,4 +313,52 @@ function like_hover(event, button) {
 	if (button.getAttribute('liked') === 'true')
 		return ;
 	button.style['background'] = event.type === 'mouseover' ? 'linear-gradient(0deg, #ff3232, #CD2421)' : 'none';
+}
+
+function add_friend() {
+	var fog = document.getElementById('fog');
+	var confirm = fog.getElementsByClassName('confirm_window')[0];
+	var res_window = document.getElementsByClassName('confirm_result')[0];
+	var text = res_window.getElementsByClassName('text_header')[0];
+
+	document.getElementById('confirm_close').addEventListener('click', function() {
+		confirm.style.display = 'block';
+		res_window.style.display = 'none';
+		fog.style.display = 'none';
+	});
+	$.get('/users/ajax', {action: 'add_friend', user_id: user_id}, function(res) {
+		console.log(res);
+		confirm.style.display = 'none';
+		res_window.style.display = 'block';
+		if (!res.success) {
+			text.setAttribute('class', 'text_header error_text');
+			text.innerHTML = res.error;
+		}
+		else {
+			text.setAttribute('class', 'text_header green');
+			text.innerHTML = 'Request is sent';
+		}
+	}).catch(function(err) {
+		confirm.style.display = 'none';
+		res_window.style.display = 'block';
+		text.setAttribute('class', 'text_header error_text');
+		text.innerHTML = err;
+	});
+}
+
+function friends(button_id) {
+	var fog = document.getElementById('fog');
+	var text = fog.getElementsByClassName('text_header')[0];
+	var yes = document.getElementById('yes_button');
+	var no = document.getElementById('no_button');
+
+	fog.style.display = 'block';
+	alert(button_id);
+	if (button_id == 'add_friend') {
+		text.innerHTML = 'Send invitation?';
+		yes.onclick = add_friend;
+		no.onclick = function() {
+			fog.style.display = 'none';
+		}
+	}
 }

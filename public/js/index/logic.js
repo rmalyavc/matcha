@@ -37,13 +37,18 @@ function start_search() {
 	wrapper.style.display = 'flex';
 }
 
-function close_search() {
+function close_search(button_id) {
 	var fog = document.getElementById('fog');
 	var wrapper = document.getElementById('index_wrapper');
+	var results = document.getElementById('search_results');
+	var form = document.getElementById('index_form');
 
-	fog.style.display = 'none';
-	wrapper.style.display = 'none';
-
+	results.style.display = 'none';
+	form.style.display = 'block';
+	if (button_id == 'close_search') {
+		fog.style.display = 'none';
+		wrapper.style.display = 'none';
+	}
 	start_slider();
 }
 
@@ -79,7 +84,7 @@ function post_users(rows) {
 			full_name += rows[i].last_name;
 		cont.innerHTML += '<div class="search_result">\
 			<a href="/users/profile/' + rows[i].id + '">\
-				<img class="avatar" src="' + avatar +'">\
+				<div class="search_avatar" style="background-image: url(\'' + avatar + '\');"></div>\
 				<div class="user_info">\
 					<div class="user_info_wrapper">\
 						<label class="admin_label">Login:</label><strong>' + rows[i].login + '</strong><br>\

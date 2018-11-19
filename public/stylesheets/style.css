@@ -83,12 +83,13 @@ a:hover {
 }
 
 .footer {
-	position: relative;
+	position: fixed;
 	width: 100.5vw;
 	height: 120px;
 	/*top: 80%;*/
-	top: 81%;
-	left: -3vw;
+	/*top: 81%;*/
+	bottom: 0;
+	left: 0;
 	background: linear-gradient(180deg, #555555, #111111);
 	min-height: 60px;
 }
@@ -205,8 +206,11 @@ a:hover {
 
 .search_result {
 	position: relative;
-	width: 100%;
+	width: 96%;
+	left: 2%;
 	height: 250px;
+	border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+	margin-top: 5px;
 	/*top: 100px;*/
 	/*border: 1px solid green;*/
 }
@@ -367,6 +371,15 @@ label, textarea {
 	font-size: 120%;
 }
 
+.results_tools > .submit_button {
+	position: absolute;
+	width: 20%;
+	height: 60%;
+	top: 20%;
+	left: 40%;
+	border-radius: 5px;
+}
+
 .search_button {
 	position: relative;
 	width: 50%;
@@ -490,8 +503,12 @@ label, textarea {
 	background-color: rgba(200,200,200,0.1);
 }
 
-.prev_next:hover, .slider_button:hover {
+.prev_next:hover, .slider_button:hover, {
 	background-color: rgba(200,200,200,0.2);
+}
+
+.search_result:hover {
+	background-color: rgba(200,200,200,0.1);
 }
 
 #prev {
@@ -628,6 +645,17 @@ label, textarea {
 	top: 5%;
 }
 
+.search_avatar {
+	position: absolute;
+	top: 35px;
+	left: 10px;
+	width: 180px;
+	height: 180px;
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
 .search_result  .avatar {
 	width: unset;
 	height: 50%;
@@ -648,10 +676,12 @@ label, textarea {
 
 .user_info {
 	position: relative;
-	width: 75%;
+	/*width: 75%;*/
+	min-width: 400px;
 	height: 100%;
-	left: 160px;
+	left: 220px;
 	display: flex;
+	/*border: 1px solid red;*/
 	align-items: center;
 	font-size: 120%;
 }
@@ -716,12 +746,23 @@ label, textarea {
 
 .confirm_window {
 	position: absolute;
-	width: 32%;
-	height: 24%;
+	width: 20%;
+	height: 14%;
 	left: 34%;
 	top: 38%;
 	border-radius: 10px;
 	background: linear-gradient(180deg, #aaaaaa, #dddddd);
+}
+
+.confirm_result {
+	position: absolute;
+	width: 20%;
+	height: 14%;
+	left: 34%;
+	top: 38%;
+	background-color: white;
+	border-radius: 5px;
+	display: none;
 }
 
 .confirm_button {
@@ -811,6 +852,12 @@ label, textarea {
 	justify-content: center;
 }
 
+.login_form > .tools_wrapper {
+	width: 80%;
+	left: 20%;
+	height: 8%;
+}
+
 .tool_button {
 	position: relative;
 	height: 70%;
@@ -827,7 +874,7 @@ label, textarea {
 	border-radius: 20%;
 }
 
-#del_photo:hover {
+#del_photo:hover, #add_friend:hover {
 	background: linear-gradient(0deg, #ff3232, #CD2421);
 }
 
@@ -899,3 +946,14 @@ label, textarea {
 	height: 100%;
 	z-index: -1;
 }
+
+.results_tools {
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+	height: 10%;
+	bottom: 0;
+}
+
+
+

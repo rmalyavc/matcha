@@ -93,6 +93,11 @@
 		{{/user}}
 		{{#if is_owner }}
 			<button type="submit" class="submit_button" id="save_changes"><strong class="button_text">Save</strong></button>
+		{{ else if logged_user }}
+			<div class="tools_wrapper">
+				<img class="tool_button" src="/images/add_friend.png" id="add_friend">
+			</div>
+			<!-- <img class="" -->
 		{{/if}}
 	</form>
 </div>

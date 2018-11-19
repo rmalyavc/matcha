@@ -11,19 +11,21 @@ function slider_listeners() {
 function search_listeners() {
 	var start = document.getElementById('start_button');
 	var search = document.getElementById('search_button');
-	var close = document.getElementById('close_search');
+	var closers = document.getElementsByClassName('close_button');
 
 	if (!close)
 		return ;
 	search.addEventListener('click', function() {
 		find_users();
 	});
-	close.addEventListener('click', function() {
-		close_search();
-	});
 	start.addEventListener('click', function() {
 		start_search();
 	});
+	for (var i = 0; i < closers.length; i++) {
+		closers[i].addEventListener('click', function() {
+			close_search(this.id);
+		});
+	}
 }
 
 function set_listeners() {

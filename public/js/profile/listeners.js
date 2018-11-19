@@ -155,6 +155,18 @@ function del_listener() {
 		del_photo();
 	});
 }
+
+function friends_listeners() {
+	var tools = document.getElementById('profile_form').getElementsByClassName('tool_button');
+
+	if (!tools || tools.length < 1)
+		return ;
+	for (var i = 0; i < tools.length; i++) {
+		tools[i].addEventListener('click', function() {
+			friends(this.id);
+		});
+	}
+}
 // function full_screen_listeners() {
 // 	var buttons = document.getElementsByClassName('full_screen');
 
@@ -176,6 +188,7 @@ function set_listeners() {
 	draw_avatar();
 	like_listeners();
 	del_listener();
+	friends_listeners();
 	post_images('preview_cont', 'img_wrapper');
 }
 

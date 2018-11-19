@@ -109,6 +109,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_avatar(req, res);
 	else if (req.query['action'] == 'find_users' && req.query['user_id'])
 		user_controller.find_users(req, res);
+	else if (req.query['action'] == 'add_friend' && req.query['user_id'] && req.session.user_id && req.session.user_id != req.query['user_id'])
+		user_controller.add_friend(req, res);
 	else {
 		res.send({
 			success: false,

@@ -655,6 +655,31 @@ module.exports = {
 				});
 			}
 		});
+	},
+	add_friend: function(req, res) {
+		var sql = "SELECT * FROM friends WHERE (id1 = ? AND id2 = ?) OR (id1 = ? AND id2 = ?);";
+		db.query(sql, [req.session.user_id, req.query['user_id'], req.query['user_id'], req.session.user_id], function(err, rows) {
+			console.log('ROWS ARE:');
+			console.log(rows);
+			console.log(this.sql);
+			console.log('END OF ROWS');
+			if (err || rows.length > 0) {
+				res.send({
+					success: false,
+					error: err ? err.sqlMessage : 'Your friendship is waiting for approval'
+				});
+				return ;
+			}
+			else {
+				sql = "INSERT INTO friends SET ?";
+				db.query(sql, {id1: req.session.user_id, id2: req.query['user_id']}, function(err) {
+					if (err)
+						res.send({success: false, error: err});
+					else
+						res.send({success: true});
+				});
+			}
+		})
 	}
 }
 

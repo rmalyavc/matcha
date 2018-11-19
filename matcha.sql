@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 15, 2018 at 10:50 AM
+-- Generation Time: Nov 19, 2018 at 11:31 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -45,7 +45,27 @@ INSERT INTO `comments` (`id`, `photo`, `author`, `text`, `time`) VALUES
 (3, 7, 4, 'Test', '2018-11-07 17:08:56'),
 (4, 13, 4, 'Really best', '2018-11-10 11:00:10'),
 (5, 7, 4, 'fijewfjew9f9', '2018-11-10 16:53:50'),
-(6, 8, 4, 'Test', '2018-11-15 15:46:33');
+(6, 8, 4, 'Test', '2018-11-15 15:46:33'),
+(7, 8, 4, 'frogoreoagrk', '2018-11-19 16:41:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `friends`
+--
+
+CREATE TABLE `friends` (
+  `id1` int(6) NOT NULL,
+  `id2` int(6) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `friends`
+--
+
+INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
+(4, 6, 0);
 
 -- --------------------------------------------------------
 
@@ -67,7 +87,8 @@ INSERT INTO `likes` (`id`, `photo_id`, `author`) VALUES
 (1, 1, 2),
 (2, 2, 2),
 (4, 9, 4),
-(6, 7, 4);
+(6, 7, 4),
+(7, 14, 4);
 
 -- --------------------------------------------------------
 
@@ -174,13 +195,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `photo`
