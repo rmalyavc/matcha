@@ -659,10 +659,6 @@ module.exports = {
 	add_friend: function(req, res) {
 		var sql = "SELECT * FROM friends WHERE (id1 = ? AND id2 = ?) OR (id1 = ? AND id2 = ?);";
 		db.query(sql, [req.session.user_id, req.query['user_id'], req.query['user_id'], req.session.user_id], function(err, rows) {
-			console.log('ROWS ARE:');
-			console.log(rows);
-			console.log(this.sql);
-			console.log('END OF ROWS');
 			if (err || rows.length > 0) {
 				res.send({
 					success: false,
@@ -676,10 +672,56 @@ module.exports = {
 					if (err)
 						res.send({success: false, error: err});
 					else
-						res.send({success: true});
+						res.send({success: true, text: 'Request has been sent'});
 				});
 			}
-		})
+		});
+	},
+	del_friend: function(req, res) {
+		var sql = "DELETE FROM friends WHERE (id1 = ? AND id2 = ?) OR (id1 = ? AND id2 = ?);";
+
+		db.query(sql, [req.session.user_id, req.query['user_id'], req.query['user_id'], req.session.user_id], function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true, text: 'User has been removed from your friend list'});
+		});
+	},
+	is_friend: function(req, res) {
+		var sql = "SELECT * FROM friends WHERE ((id1 = ? AND id2 = ?) OR (id1 = ? AND id2 = ?)) AND active = '1';";
+
+		db.query(sql, [req.session.user_id, req.query['user_id'], req.query['user_id'], req.session.user_id], function(err, rows) {
+			if (err || !rows || rows.length == 0)
+				res.send(false);
+			else
+				res.send(true);
+		});
+	},
+	get_requests: function(req, res) {
+		var sql = "SELECT u.id, u.login, p.url AS avatar FROM friends f\
+			INNER JOIN users u ON u.id = f.id1\
+				LEFT JOIN photo p ON p.user_id = f.id1 AND p.avatar = '1'\
+					WHERE f.id2 = ? AND f.active = '0';";
+		db.query(sql, req.session.user_id, function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true, data: rows});
+		});
+	},
+	confirm_friend: function(req, res) {
+		console.log(req.query['action']);
+		if (req.query['action'] == 'confirm_friend')
+			var sql = "UPDATE friends SET active = '1' WHERE id1 = ? AND id2 = ?;";
+		else
+			var sql = "DELETE FROM friends WHERE id1 = ? AND id2 = ?;";
+
+		db.query(sql, [req.query['user_id'], req.session.user_id], function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
 	}
 }
 

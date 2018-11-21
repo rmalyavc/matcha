@@ -315,19 +315,19 @@ function like_hover(event, button) {
 	button.style['background'] = event.type === 'mouseover' ? 'linear-gradient(0deg, #ff3232, #CD2421)' : 'none';
 }
 
-function add_friend() {
+function add_del_friend() {
 	var fog = document.getElementById('fog');
 	var confirm = fog.getElementsByClassName('confirm_window')[0];
 	var res_window = document.getElementsByClassName('confirm_result')[0];
 	var text = res_window.getElementsByClassName('text_header')[0];
+	var action = document.getElementById('action');
 
 	document.getElementById('confirm_close').addEventListener('click', function() {
 		confirm.style.display = 'block';
 		res_window.style.display = 'none';
 		fog.style.display = 'none';
 	});
-	$.get('/users/ajax', {action: 'add_friend', user_id: user_id}, function(res) {
-		console.log(res);
+	$.get('/users/ajax', {action: action.value, user_id: user_id}, function(res) {
 		confirm.style.display = 'none';
 		res_window.style.display = 'block';
 		if (!res.success) {
@@ -336,7 +336,7 @@ function add_friend() {
 		}
 		else {
 			text.setAttribute('class', 'text_header green');
-			text.innerHTML = 'Request is sent';
+			text.innerHTML = res.text;
 		}
 	}).catch(function(err) {
 		confirm.style.display = 'none';
@@ -344,6 +344,7 @@ function add_friend() {
 		text.setAttribute('class', 'text_header error_text');
 		text.innerHTML = err;
 	});
+	check_friendship();
 }
 
 function friends(button_id) {
@@ -353,12 +354,36 @@ function friends(button_id) {
 	var no = document.getElementById('no_button');
 
 	fog.style.display = 'block';
-	alert(button_id);
 	if (button_id == 'add_friend') {
-		text.innerHTML = 'Send invitation?';
-		yes.onclick = add_friend;
+		// text.innerHTML = 'Send invitation?';
+		yes.onclick = add_del_friend;
 		no.onclick = function() {
 			fog.style.display = 'none';
 		}
 	}
+}
+
+function check_friendship() {
+	var fog = document.getElementById('fog');
+	var text = fog.getElementsByClassName('text_header')[0];
+	var button = document.getElementById('add_friend');
+	var action = document.getElementById('action');
+
+	if (!button || !text || !fog || !action)
+		return ;
+	$.get('/users/ajax', {action: 'is_friend', user_id: user_id}, function(res) {
+		console.log('RES IS: ' + res);
+		if (!res) {
+			button.src = '/images/add_friend.png';
+			button.style['border-radius'] = '50%';
+			text.innerHTML = 'Send Invitation?';
+			action.value = 'add_friend';
+		}
+		else {
+			button.style['border-radius'] = '5px';
+			button.src = '/images/delete.png';
+			text.innerHTML = 'Do you really want to delete this user?';
+			action.value = 'del_friend';
+		}
+	});
 }

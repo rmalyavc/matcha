@@ -159,6 +159,7 @@ function del_listener() {
 function friends_listeners() {
 	var tools = document.getElementById('profile_form').getElementsByClassName('tool_button');
 
+	check_friendship();
 	if (!tools || tools.length < 1)
 		return ;
 	for (var i = 0; i < tools.length; i++) {

@@ -12,6 +12,7 @@
 		<div class="header_tools">
 			{{# if login}}
 			{{ else if logged_user }}
+				<button class="header_icon" id="requests_button"><strong id="req_qty">0</strong></button>
 				<img class="header_icon" id="logout_icon" onclick="location.href='/users/logout'" src="/images/logout.png">
 				<a id="profile_link" href="/users/profile/{{ logged_user }}"></a>
 				<script type="text/javascript">
@@ -32,6 +33,7 @@
 				<img class="header_icon" onclick="location.href='/users/login'" src="/images/login.png">
 			{{/if}}
 		</div>
+		<div class="requests_cont" id="requests_cont">Test</div>
 	</div>
 	<div class="fog" id="fog">
 		<div class="confirm_window">
@@ -43,7 +45,7 @@
 		</div>
 		<div class="confirm_result">
 			<h2 class="text_header"></h2>
-			<img class="close_button" src="/images/close.png" id="confirm_close">
+			<button class="submit_button" id="confirm_close"><strong class="button_text">Back</strong></button>
 		</div>
 	</div>
 	<div class="main_cont">
@@ -67,4 +69,8 @@
 			</div>
 		</div>
 	</div>
+	{{# if logged_user }}
+		<script type="text/javascript" src="/js/basic/logic.js"></script>
+		<script type="text/javascript" src="/js/basic/listeners.js"></script>
+	{{/if}}
 </html>

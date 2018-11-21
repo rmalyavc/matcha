@@ -111,6 +111,14 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.find_users(req, res);
 	else if (req.query['action'] == 'add_friend' && req.query['user_id'] && req.session.user_id && req.session.user_id != req.query['user_id'])
 		user_controller.add_friend(req, res);
+	else if (req.query['action'] == 'del_friend' && req.query['user_id'] && req.session.user_id && req.session.user_id != req.query['user_id'])
+		user_controller.del_friend(req, res);
+	else if (req.query['action'] == 'is_friend' && req.query['user_id'] && req.session.user_id && req.session.user_id != req.query['user_id'])
+		user_controller.is_friend(req, res);
+	else if (req.query['action'] == 'get_requests' && req.session.user_id)
+		user_controller.get_requests(req, res);
+	else if ((req.query['action'] == 'confirm_friend' || req.query['action'] == 'refuse_friend') && req.query['user_id'] && req.session.user_id)
+		user_controller.confirm_friend(req, res);
 	else {
 		res.send({
 			success: false,
