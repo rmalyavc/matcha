@@ -59,7 +59,7 @@ router.get('/profile/:id', function(req, res, next) {
 		}
 		else {
 			var error = req.query['err'] ? req.query['err'] : false;
-			res.render('auth/profile', {
+			res.render('users/profile', {
 				user: rows[0],
 				is_owner: is_owner,
 				err: error,
@@ -67,20 +67,13 @@ router.get('/profile/:id', function(req, res, next) {
 			});
 		}
 	});
+});
 
-	// User.findById(req.params.id, function (err, doc) {
-	// 	if (err || !doc)
-	// 		res.render('error', {message: 'User is not found'});
-	// 	else {
-	// 		var error = req.query['err'] ? req.query['err'] : false;
-	// 		res.render('auth/profile', {
-	// 			user: doc,
-	// 			is_owner: is_owner,
-	// 			err: error,
-	// 			logged_user: req.session.user_id
-	// 		});
-	// 	}
-	// });
+router.get('/friends', function(req, res, next) {
+	res.render('users/friends', {
+		logged_user: req.session.user_id,
+		friends: true
+	});
 });
 
 router.get('/ajax', function(req, res, next) {
@@ -137,8 +130,6 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 	else if ((req.body['action'] == 'del_user' || req.body['action'] == 'change_admin' || req.body['action'] == 'change_active') && req.body['id']) {
 		
 		var sql = "SELECT * FROM users WHERE id = ?;";
-		// var curr_user = await db.query(sql, req.session.user_id);
-		// var curr_user = await User.findById(req.session.user_id).exec();
 		db.query(sql, req.session.user_id, function(err, rows) {
 			var curr_user = rows[0];
 			console.log('CURR USER IS: ');

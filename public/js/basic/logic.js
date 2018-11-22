@@ -15,11 +15,11 @@ function post_request(req) {
 	var cont = document.getElementById('requests_cont');
 	if (!cont)
 		return ;
-	var avatar = req.avatar ? req.avatar : '/images/avatar.png';
+	var avatar = req.avatar ? req.avatar : '/images/default_avatar.png';
 	cont.innerHTML += '<div class="request">\
 		<div class="req_avatar" style="background-image: url(' + "'" + avatar + "'" + ')"></div>\
 		<div class="req_info">\
-			<a href="/users/profile/' + req.id + '">' + req.login + '</a>\
+			<a href="/users/profile/' + req.id + '">' + req.login + '</a><span>\ invites you to be friends</span>\
 			<div class="req_tools">\
 				<img class="req_tool req_confirm" onclick="req_confirm(this, ' + "'" + req.id + "'" + ');" src="/images/confirm.png">\
 				<img class="req_tool req_refuse" onclick="req_confirm(this, ' + "'" + req.id + "'" + ');" src="/images/refuse.png">\

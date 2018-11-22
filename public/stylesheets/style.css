@@ -54,6 +54,13 @@ a:hover {
 	margin-right: 10px;
 }
 
+#friends_button {
+	/*height: 80%;*/
+	min-width: 0;
+	border-radius: 50%;
+}
+
+
 button.header_icon {
 	border-radius: 50%;
 	border: 2px solid #82B436;
@@ -62,9 +69,9 @@ button.header_icon {
 	max-width: unset;
 }
 
-#requests_button:hover {
+/*#requests_button:hover {
 	background: linear-gradient(0deg, #ff3232, #CD2421);
-}
+}*/
 
 #requests_button:hover strong {
 	color: white;
@@ -72,8 +79,8 @@ button.header_icon {
 
 .requests_cont {
 	position: absolute;
-	width: 300px;
-	height: 200px;
+	width: 400px;
+	height: 270px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	right: 5%;
@@ -97,7 +104,7 @@ button.header_icon {
 	border-radius: 50%;
 }
 
-#admin_link:hover {
+#admin_link:hover, #friends_button:hover, #requests_button:hover {
 	background-color: #556b2f;
 }
 
