@@ -91,9 +91,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.add_comment(req, res);
 	else if (req.query['action'] == 'get_comments' && req.query['photo_id'])
 		user_controller.get_comments(req, res);
-	else if (req.query['action'] == 'set_avatar' && req.query['photo_id'] && req.query['user_id'] && req.query['user_id'] == req.session.user_id) {
+	else if (req.query['action'] == 'set_avatar' && req.query['photo_id'] && req.query['user_id'] && req.query['user_id'] == req.session.user_id)
 		user_controller.set_avatar(req, res);
-	}
 	else if (req.query['action'] == 'like_photo' && req.query['photo_id'] && req.query['user_id'])
 		user_controller.like_photo(req, res);
 	else if (req.query['action'] == 'get_likes' && req.query['photo_id'] && req.query['user_id'])
@@ -112,6 +111,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_requests(req, res);
 	else if ((req.query['action'] == 'confirm_friend' || req.query['action'] == 'refuse_friend') && req.query['user_id'] && req.session.user_id)
 		user_controller.confirm_friend(req, res);
+	else if (req.query['action'] == 'get_friends' && req.session.user_id)
+		user_controller.get_friends(req, res);
 	else {
 		res.send({
 			success: false,

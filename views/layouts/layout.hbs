@@ -12,7 +12,10 @@
 		<div class="header_tools">
 			{{# if login}}
 			{{ else if logged_user }}
-				<img class="header_icon" id="friends_button" onclick="location.href='/users/friends'" src="/images/friends.png">
+				{{# if friends }}
+				{{ else }}
+					<img class="header_icon" id="friends_button" onclick="location.href='/users/friends'" src="/images/friends.png">
+				{{/if}}
 				<button class="header_icon" id="requests_button" onclick="requests_visible();"><strong id="req_qty">0</strong></button>
 				<img class="header_icon" id="logout_icon" onclick="location.href='/users/logout'" src="/images/logout.png">
 				<a id="profile_link" href="/users/profile/{{ logged_user }}"></a>

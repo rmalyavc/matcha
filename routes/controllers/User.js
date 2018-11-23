@@ -722,6 +722,20 @@ module.exports = {
 			else
 				res.send({success: true});
 		});
+	},
+	get_friends: function(req, res) {
+		var sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar \
+			FROM users u\
+				INNER JOIN friends f ON (f.id1 = u.id OR f.id2 = u.id)\
+					LEFT JOIN photo p ON u.id = p.user_id AND p.avatar = '1'\
+						WHERE u.id <> ? AND f.active = '1';";
+		db.query(sql, req.session.user_id, function(err, rows) {
+			console.log(this.sql);
+			if (err)
+				res.send({success: false, err: err.sqlMessage});
+			else
+				res.send({success: true, data: rows});
+		});
 	}
 }
 

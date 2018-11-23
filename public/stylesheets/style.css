@@ -28,6 +28,7 @@ a:hover {
 	top: 0;
 	background: linear-gradient(180deg, #555555, #111111);
 	min-height: 25px;
+	z-index: 4;
 }
 
 .logo {
@@ -60,6 +61,92 @@ a:hover {
 	border-radius: 50%;
 }
 
+#friends_window {
+	display: block;
+	height: 85vh;
+	min-width: 400px;
+}
+
+.friends_wrapper {
+	position: absolute;
+	width: 100%;
+	height: 80%;
+	top: 10%;
+	/*border: 1px solid red;*/
+}
+
+.friend_cont {
+	position: relative;
+	width: 99.5%;
+	height: 25%;
+	min-height: 200px;
+	margin-top: 10px;
+	padding: 5px;	
+	font-size: 12px;
+	border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+	/*border: 1px solid green;*/
+}
+
+.check_cont {
+	position: absolute;
+	width: 3%;
+	height: 90%;
+	top: 5%;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/*border: 1px solid yellow;*/
+}
+
+.friend_cont > .avatar {
+	left: 4%;
+	width: 10%;
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	/*border: 1px solid blue;*/
+	background-image: url('/images/default_avatar.png');
+}
+
+.friend_info {
+	position: absolute;
+	width: 85%;
+	height: 90%;
+	top: 5%;
+	right: 0%;
+	display: flex;
+	align-items: center;
+	/*border: 1px solid black;*/
+}
+
+.friend_info_wrapper {
+	font-size: 90%;
+}
+
+.friend_info_wrapper > .search_about {
+	height: 60%;
+	width: 60%;
+}
+
+.friend_info_wrapper > .admin_label {
+	font-size: 12px;
+}
+
+.friend_tools {
+	position: absolute;
+	width: 30%;
+	height: 9%;
+	bottom: 0;
+	left: 35%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.friend_tools > .tool_button {
+	border-radius: 5px;
+}
 
 button.header_icon {
 	border-radius: 50%;
@@ -971,7 +1058,7 @@ label, textarea {
 	border-radius: 20%;
 }
 
-#del_photo:hover, #add_friend:hover {
+#del_photo:hover, #add_friend:hover, #del_friend:hover {
 	background: linear-gradient(0deg, #ff3232, #CD2421);
 }
 
