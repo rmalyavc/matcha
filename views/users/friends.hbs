@@ -1,26 +1,26 @@
-<script type="text/javascript" src="/js/basic/helpers.js"></script>
 <script type="text/javascript" src="/js/friends/logic.js"></script>
 <script type="text/javascript" src="/js/friends/listeners.js"></script>
 <div class="full_size" id="friends_window">
-	<h2 class="text_header green">Friends</h2>
-	<div class="friends_wrapper">
-		<!-- <a href="#">
-			<div class="friend_cont">
-				<div class="check_cont">
-					<input type="radio" class="">
-				</div>
-				<div class="avatar"></div>
-				<div class="friend_info">
-					<div class="friend_info_wrapper">
-						<label class="admin_label">Login:</label><span>Login</span><br>
-						<label class="admin_label">Full Name:</label><span>Full Name</span><br>
-						<label class="admin_label">Age:</label><span>42</span><br>
-						<label class="admin_label about_label">About me:</label>
-						<div class="search_about">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento</div>
-					</div>
-				</div>
-			</div>
-		</a> -->
+	<div class="chat_window" id="chat_window">
+		<img class="close_button" id="close_chat" src="/images/close.png">
 	</div>
-	<div class="friend_tools"><img src="/images/delete.png" class="tool_button" id="del_friend"></div>
+	<div class="friend_fog" id="friend_fog">
+		<div class="confirm_window">
+			<h2 class="text_header error_text" id="friend_confirm"></h2>
+			<button class="confirm_button" id="yes_del"><strong>Yes</strong></button>
+			<button class="confirm_button" id="no_del"><strong>No</strong></button>
+		</div>
+		<div class="confirm_window" id="action_result">
+			<h2 class="text_header" id="result_text"></h2>
+			<button type="button" class="submit_button" id="result_back"><strong class="button_text">Back</strong></button>
+		</div>
+		<input type="hidden" id="friend_action">
+		<input type="hidden" id="friend_data">
+	</div>
+	<h2 class="text_header green">Friends</h2>
+	<div class="friends_wrapper"></div>
+	<div class="friend_tools">
+		<img src="/images/delete.png" class="tool_button" id="del_friend">
+		<img src="/images/chat.png" class="tool_button" id="chat_button">
+	</div>
 </div>

@@ -148,6 +148,19 @@ a:hover {
 	border-radius: 5px;
 }
 
+#action_result {
+	display: none;
+}
+
+.chat_window {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+	background-color: white;
+	display: none;
+}
+
 button.header_icon {
 	border-radius: 50%;
 	border: 2px solid #82B436;
@@ -504,12 +517,16 @@ label, textarea {
 	border-radius: 5px;
 }
 
-.confirm_result > .submit_button {
+.confirm_result > .submit_button, .confirm_window > .submit_button {
 	position: absolute;
 	height: 25%;
 	width: 50%;
 	left: 25%;
 	top: 60%;
+}
+
+#friend_confirm, #action_result {
+	font-size: 100%;
 }
 
 .search_button {
@@ -935,7 +952,7 @@ label, textarea {
 	left: 34%;
 	top: 38%;
 	border-radius: 10px;
-	background: linear-gradient(180deg, #aaaaaa, #dddddd);
+	background-color: white;
 }
 
 .confirm_result {
@@ -1060,6 +1077,35 @@ label, textarea {
 
 #del_photo:hover, #add_friend:hover, #del_friend:hover {
 	background: linear-gradient(0deg, #ff3232, #CD2421);
+}
+
+#chat_button:hover {
+	background-color: rgba(100,100,100,0.3);
+}
+
+#chat_button {
+	border-radius: 50%;
+}
+
+.friend_tools > .tool_button {
+	border-radius: 10px;
+}
+
+.friend_cont > a {
+	color: #444444;
+}
+
+.friend_cont > a:hover {
+	color: #7777FF;
+}
+
+.full_size > .friend_fog {
+	position: absolute;
+	background: rgba(0,0,0,0.8);
+	z-index: 4;
+	height: 100%;
+	width: 100%;
+	display: none;
 }
 
 .comments {
