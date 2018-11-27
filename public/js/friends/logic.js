@@ -7,6 +7,18 @@ function uncheck_users(elem_id) {
 			inputs[i].checked = false;
 }
 
+function fill_chat_list(cont, friend) {
+	var avatar = friend.avatar ? friend.avatar : '/images/default_avatar.png';
+
+	cont.innerHTML += '<div class="chat_user" id="chat_' + friend.id + '" onclick="start_chat(this.id);">\
+		<div class="req_avatar" style="background-image:url(\'' + avatar + '\');"></div>\
+		<div class="req_info">\
+			<h4 class="text_header">' + friend.login + '</h4>\
+			<i class="text_header" id="last_message">No recent messages...</i>\
+		</div>\
+	</div>'
+}
+
 function post_friend(cont, friend) {
 	var avatar = friend.avatar ? friend.avatar : '/images/default_avatar.png';
 	var age = friend.age ? friend.age : '?';
@@ -20,7 +32,7 @@ function post_friend(cont, friend) {
 			<div class="check_cont">\
 				<input type="radio" id="' + friend.id + '">\
 			</div>\
-				<div class="avatar" style="background-image:url(' + "'" + avatar + "'" + '"></div>\
+				<div class="avatar" style="background-image:url(' + "'" + avatar + "'" + ');"></div>\
 				<a href="/users/profile/' + friend.id + '">\
 					<div class="friend_info">\
 						<div class="friend_info_wrapper">\
@@ -36,8 +48,10 @@ function post_friend(cont, friend) {
 	radio_listeners();
 }
 
-function post_friends() {
-	var cont = document.getElementsByClassName('friends_wrapper')[0];
+function post_friends(cont_id, funct) {
+	var cont = document.getElementById(cont_id);
+	// var cont = document.getElementsByClassName('friends_wrapper')[0];
+	// var cont = document.getElementById('chat_list').getElementsByClassName('chat_wrapper')[0];
 
 	// console.log(document.getElementById('friends_window'));
 	cont.innerHTML = '';
@@ -48,13 +62,13 @@ function post_friends() {
 			cont.innerHTML = '<h3 class="text_header error_text">No friends found =(</h3>';
 		else
 			for (var i = 0; i < res.data.length; i++)
-				post_friend(cont, res.data[i]);
+				funct(cont, res.data[i]);
 	});
 }
 
 function friends() {
 	fog_visible('fog', true, false);
-	post_friends();
+	post_friends('friends_cont', post_friend);
 }
 
 function proceed_action() {
@@ -77,7 +91,7 @@ function proceed_action() {
 			text.setAttribute('class', text.getAttribute('class') + ' ' + 'green');
 			text.innerHTML = 'Friend is successfuly deleted';
 		}
-		post_friends();
+		post_friends('friends_cont', post_friend);
 		back.onclick = function() {
 			res_win.style.display = 'none';
 			fog_visible('friend_fog', false, true);
@@ -85,10 +99,27 @@ function proceed_action() {
 	});
 }
 
-function chat_action() {
+function start_chat(cont_id) {
+	var list = document.getElementsByClassName('chat_user');
+
+	console.log(list);
+	console.log(cont_id);
+	for (var i = 0; i < list.length; i++) {
+		var list_id = list[i].id;
+		console.log('LIST ID IS: ' + list_id + '   CONT ID IS: ' + cont_id);
+		console.log(list[i].id == cont_id);
+		list[i].style['background'] = (list[i].id == cont_id) ? "rgba(200,200,200,0.2)" : 'none';
+		console.log(list[i].style['background']);
+	}
+}
+
+function chat_action(user_id) {
 	var chat = document.getElementById('chat_window');
 
 	chat.style.display = 'block';
+	post_friends('chat_list', fill_chat_list);
+	chat_list_listeners();
+	start_chat('chat_' + user_id);
 }
 
 function del_action() {
@@ -132,7 +163,7 @@ function action(elem_id) {
 	if (elem_id == 'del_friend')
 		del_action();
 	else if (elem_id == 'chat_button')
-		chat_action();
+		chat_action(checked.id);
 }
 
 $(document).ready(function() {

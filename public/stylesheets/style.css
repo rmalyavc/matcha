@@ -72,6 +72,7 @@ a:hover {
 	width: 100%;
 	height: 80%;
 	top: 10%;
+	overflow-y: auto;
 	/*border: 1px solid red;*/
 }
 
@@ -148,6 +149,16 @@ a:hover {
 	border-radius: 5px;
 }
 
+.message_input {
+	position: relative;
+	height: 70%;
+	width: 70%;
+	border-radius: 5px;
+	padding: 5px;
+	resize: none;
+	border: 2px solid #e6e6e6;
+}
+
 #action_result {
 	display: none;
 }
@@ -159,6 +170,70 @@ a:hover {
 	z-index: 5;
 	background-color: white;
 	display: none;
+}
+
+.chat_wrapper {
+	position: absolute;
+	width: 100%;
+	height: 80%;
+	top: 10%;
+	/*border: 1px solid black;*/
+}
+
+.chat_list {
+	position: absolute;
+	left: 1%;
+	width: 20%;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	/*border: 1px solid red;*/
+}
+
+.chat_messages {
+	position: absolute;
+	width: 78%;
+	height: 98%;
+	top: 1%;
+	right: 0.5%;
+	border-radius: 5px;
+	border: 2px solid #e6e6e6;
+}
+
+.chat_list > .chat_wrapper {
+	height: 94%;
+	top: 6%;
+	/*border: 1px solid blue;*/
+}
+
+.chat_user {
+	position: relative;
+	width: 95%;
+	height: 15%;
+	left: 0.5%;
+	margin-top: 10px;
+	border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+	/*border: 1px solid green;*/
+}
+
+.chat_user > .req_avatar {
+	height: 100%;
+	top: 0;
+}
+
+.chat_user:hover {
+	background-color: rgba(200,200,200,0.2);
+}
+
+.req_info > .text_header {
+	text-align: left;
+	margin-left: 10px;
+	margin-top: 10%;
+}
+.req_info > i.text_header {
+	float: left;
+	font-size: 80%;
+	margin-top: 10%;
 }
 
 button.header_icon {
@@ -1075,7 +1150,7 @@ label, textarea {
 	border-radius: 20%;
 }
 
-#del_photo:hover, #add_friend:hover, #del_friend:hover {
+#del_photo:hover, #add_friend:hover, #del_friend:hover, #send_message:hover {
 	background: linear-gradient(0deg, #ff3232, #CD2421);
 }
 
@@ -1083,7 +1158,7 @@ label, textarea {
 	background-color: rgba(100,100,100,0.3);
 }
 
-#chat_button {
+#chat_button, #send_message {
 	border-radius: 50%;
 }
 
@@ -1097,6 +1172,12 @@ label, textarea {
 
 .friend_cont > a:hover {
 	color: #7777FF;
+}
+
+.chat_window > .friend_tools {
+	width: 99%;
+	left: 0%;
+	justify-content: flex-end;
 }
 
 .full_size > .friend_fog {

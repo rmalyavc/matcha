@@ -728,8 +728,8 @@ module.exports = {
 			FROM users u\
 				INNER JOIN friends f ON (f.id1 = u.id OR f.id2 = u.id)\
 					LEFT JOIN photo p ON u.id = p.user_id AND p.avatar = '1'\
-						WHERE u.id <> ? AND f.active = '1';";
-		db.query(sql, req.session.user_id, function(err, rows) {
+						WHERE u.id <> ? AND f.active = '1' AND (f.id1 = ? OR f.id2 = ?);";
+		db.query(sql, [req.session.user_id, req.session.user_id, req.session.user_id], function(err, rows) {
 			console.log(this.sql);
 			if (err)
 				res.send({success: false, err: err.sqlMessage});

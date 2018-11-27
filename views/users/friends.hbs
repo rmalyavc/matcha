@@ -2,7 +2,19 @@
 <script type="text/javascript" src="/js/friends/listeners.js"></script>
 <div class="full_size" id="friends_window">
 	<div class="chat_window" id="chat_window">
+		<h2 class="text_header green">Chat</h2>
 		<img class="close_button" id="close_chat" src="/images/close.png">
+		<div class="chat_wrapper">
+			<div class="chat_list">
+				<h3 class="text_header green">Friends</h3>
+				<div class="chat_wrapper" id="chat_list"></div>
+			</div>
+			<div class="chat_messages"></div>
+		</div>
+		<div class="friend_tools">
+			<textarea class="message_input" id="message_input">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+			<img src="/images/send.png" class="tool_button" id="send_message">
+		</div>
 	</div>
 	<div class="friend_fog" id="friend_fog">
 		<div class="confirm_window">
@@ -18,7 +30,7 @@
 		<input type="hidden" id="friend_data">
 	</div>
 	<h2 class="text_header green">Friends</h2>
-	<div class="friends_wrapper"></div>
+	<div class="friends_wrapper" id="friends_cont"></div>
 	<div class="friend_tools">
 		<img src="/images/delete.png" class="tool_button" id="del_friend">
 		<img src="/images/chat.png" class="tool_button" id="chat_button">

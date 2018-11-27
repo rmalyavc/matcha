@@ -27,3 +27,13 @@ function chat_listeners() {
 		chat.style.display = 'none';
 	});
 }
+
+function chat_list_listeners() {
+	var list = document.getElementsByClassName('chat_user');
+
+	for (var i = 0; i < list.length; i++) {
+		list[i].addEventListener('click', function() {
+			start_chat(this.id);
+		});
+	}
+}
