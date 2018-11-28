@@ -73,6 +73,7 @@ a:hover {
 	height: 80%;
 	top: 10%;
 	overflow-y: auto;
+	overflow-x: hidden;
 	/*border: 1px solid red;*/
 }
 
@@ -198,6 +199,22 @@ a:hover {
 	right: 0.5%;
 	border-radius: 5px;
 	border: 2px solid #e6e6e6;
+}
+
+.message {
+	position: relative;
+	border: 2px solid #e6e6e6;
+	border-radius: 5px;
+	background-color: white;
+	left: 0.5%;
+	margin-top: 20px;
+	width: 50%;
+	padding: 5px;
+}
+
+.owner {
+	left: 48.5%;
+	background-color: rgba(0,0,255,0.2);
 }
 
 .chat_list > .chat_wrapper {

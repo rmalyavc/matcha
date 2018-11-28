@@ -16,7 +16,7 @@ function fill_chat_list(cont, friend) {
 			<h4 class="text_header">' + friend.login + '</h4>\
 			<i class="text_header" id="last_message">No recent messages...</i>\
 		</div>\
-	</div>'
+	</div>';
 }
 
 function post_friend(cont, friend) {
@@ -99,27 +99,52 @@ function proceed_action() {
 	});
 }
 
+function post_message(message, is_owner) {
+	console.log(message);
+	var cont = document.getElementById('chat_messages');
+	var add_class = is_owner ? ' owner' : '';
+
+	cont.innerHTML += '<div class="message' + add_class + '">\
+		<p class="message_text">' + message.text + '</p>\
+	</div>';
+}
+
+function post_messages(user_id) {
+	var cont = document.getElementById('chat_messages');
+
+	$.post('/users/ajax_post', {action: 'get_messages', user_id: user_id}, function(res) {
+		if (!res.success) {
+			console.log(res.error);
+			return ;
+		}
+		cont.innerHTML = '';
+		for (var i = 0; i < res.data.length; i++) {
+			post_message(res.data[i], res.data[i].author != user_id);
+		}
+	});
+}
+
 function start_chat(cont_id) {
 	var list = document.getElementsByClassName('chat_user');
 
-	console.log(list);
-	console.log(cont_id);
+	// console.log(Array.isArray(cont_id));
+	if (Array.isArray(cont_id))
+		cont_id = cont_id[0];
 	for (var i = 0; i < list.length; i++) {
 		var list_id = list[i].id;
-		console.log('LIST ID IS: ' + list_id + '   CONT ID IS: ' + cont_id);
-		console.log(list[i].id == cont_id);
 		list[i].style['background'] = (list[i].id == cont_id) ? "rgba(200,200,200,0.2)" : 'none';
-		console.log(list[i].style['background']);
 	}
+	console.log(cont_id);
+	// var user_id = cont_id.replace('chat_', '');
+	post_messages(cont_id.replace('chat_', ''));
 }
 
 function chat_action(user_id) {
 	var chat = document.getElementById('chat_window');
-
+	
 	chat.style.display = 'block';
 	post_friends('chat_list', fill_chat_list);
-	chat_list_listeners();
-	start_chat('chat_' + user_id);
+	wait_elem('id_name', 'chat_' + user_id, document, start_chat, ['chat_' + user_id]);
 }
 
 function del_action() {

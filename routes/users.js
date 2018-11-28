@@ -70,10 +70,13 @@ router.get('/profile/:id', function(req, res, next) {
 });
 
 router.get('/friends', function(req, res, next) {
-	res.render('users/friends', {
-		logged_user: req.session.user_id,
-		friends: true
-	});
+	if (!req.session.user_id)
+		res.redirect('/users/login');
+	else
+		res.render('users/friends', {
+			logged_user: req.session.user_id,
+			friends: true
+		});
 });
 
 router.get('/ajax', function(req, res, next) {
@@ -149,6 +152,8 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		user_controller.get_avatars(req, res);
 	else if (req.body['action'] == 'del_photo' && req.body['photo_id'] && req.body['user_id'] == req.session.user_id)
 		user_controller.del_photo(req, res);
+	else if (req.body['action'] == 'get_messages' && req.body['user_id'] && req.session.user_id && req.session.user_id != req.body['user_id'])
+		user_controller.get_messages(req, res);
 });
 
 module.exports = router;

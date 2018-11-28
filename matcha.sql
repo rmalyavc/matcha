@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 19, 2018 at 11:31 AM
+-- Generation Time: Nov 28, 2018 at 11:12 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -43,10 +43,11 @@ CREATE TABLE `comments` (
 INSERT INTO `comments` (`id`, `photo`, `author`, `text`, `time`) VALUES
 (2, 7, 4, 'Fire', '2018-11-07 16:57:38'),
 (3, 7, 4, 'Test', '2018-11-07 17:08:56'),
-(4, 13, 4, 'Really best', '2018-11-10 11:00:10'),
 (5, 7, 4, 'fijewfjew9f9', '2018-11-10 16:53:50'),
 (6, 8, 4, 'Test', '2018-11-15 15:46:33'),
-(7, 8, 4, 'frogoreoagrk', '2018-11-19 16:41:28');
+(7, 8, 4, 'frogoreoagrk', '2018-11-19 16:41:28'),
+(8, 8, 4, 'fwjifwjiejwf', '2018-11-22 18:42:38'),
+(9, 12, 4, 'kdwokdwokdekw', '2018-11-27 18:36:45');
 
 -- --------------------------------------------------------
 
@@ -65,7 +66,11 @@ CREATE TABLE `friends` (
 --
 
 INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
-(4, 6, 0);
+(2, 3, 1),
+(2, 4, 1),
+(4, 5, 1),
+(4, 6, 1),
+(4, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -88,7 +93,32 @@ INSERT INTO `likes` (`id`, `photo_id`, `author`) VALUES
 (2, 2, 2),
 (4, 9, 4),
 (6, 7, 4),
-(7, 14, 4);
+(7, 14, 4),
+(8, 10, 4),
+(9, 8, 2),
+(11, 12, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `author` int(6) NOT NULL,
+  `dest_user` int(6) NOT NULL,
+  `text` varchar(500) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`) VALUES
+(1, 2, 4, 'Hi root! How are you?', '2018-11-28 18:57:27'),
+(2, 4, 2, 'Oh, very good, thanks. You?', '2018-11-28 18:58:00');
 
 -- --------------------------------------------------------
 
@@ -117,11 +147,10 @@ INSERT INTO `photo` (`id`, `user_id`, `url`, `avatar`) VALUES
 (10, 4, '/uploads/root/2018/11/7/88e527ec961e010719b716ebe9bf53d6.jpeg', 0),
 (11, 4, '/uploads/root/2018/11/7/fb55c456b1fbc8bb10d3c3bb30e9c19a.jpeg', 0),
 (12, 4, '/uploads/root/2018/11/7/9c43f9059fc86eca2e597718094b48d1.jpeg', 0),
-(13, 4, '/uploads/root/2018/11/7/a6219a4e2bc57e8fdc5f1938fdd44e69.jpeg', 0),
 (14, 4, '/uploads/root/2018/11/7/1955d0423acc6a3de351bb15381a5a3b.jpeg', 0),
 (15, 3, '/uploads/test1/2018/11/15/fb6a792d8db5a5ba763a1dd6cd0527d8.jpeg', 1),
 (16, 3, '/uploads/test1/2018/11/15/d0b53c2eec81b7c5ff1ef3f195be9417.jpeg', 0),
-(17, 5, '/uploads/Stanly/2018/11/15/119ffdb79a6a4bff6ee585efc8a99797.jpeg', 1),
+(17, 5, '/uploads/Stanly/2018/11/15/119ffdb79a6a4bff6ee585efc8a99797.jpeg', 0),
 (18, 6, '/uploads/Roman/2018/11/15/257ee8b97c5400a85aa8f24ab51f048d.jpeg', 1),
 (19, 6, '/uploads/Roman/2018/11/15/cad088c6ec17bb7eba39067370b64df4.jpeg', 0);
 
@@ -174,6 +203,12 @@ ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `photo`
 --
 ALTER TABLE `photo`
@@ -195,13 +230,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `photo`

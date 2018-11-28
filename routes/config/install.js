@@ -68,6 +68,20 @@ function create_friends() {
 	)";
 }
 
+function create_messages() {
+	var sql = "CREATE TABLE messages (\
+		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
+		author INT(6) NOT NULL,\
+		dest_user INT(6) NOT NULL,\
+		text VARCHAR(500) NOT NULL,\
+		time TIMESTAMP NOT NULL DEFAULT now()\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});
+}
+
 module.exports = {
 	install: function() {
 		create_users();
@@ -75,5 +89,6 @@ module.exports = {
 		create_comments();
 		create_likes();
 		create_friends();
+		create_messages();
 	}
 }
