@@ -11,7 +11,13 @@ function radio_listeners() {
 
 function tools_listeners() {
 	var tools = document.getElementsByClassName('tool_button');
+	var input = document.getElementById('message_input');
 
+	input.addEventListener('keypress', function(event) {
+		console.log(event.keyCode);
+		if (event.keyCode == 13)
+			action('send_message');
+	});
 	for (var i = 0; i < tools.length; i++) {
 		tools[i].addEventListener('click', function() {
 			action(this.id);

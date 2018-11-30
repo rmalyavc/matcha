@@ -1,3 +1,5 @@
+var chat_with = '';
+
 function uncheck_users(elem_id) {
 	var cont = document.getElementsByClassName('friends_wrapper')[0];
 	var inputs = cont.getElementsByTagName('input');
@@ -104,8 +106,10 @@ function post_message(message, is_owner) {
 	var cont = document.getElementById('chat_messages');
 	var add_class = is_owner ? ' owner' : '';
 
-	cont.innerHTML += '<div class="message' + add_class + '">\
-		<p class="message_text">' + message.text + '</p>\
+	cont.innerHTML += '<span class="message_time' + add_class + '">' + message.time + '</span><br><strong class="message_login' + add_class + '">' + message.login + '</strong><div class="message_wrapper' + add_class + '">\
+		<div class="message' + add_class + '">\
+			<p class="message_text">' + message.text + '</p>\
+		</div>\
 	</div>';
 }
 
@@ -121,8 +125,11 @@ function post_messages(user_id) {
 		for (var i = 0; i < res.data.length; i++) {
 			post_message(res.data[i], res.data[i].author != user_id);
 		}
+		var target = cont.scrollTop + cont.offsetHeight * 42000;
+    	$('#chat_messages').animate({scrollTop: target}, 0);
 	});
 }
+
 
 function start_chat(cont_id) {
 	var list = document.getElementsByClassName('chat_user');
@@ -130,13 +137,14 @@ function start_chat(cont_id) {
 	// console.log(Array.isArray(cont_id));
 	if (Array.isArray(cont_id))
 		cont_id = cont_id[0];
+	chat_with = cont_id.replace('chat_', '');
 	for (var i = 0; i < list.length; i++) {
 		var list_id = list[i].id;
 		list[i].style['background'] = (list[i].id == cont_id) ? "rgba(200,200,200,0.2)" : 'none';
 	}
 	console.log(cont_id);
 	// var user_id = cont_id.replace('chat_', '');
-	post_messages(cont_id.replace('chat_', ''));
+	post_messages(chat_with);
 }
 
 function chat_action(user_id) {
@@ -177,6 +185,20 @@ function del_action() {
 	});
 }
 
+function send_message() {
+	var input = document.getElementById('message_input');
+
+	if (!input || input.value.trim() == '' || !chat_with || chat_with == '')
+		return ;
+	$.post('/users/ajax_post', {action: 'send_message', text: input.value.trim(), user_id: chat_with}, function(res) {
+		input.value = '';
+		if (!res.success)
+			console.log(res.error);
+		else
+			post_messages(chat_with);
+	});
+}
+
 function action(elem_id) {
 	var full_size = document.getElementById('friends_window');
 	var checked = full_size.querySelector('input:checked');
@@ -189,6 +211,8 @@ function action(elem_id) {
 		del_action();
 	else if (elem_id == 'chat_button')
 		chat_action(checked.id);
+	else if (elem_id == 'send_message')
+		send_message();
 }
 
 $(document).ready(function() {

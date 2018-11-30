@@ -738,14 +738,29 @@ module.exports = {
 		});
 	},
 	get_messages: function(req, res) {
-		var sql = "SELECT * FROM messages\
-			WHERE (author = ? AND dest_user = ?) OR (author = ? AND dest_user = ?)\
-				ORDER BY time;";
+		var sql = "SELECT m.*, u.login FROM messages m\
+					INNER JOIN users u ON u.id = m.author\
+						WHERE (m.author = ? AND m.dest_user = ?) OR (m.author = ? AND m.dest_user = ?)\
+							ORDER BY m.time;";
 		db.query(sql, [req.body['user_id'], req.session.user_id, req.session.user_id, req.body['user_id']], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else
 				res.send({success: true, data: rows});
+		});
+	},
+	send_message: function(req, res) {
+		var sql = "INSERT INTO messages SET ?;";
+
+		db.query(sql, {
+			author: req.session.user_id,
+			dest_user: req.body['user_id'],
+			text: req.body['text'].trim()
+		}, function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
 		});
 	}
 }

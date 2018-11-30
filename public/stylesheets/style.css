@@ -199,6 +199,8 @@ a:hover {
 	right: 0.5%;
 	border-radius: 5px;
 	border: 2px solid #e6e6e6;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .message {
@@ -206,16 +208,56 @@ a:hover {
 	border: 2px solid #e6e6e6;
 	border-radius: 5px;
 	background-color: white;
-	left: 0.5%;
-	margin-top: 20px;
-	width: 50%;
+	/*float: left;*/
+	margin-top: 5px;
+	max-width: 50%;
 	padding: 5px;
+	border-left: none;
+	border-radius: 0 5px 5px 0;
 }
 
-.owner {
-	left: 48.5%;
-	background-color: rgba(0,0,255,0.2);
+.message_wrapper {
+	position: relative;
+	width: 100%;
+	display: flex;
+	margin-bottom: 30px;
+	/*align-items: flex-end;*/
+} 
+
+.message_wrapper.owner {
+	justify-content: flex-end;
 }
+
+.message.owner {
+	border-left: 2px solid #e6e6e6;
+	border-right: none;
+	background-color: rgba(0,0,255,0.2);
+	border-radius: 5px 0 0 5px;
+}
+
+.message_time, .message_login {
+	/*width: 200px;*/
+	margin-left: 5px;
+	font-size: 60%;
+	text-align: left;
+	color: #777777;
+}
+
+.message_time.owner, .message_login.owner {
+	float: right;
+	margin-right: 5px;
+}
+
+.message_login {
+	color: black;
+	font-size: 100%;
+}
+
+.owner > .message_time {
+	left: unset;
+	right: 5px;
+	text-align: right;
+} 
 
 .chat_list > .chat_wrapper {
 	height: 94%;
