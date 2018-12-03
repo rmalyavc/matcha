@@ -28,6 +28,7 @@
     "password-hash": "^1.2.2",
     "qs": "^6.5.2",
     "require": "^2.4.20",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "socket.io": "^2.2.0"
   }
 }

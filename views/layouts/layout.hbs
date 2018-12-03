@@ -5,6 +5,7 @@
 	<title>{{ title }}</title>
 	<link rel="stylesheet" href="/stylesheets/style.css">
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 </head>
 <body>
 	<div class="header">
@@ -20,6 +21,8 @@
 				<img class="header_icon" id="logout_icon" onclick="location.href='/users/logout'" src="/images/logout.png">
 				<a id="profile_link" href="/users/profile/{{ logged_user }}"></a>
 				<script type="text/javascript">
+					var socket = io('localhost:3001');
+					
 					var id = '{{ logged_user }}';
 					
 					$.get('/users/ajax', {id: id, action: 'get_user'}, function(result) {
