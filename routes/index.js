@@ -5,8 +5,14 @@ var Admin = require('./controllers/Admin.js');
 var install = require('./config/install.js');
 var db = require('./config/connection.js');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var client = require("socket.io-client");
+client.connect("http://localhost:3001");
+console.log(client);
+// client.emit("test", "foo");
+// var http = require('http').Server(app);
+// var io = require('socket.io')(http);
+// var http = require('http').Server(app);
+// var io = require('socket.io')(http);
 // var server = app.listen(3001);
 // var io = require('socket.io')(server);
 // var server = require('http').createServer(app);
@@ -68,16 +74,16 @@ router.get('/install', function(req, res) {
 	res.redirect('/');
 });
 
-io.on('connect', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-});
+// io.on('connect', function(socket){
+//   console.log('a user connected');
+//   socket.on('disconnect', function(){
+//     console.log('user disconnected');
+//   });
+// });
 
-http.listen(3001, function(){
-  console.log('listening on *:3000');
-});
+// http.listen(3001, function(){
+//   console.log('listening on *:3000');
+// });
 
 // io.on('connect', function(socket){
 // 	// io.emit('set users', "A user connected");

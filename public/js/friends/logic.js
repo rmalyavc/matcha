@@ -1,5 +1,5 @@
 var chat_with = '';
-var socket = io('localhost:3001');
+
 
 function uncheck_users(elem_id) {
 	var cont = document.getElementsByClassName('friends_wrapper')[0];
@@ -193,6 +193,7 @@ function send_message() {
 	if (!input || input.value.trim() == '' || !chat_with || chat_with == '')
 		return ;
 	$.post('/users/ajax_post', {action: 'send_message', text: input.value.trim(), user_id: chat_with}, function(res) {
+		// socket.emit('chat message', $('#m').val());
 		socket.emit('chat message', input.value.trim());
 		input.value = '';
 		if (!res.success) {
