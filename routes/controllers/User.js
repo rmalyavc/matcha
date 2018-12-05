@@ -683,8 +683,9 @@ module.exports = {
 		db.query(sql, [req.session.user_id, req.query['user_id'], req.query['user_id'], req.session.user_id], function(err) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
-			else
+			else {
 				res.send({success: true, text: 'User has been removed from your friend list'});
+			}
 		});
 	},
 	is_friend: function(req, res) {
@@ -719,8 +720,24 @@ module.exports = {
 		db.query(sql, [req.query['user_id'], req.session.user_id], function(err) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
-			else
-				res.send({success: true});
+			else {
+				sql = "INSERT INTO rooms (active) VALUES ('1');";
+				db.query(sql, function(err, query_res) {
+					if (err || !query_res)
+						res.send({success: false, error: err.sqlMessage});
+					else {
+						var room = query_res.insertId;
+						sql = "INSERT INTO room_user (room_id, user_id) VALUES (?, ?), (?, ?)";
+						db.query(sql, [room, req.session.user_id, room, req.query['user_id']], function(err) {
+							if (err)
+								res.send({success: false, error: err.sqlMessage});
+							else
+								res.send({success: true});
+						});
+					}
+				});
+				// res.send({success: true});
+			}
 		});
 	},
 	get_friends: function(req, res) {
@@ -737,30 +754,71 @@ module.exports = {
 				res.send({success: true, data: rows});
 		});
 	},
-	get_messages: function(req, res) {
-		var sql = "SELECT m.*, u.login FROM messages m\
-					INNER JOIN users u ON u.id = m.author\
-						WHERE (m.author = ? AND m.dest_user = ?) OR (m.author = ? AND m.dest_user = ?)\
-							ORDER BY m.time;";
-		db.query(sql, [req.body['user_id'], req.session.user_id, req.session.user_id, req.body['user_id']], function(err, rows) {
+	get_chats: function(req, res) {
+		var sql = "SELECT r.id, p.url AS avatar, u.login FROM room_user ru\
+			INNER JOIN rooms r ON r.id = ru.room_id\
+				INNER JOIN users u ON u.id = ru.user_id\
+					LEFT JOIN photo p ON p.user_id = ru.user_id AND r.private = '1' AND p.avatar = '1'\
+						WHERE  ru.user_id <> ?;";
+		db.query(sql, req.session.user_id, function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else
 				res.send({success: true, data: rows});
 		});
 	},
+	get_messages: function(req, res) {
+		var sql = "SELECT m.*, u.login FROM messages m\
+			INNER JOIN users u ON u.id = m.author\
+				WHERE m.room_id = ?";
+		db.query(sql, req.body['room_id'], function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true, data: rows, });
+		});
+		// var sql = "SELECT m.*, u.login FROM messages m\
+		// 			INNER JOIN users u ON u.id = m.author\
+		// 				WHERE (m.author = ? AND m.dest_user = ?) OR (m.author = ? AND m.dest_user = ?)\
+		// 					ORDER BY m.time;";
+		// db.query(sql, [req.body['user_id'], req.session.user_id, req.session.user_id, req.body['user_id']], function(err, rows) {
+		// 	if (err)
+		// 		res.send({success: false, error: err.sqlMessage});
+		// 	else
+		// 		res.send({success: true, data: rows, });
+		// });
+	},
 	send_message: function(req, res) {
 		var sql = "INSERT INTO messages SET ?;";
 
 		db.query(sql, {
 			author: req.session.user_id,
-			dest_user: req.body['user_id'],
-			text: req.body['text'].trim()
+			text: req.body['text'].trim(),
+			room_id: req.body['room_id']
 		}, function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else
 				res.send({success: true});
+		});
+	},
+	get_room: function(req, res) {
+		var sql = "SELECT r.id FROM rooms r\
+			INNER JOIN room_user ru ON ru.room_id = r.id\
+				WHERE ru.user_id = ?\
+					AND r.private = '1'\
+						AND r.id IN (\
+							SELECT ir.id FROM rooms ir\
+								INNER JOIN room_user iru ON iru.room_id = ir.id\
+									WHERE iru.user_id = ?\
+										AND ir.private = '1');";
+		db.query(sql, [req.session.user_id, req.query['user_id']], function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else if (!rows || rows.length < 1)
+				res.send({success: false, error: 'Room is not found'});
+			else
+				res.send({success: true, room_id: rows[0].id});
 		});
 	}
 }

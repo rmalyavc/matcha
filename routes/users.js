@@ -116,6 +116,10 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.confirm_friend(req, res);
 	else if (req.query['action'] == 'get_friends' && req.session.user_id)
 		user_controller.get_friends(req, res);
+	else if (req.query['action'] == 'get_chats' && req.session.user_id)
+		user_controller.get_chats(req, res);
+	else if (req.query['action'] == 'get_room' && req.query['user_id'] && req.session.user_id && req.query['user_id'] != req.session.user_id)
+		user_controller.get_room(req, res);
 	else {
 		res.send({
 			success: false,
@@ -152,9 +156,11 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		user_controller.get_avatars(req, res);
 	else if (req.body['action'] == 'del_photo' && req.body['photo_id'] && req.body['user_id'] == req.session.user_id)
 		user_controller.del_photo(req, res);
-	else if (req.body['action'] == 'get_messages' && req.body['user_id'] && req.session.user_id && req.session.user_id != req.body['user_id'])
+	// else if (req.body['action'] == 'get_messages' && req.body['user_id'] && req.session.user_id && req.session.user_id != req.body['user_id'])
+	// 	user_controller.get_messages(req, res);
+	else if (req.body['action'] == 'get_messages' && req.body['room_id'] && req.session.user_id)
 		user_controller.get_messages(req, res);
-	else if (req.body['action'] == 'send_message' && req.body['user_id'] && req.body['text'] && req.body['text'].trim() != '' && req.session.user_id && req.session.user_id != req.body['user_id'])
+	else if (req.body['action'] == 'send_message' && req.body['room_id'] && req.body['text'] && req.body['text'].trim() != '' && req.session.user_id)
 		user_controller.send_message(req, res);
 });
 

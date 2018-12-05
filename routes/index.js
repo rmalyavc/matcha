@@ -5,10 +5,7 @@ var Admin = require('./controllers/Admin.js');
 var install = require('./config/install.js');
 var db = require('./config/connection.js');
 var app = express();
-var client = require("socket.io-client");
-client.connect("http://localhost:3001");
-console.log(client);
-// client.emit("test", "foo");
+
 // var http = require('http').Server(app);
 // var io = require('socket.io')(http);
 // var http = require('http').Server(app);
@@ -84,6 +81,7 @@ router.get('/install', function(req, res) {
 // http.listen(3001, function(){
 //   console.log('listening on *:3000');
 // });
+ 
 
 // io.on('connect', function(socket){
 // 	// io.emit('set users', "A user connected");

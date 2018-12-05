@@ -72,14 +72,34 @@ function create_messages() {
 	var sql = "CREATE TABLE messages (\
 		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
 		author INT(6) NOT NULL,\
-		dest_user INT(6) NOT NULL,\
+		dest_user INT(6),\
 		text VARCHAR(500) NOT NULL,\
-		time TIMESTAMP NOT NULL DEFAULT now()\
+		time TIMESTAMP NOT NULL DEFAULT now(),\
+		room_id INT(6) NOT NULL\
 	)";
 	conn.query(sql, function(err) {
 		if (err)
 			console.log(err);
 	});
+}
+
+function create_rooms() {
+	var room_sql = "CREATE TABLE rooms (\
+	    id INT(6) AUTO_INCREMENT PRIMARY KEY,\
+	    active TINYINT(1) NOT NULL DEFAULT 1,\
+	    private TINYINT(1) NOT NULL DEFAULT 1\
+	)";
+	var room_user_sql = "CREATE TABLE room_user (\
+		room_id INT(6) NOT NULL,\
+	    user_id INT(6) NOT NULL\
+	)";
+	var queries = [room_sql, room_user_sql];
+	for (var i = 0; i < queries.length; i++) {
+		conn.query(queries[i], function(err) {
+			if (err)
+				console.log(err);
+		});
+	}
 }
 
 module.exports = {
@@ -90,5 +110,6 @@ module.exports = {
 		create_likes();
 		create_friends();
 		create_messages();
+		create_rooms();
 	}
 }

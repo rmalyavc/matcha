@@ -69,6 +69,19 @@ function post_friends(cont_id, funct) {
 	});
 }
 
+function post_chats(cont_id) {
+	var cont = document.getElementById(cont_id);
+
+	$.get('/users/ajax', {action: 'get_chats'}, function(res) {
+		if (!res.success || !res.data)
+			console.log(res.error);
+		else
+			for (var i = 0; i < res.data.length; i++) {
+				fill_chat_list(cont, res.data[i]);
+			}
+	});
+}
+
 function friends() {
 	fog_visible('fog', true, false);
 	post_friends('friends_cont', post_friend);
@@ -117,7 +130,8 @@ function post_message(message, is_owner) {
 function post_messages(user_id) {
 	var cont = document.getElementById('chat_messages');
 
-	$.post('/users/ajax_post', {action: 'get_messages', user_id: user_id}, function(res) {
+	$.post('/users/ajax_post', {action: 'get_messages', room_id: user_id}, function(res) {
+		console.log(res);
 		if (!res.success) {
 			console.log(res.error);
 			return ;
@@ -152,8 +166,17 @@ function chat_action(user_id) {
 	var chat = document.getElementById('chat_window');
 	
 	chat.style.display = 'block';
-	post_friends('chat_list', fill_chat_list);
-	wait_elem('id_name', 'chat_' + user_id, document, start_chat, ['chat_' + user_id]);
+	// post_friends('chat_list', fill_chat_list);
+	$.get('/users/ajax', {action: 'get_room', user_id: user_id}, function(res) {
+		console.log(res);
+		if (!res.success)
+			console.log(res.error);
+		else {
+			chat_with = res.room_id;
+			post_chats('chat_list');
+			wait_elem('id_name', 'chat_' + chat_with, document, start_chat, ['chat_' + chat_with]);
+		}
+	});
 }
 
 function del_action() {
@@ -192,7 +215,7 @@ function send_message() {
 
 	if (!input || input.value.trim() == '' || !chat_with || chat_with == '')
 		return ;
-	$.post('/users/ajax_post', {action: 'send_message', text: input.value.trim(), user_id: chat_with}, function(res) {
+	$.post('/users/ajax_post', {action: 'send_message', text: input.value.trim(), room_id: chat_with}, function(res) {
 		// socket.emit('chat message', $('#m').val());
 		socket.emit('chat message', input.value.trim());
 		input.value = '';
