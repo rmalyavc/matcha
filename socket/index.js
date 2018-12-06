@@ -7,8 +7,10 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
+  socket.on('send_message', function(msg){
+  	io.emit('chat message', msg.text);
+    console.log('message: ' + msg.text);
+    console.log('room: ' + msg.room_id);
   });
 });
 

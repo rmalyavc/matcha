@@ -84,6 +84,8 @@ router.get('/ajax', function(req, res, next) {
 	// console.log(req.query);
 	if (req.query['action'] == 'is_unique')
 		user_controller.is_unique(req, res);
+	else if (req.query['action'] == 'current_user')
+		user_controller.current_user(req,res);
 	else if (req.query['action'] == 'is_owner' && req.query['id'])
 		user_controller.is_owner(req.query['id'], res, req);
 	else if (req.query['action'] == 'get_user' && req.query['id'])

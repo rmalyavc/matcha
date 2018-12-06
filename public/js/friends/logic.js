@@ -1,5 +1,10 @@
 var chat_with = '';
 
+socket.on('chat message', function(msg){
+	console.log(msg);
+	// $('#messages').append($('<li>').text(msg));
+});
+
 
 function uncheck_users(elem_id) {
 	var cont = document.getElementsByClassName('friends_wrapper')[0];
@@ -138,7 +143,7 @@ function post_messages(user_id) {
 		}
 		cont.innerHTML = '';
 		for (var i = 0; i < res.data.length; i++) {
-			post_message(res.data[i], res.data[i].author != user_id);
+			post_message(res.data[i], res.data[i].author == current_user.id);
 		}
 		var target = cont.scrollTop + cont.offsetHeight * 42000;
     	$('#chat_messages').animate({scrollTop: target}, 0);
@@ -216,8 +221,10 @@ function send_message() {
 	if (!input || input.value.trim() == '' || !chat_with || chat_with == '')
 		return ;
 	$.post('/users/ajax_post', {action: 'send_message', text: input.value.trim(), room_id: chat_with}, function(res) {
-		// socket.emit('chat message', $('#m').val());
-		socket.emit('chat message', input.value.trim());
+		socket.emit('send_message', {
+			room_id: chat_with,
+			text: input.value.trim()
+		});
 		input.value = '';
 		if (!res.success) {
 			console.log(res.error);

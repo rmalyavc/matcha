@@ -120,28 +120,6 @@ module.exports = {
 			else
 				res.redirect(url);
 		});
-		// User.findById(data['user_id'], function(err, doc) {
-		// 	var error = '';
-		// 	var url = '/users/profile/' + data['user_id'] + '/';
-		// 	if ((err || !doc) && (url += '?err='))
-		// 		error = err ? err : 'User does not exist';
-		// 	else {
-		// 		doc.login = data['login'];
-		// 		doc.email = data['email'];
-		// 		doc.first_name = data['first_name'];
-		// 		doc.last_name = data['last_name'];
-		// 		doc.about = data['about'];
-		// 		doc.save().then(function() {
-		// 			res.redirect(url);
-		// 			return ;
-		// 		}, function(err) {
-		// 			res.redirect(url + '?err=' + err);
-		// 		}).catch(function(error_catch) {
-		// 			console.log(error_catch);
-		// 		});
-		// 	}
-		// 	res.redirect(url + error);
-		// });
 	},
 	upload: function(req, res) {
 		var data = req.body;
@@ -182,38 +160,7 @@ module.exports = {
 				else
 					res.send({success: true});
 			});
-			// User.findById(data['user_id'], function(err, doc) {
-			// 	if (err || !doc) {
-			// 		res.send({
-			// 			success: false,
-			// 			errors: ['Unable to find user', err],
-			// 		});
-			// 		return ;
-			// 	}
-			// 	else {
-			
-
-			// doc.photo.push(new Photo({
-			// 	url: path + file.filename + get_extension(file),
-			// 	avatar: false,
-			// }));
-			// doc.save().then(function() {
-			// 	res.send({
-			// 		success: true,
-			// 		data: doc
-			// 	});
-			// 	return ;
-			// }).catch(function(err) {
-			// 	console.log(err);
-			// 	res.send({
-			// 		success: false,
-			// 		errors: [err]
-			// 	});
-			// 	return ;
-			// });
 		}
-			// });
-		// }
 	},
 	is_unique: function(req, res) {
 		if (!req.query.login && !req.query.email) {
@@ -229,18 +176,6 @@ module.exports = {
 			else
 				res.send(true);
 		});
-		// var cond;
-
-		// if (req.query.login)
-		// 	cond = {login: req.query.login};
-		// else if (req.query.email)
-		// 	cond = {email: req.query.email};
-		// User.findOne(cond, function (err, doc) {
-		// 	if (err || (doc && doc.id !== req.session.user_id))
-		// 		res.send(false);
-		// 	else
-		// 		res.send(true);
-		// });
 	},
 	get_user: function(id, res) {
 		var sql = "SELECT * FROM users WHERE id = ?;";
@@ -251,12 +186,6 @@ module.exports = {
 			else
 				res.send(rows[0]);
 		});
-		// User.findById(id, function (err, doc) {
-		// 	if (err || !doc)
-		// 		res.send(false);
-		// 	else
-		// 		res.send(doc);
-		// });
 	},
 	is_owner: function(id, res, req) {
 		res.send(id != '' && id == req.session.user_id);
@@ -280,25 +209,6 @@ module.exports = {
 				});
 			}
 		});
-		// Photo.find({}).exec(function(err, docs) {
-		// 	console.log('Docs are ');
-		// 	console.log(docs);
-		// 	console.log('Error is ');
-		// 	console.log(err);
-		// 	if (err || !docs) {
-		// 		res.send({
-		// 			success: false,
-		// 			err: err
-		// 		});
-		// 		return ;
-		// 	}
-		// 	else {
-		// 		res.send({
-		// 			success: true,
-		// 			images: docs
-		// 		});
-		// 	}
-		// });
 	},
 	add_comment: function(req, res) {
 		if (!req.session.user_id) {
@@ -325,15 +235,6 @@ module.exports = {
 			else
 				res.send({success: true});
 		});
-		// comment.save().then(function(rec) {
-		// 	res.send({success: true});
-		// 	return ;
-		// }).catch(function(err) {
-		// 	res.send({
-		// 		success: false,
-		// 		error: err
-		// 	});
-		// });
 	},
 	get_comments: function(req, res) {
 		var sql = "SELECT * FROM comments WHERE photo = ?;";
@@ -352,24 +253,8 @@ module.exports = {
 				});
 			}
 		});
-		// Comment.find({photo: req.query.photo_id}, function(err, docs) {
-		// 	if (err || !docs) {
-		// 		res.send({
-		// 			success: false,
-		// 			error: err
-		// 		});
-		// 		return ;
-		// 	}
-		// 	res.send({
-		// 		success: true,
-		// 		data: docs
-		// 	});
-		// });
 	},
 	get_users: function(req, res) {
-		// console.log('AUTHORS ARE: ');
-		// console.log(req.body['authors[]']);
-		// console.log(req.body['authors[]'].length);
 		var list = Array.isArray(req.body['authors[]']) ? req.body['authors[]'].join("', '") : req.body['authors[]'];
 		var sql = "SELECT * FROM users WHERE id IN ('" + list + "');";
 
@@ -387,19 +272,6 @@ module.exports = {
 				});
 			}
 		});
-		// User.find({_id: { $in: req.body['authors[]']}}, function(err, docs) {
-		// 	if (err || !docs || docs.length < 1) {
-		// 		res.send({
-		// 			success: false,
-		// 			error: err
-		// 		});
-		// 		return ;
-		// 	}
-		// 	res.send({
-		// 		success: true,
-		// 		data: docs
-		// 	});
-		// });
 	},
 	set_avatar: function(req, res) {
 		var sql = "UPDATE photo SET avatar = 1 WHERE id = ?;";
@@ -417,28 +289,6 @@ module.exports = {
 					res.send({success: true});
 			});
 		});
-		// User.findById(req.query['user_id'], function(err, doc) {
-		// 	if (!doc || err) {
-		// 		res.send({
-		// 			success: false,
-		// 			error: err ? err : 'User is not found', 
-		// 		});
-		// 		return ;
-		// 	}
-		// 	for (var i = 0; i < doc.photo.length; i++) {
-		// 		if (doc.photo[i]._id == req.query['photo_id'])
-		// 			doc.photo[i].avatar = true;
-		// 		else
-		// 			doc.photo[i].avatar = false;
-		// 	}
-		// 	doc.markModified('photo');
-		// 	doc.save().then(function(doc) {
-		// 		res.send({success: true});
-		// 		return ;	
-		// 	}).catch(function(err) {
-		// 		res.send({succes: false, error: err});
-		// 	});
-		// });
 	},
 	get_avatar: function(req, res) {
 		var sql = "SELECT url FROM photo WHERE user_id = ? AND avatar = 1;";
@@ -497,24 +347,6 @@ module.exports = {
 				});
 			}
 		});
-		// Like.deleteMany({author: req.session.user_id, photo_id: req.query['photo_id']}, function(err, result) {
-		// 	if (err)
-		// 		res.send({success: false, error: err});
-		// 	else if (result.n > 0)
-		// 		res.send({success: true, res: result});
-		// 	else {
-		// 		var like = new Like({author: req.session.user_id, owner: req.query['user_id'], photo_id: req.query['photo_id']});
-		// 		like.save().then(function(rec) {
-		// 			res.send({success: true, res: result});
-		// 			return ;
-		// 		}).catch(function(err) {
-		// 			res.send({success: false, error: err});
-		// 		});
-		// 	}
-		// 	return ;
-		// }).catch(function(err) {
-		// 	res.send({success: false, error: err});
-		// });
 	},
 	get_likes: function(req, res) {
 		var sql = "SELECT * FROM likes WHERE photo_id = ?;";
@@ -542,19 +374,6 @@ module.exports = {
 				});
 			}
 		});
-		// Like.find({photo_id: req.query['photo_id']}, function(err, docs) {
-		// 	if (err) {
-		// 		res.send({success: false, error: err});
-		// 		return ;
-		// 	}
-		// 	var liked = false;
-		// 	for (var i = 0; i < docs.length; i++) {
-		// 		console.log('I = ' + i + ' Author is: ' + docs[i].author + ' Logged user is: ' + req.session.user_id);
-		// 		if (docs[i].author == req.session.user_id && (liked = true))
-		// 			break ;
-		// 	}
-		// 	res.send({success: true, qty: docs.length, liked: liked});
-		// })
 	},
 	del_photo: function(req, res) {
 		var sql = "SELECT url FROM photo WHERE id = ?;";
@@ -592,49 +411,6 @@ module.exports = {
 				});
 			});
 		});
-	// 	User.findById(req.session.user_id, function(err, doc) {
-	// 		if (err || !doc) {
-	// 			res.send({
-	// 				success: false, 
-	// 				error: err ? err : 'User is not found'
-	// 			});
-	// 			return ;
-	// 		}
-	// 		var i = -1;
-	// 		while (++i < doc.photo.length) {
-	// 			if (doc.photo[i]._id == req.body['photo_id'])
-	// 				break ;
-	// 		}
-	// 		if (i == doc.photo.length || doc.photo.length == 0) {
-	// 			res.send({success: false, error: 'Photo is not found'});
-	// 			return ;
-	// 		}
-	// 		fs.unlink('./public' + doc.photo[i].url, function(err) {
-	// 			if (err) {
-	// 				res.send({success: false, err: 'Cannot delete the file'});
-	// 				return ;
-	// 			}
-	// 		});
-	// 		doc.photo.splice(i, 1);
-	// 		doc.markModified('photo');
-	// 		doc.save().then(function(doc) {
-	// 			Comment.remove({photo: req.body['photo_id']}, function(err) {
-	// 				if (err) {
-	// 					res.send({success: false, error: err});
-	// 					return ;
-	// 				}
-	// 				Like.remove({photo_id: req.body['photo_id']}, function(err) {
-	// 					if (err) {
-	// 						res.send({success: false, error: err});
-	// 						return ;
-	// 					}
-	// 					res.send({success: true});
-	// 				});
-	// 			});
-	// 		}).catch(function(err) {
-	// 			res.send({success: false, error: err});
-	// 		});
-	// 	});
 	},
 	find_users: function(req, res) {
 		var sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url FROM users u\
@@ -736,7 +512,6 @@ module.exports = {
 						});
 					}
 				});
-				// res.send({success: true});
 			}
 		});
 	},
@@ -759,8 +534,9 @@ module.exports = {
 			INNER JOIN rooms r ON r.id = ru.room_id\
 				INNER JOIN users u ON u.id = ru.user_id\
 					LEFT JOIN photo p ON p.user_id = ru.user_id AND r.private = '1' AND p.avatar = '1'\
-						WHERE  ru.user_id <> ?;";
-		db.query(sql, req.session.user_id, function(err, rows) {
+						WHERE  ru.user_id <> ?\
+							AND ru.room_id IN (SELECT room_id FROM room_user WHERE user_id = ?)";
+		db.query(sql, [req.session.user_id, req.session.user_id], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else
@@ -777,16 +553,6 @@ module.exports = {
 			else
 				res.send({success: true, data: rows, });
 		});
-		// var sql = "SELECT m.*, u.login FROM messages m\
-		// 			INNER JOIN users u ON u.id = m.author\
-		// 				WHERE (m.author = ? AND m.dest_user = ?) OR (m.author = ? AND m.dest_user = ?)\
-		// 					ORDER BY m.time;";
-		// db.query(sql, [req.body['user_id'], req.session.user_id, req.session.user_id, req.body['user_id']], function(err, rows) {
-		// 	if (err)
-		// 		res.send({success: false, error: err.sqlMessage});
-		// 	else
-		// 		res.send({success: true, data: rows, });
-		// });
 	},
 	send_message: function(req, res) {
 		var sql = "INSERT INTO messages SET ?;";
@@ -820,28 +586,24 @@ module.exports = {
 			else
 				res.send({success: true, room_id: rows[0].id});
 		});
+	},
+	current_user: function(req, res) {
+		if (!req.session.user_id || req.session.user_id == '')
+			res.send({success: false, error: 'No logged user'});
+		else {
+			var sql = "SELECT u.*, p.url AS avatar\
+				FROM users u\
+					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
+						WHERE u.id = ?";
+			db.query(sql, req.session.user_id, function(err, rows) {
+				if (err)
+					res.send({success: false, error: err.sqlMessage});
+				else if (!rows || rows.length < 1)
+					res.send({success: false, error: 'There is no such user'});
+				else
+					res.send({success: true, data: rows[0]});
+			});
+		}
 	}
 }
 
-// var new_user = {
-// 				login: data['login'],
-// 				password: hash.generate(data['password'], {algorithm: 'sha256'}),
-// 				email: data['email']
-// 			}
-// 			if (data['login'] === 'root')
-// 				new_user['admin'] = true;
-// 			user = new User(new_user);
-// 			user.save().then(function(record){
-// 				req.session.user_id = record.id;
-// 				req.session.user_login = record.login;
-// 				res.render('./auth/valid', {
-// 					registred: true,
-// 					login: new_user['login']
-// 				});
-// 			}, function(err) {
-// 				console	.log('test   ' + err);
-// 				res.render('./auth/valid', {
-// 					registred: false,
-// 					error: err
-// 				});
-// 			});

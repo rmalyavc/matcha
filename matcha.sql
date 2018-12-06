@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 05, 2018 at 11:45 AM
+-- Generation Time: Dec 06, 2018 at 11:32 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -109,6 +109,23 @@ CREATE TABLE `messages` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `room_id` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`, `room_id`) VALUES
+(61, 3, NULL, 'Hi, white_men! How are you?', '2018-12-06 17:55:09', 7),
+(62, 2, NULL, 'Hi test! I\'m great I\'ve just fixed this fucking bug!!!!', '2018-12-06 18:18:08', 7),
+(63, 3, NULL, 'Oh! very well. Now create normal chat then. It should work on sockets! It\'s mandatory', '2018-12-06 18:43:14', 7),
+(64, 3, NULL, 'This is test', '2018-12-06 18:47:56', 7),
+(65, 3, NULL, 'One more test', '2018-12-06 18:48:13', 7),
+(66, 3, NULL, 'Testing sockets', '2018-12-06 19:01:08', 7),
+(67, 3, NULL, 'Sockets', '2018-12-06 19:01:43', 7),
+(68, 3, NULL, 'This is a test', '2018-12-06 19:02:00', 7),
+(69, 3, NULL, 'Chat', '2018-12-06 19:03:13', 7),
+(70, 3, NULL, 'This is my chat!', '2018-12-06 19:03:38', 7),
+(71, 3, NULL, 'Winter is coming', '2018-12-06 19:04:58', 7);
 
 -- --------------------------------------------------------
 
@@ -279,7 +296,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `photo`
