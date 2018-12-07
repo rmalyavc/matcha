@@ -1,10 +1,31 @@
 var chat_with = '';
 
 socket.on('chat message', function(msg){
+	if (msg.room_id == chat_with)
+		post_messages(chat_with);
+	else
+		unread_messages('chat_' + msg.room_id);
 	console.log(msg);
 	// $('#messages').append($('<li>').text(msg));
 });
 
+function unread_messages(cont_id, show = true) {
+	var cont = document.getElementById(cont_id).getElementsByClassName('unread_messages')[0];
+
+	if (show) {
+		cont.innerHTML = parseInt(cont.innerHTML) + 1;
+		cont.style.display = 'flex';	
+	}
+	else {
+		cont.innerHTML = 0;
+		cont.style.display = 'none';
+	}
+	// var list = document.getElementsByClassName('chat_user');
+
+	// for (var i = 0; i < list.length; i++) {
+
+	// }
+}
 
 function uncheck_users(elem_id) {
 	var cont = document.getElementsByClassName('friends_wrapper')[0];
@@ -24,6 +45,7 @@ function fill_chat_list(cont, friend) {
 			<h4 class="text_header">' + friend.login + '</h4>\
 			<i class="text_header" id="last_message">No recent messages...</i>\
 		</div>\
+		<div class="unread_messages">0</div>\
 	</div>';
 }
 
@@ -164,6 +186,7 @@ function start_chat(cont_id) {
 	}
 	console.log(cont_id);
 	// var user_id = cont_id.replace('chat_', '');
+	unread_messages(cont_id, false);
 	post_messages(chat_with);
 }
 

@@ -26,22 +26,26 @@
 					// client.emit("chat message", "foo");
 // client.connect("http://localhost:3001");
 // client.emit("test", "foo");
+					var id = '{{ logged_user }}';
 					var current_user = false;
-					var socket = io.connect('http://localhost:3001');
+					var socket = io.connect('http://localhost:3001', {user_id: id});
 
+					socket.emit('add_client', {
+						user_id: id
+					});
 					$.get('/users/ajax', {action: 'current_user'}, function(res) {
 						if (!res.success)
 							console.log(res.error);
 						else {
 							current_user = res.data;
-							socket['user_id'] = current_user.id;
+							// socket['id'] = current_user.id;
 						}
 					});
 					// var socket = io.connect('http://localhost:3001');
 					// var socket = io.connect('http://localhost:3001', {user_id: current_user ? current_user.id : false});
 					console.log(socket);
 					
-					var id = '{{ logged_user }}';
+					
 					
 
 					$.get('/users/ajax', {id: id, action: 'get_user'}, function(result) {

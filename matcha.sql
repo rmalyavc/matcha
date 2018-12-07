@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 06, 2018 at 11:32 AM
+-- Generation Time: Dec 07, 2018 at 11:48 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -125,7 +125,50 @@ INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`, `room_id`) 
 (68, 3, NULL, 'This is a test', '2018-12-06 19:02:00', 7),
 (69, 3, NULL, 'Chat', '2018-12-06 19:03:13', 7),
 (70, 3, NULL, 'This is my chat!', '2018-12-06 19:03:38', 7),
-(71, 3, NULL, 'Winter is coming', '2018-12-06 19:04:58', 7);
+(71, 3, NULL, 'Winter is coming', '2018-12-06 19:04:58', 7),
+(72, 3, NULL, 'What will happen?', '2018-12-06 19:44:12', 7),
+(73, 3, NULL, 'fkoekgokeokrgp4qr[glq[l[glq3[;g[3q;g34', '2018-12-06 19:44:53', 7),
+(74, 3, NULL, 'cwmceimcTETETETTETETECYCBEHCBEBNUEKOPE', '2018-12-06 19:45:52', 7),
+(75, 3, NULL, 'blabla', '2018-12-06 19:48:40', 7),
+(76, 3, NULL, 'BLABLABLA', '2018-12-06 19:50:03', 7),
+(77, 3, NULL, 'ETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETECETETETTETETEC', '2018-12-06 19:50:26', 7),
+(78, 3, NULL, 'Test', '2018-12-06 19:51:13', 7),
+(79, 3, NULL, 'My test', '2018-12-06 19:51:50', 7),
+(80, 3, NULL, 'rsetgrwhw5', '2018-12-06 19:52:25', 7),
+(81, 2, NULL, 'Test', '2018-12-06 19:52:49', 7),
+(82, 2, NULL, 'covmoerkogerrffr', '2018-12-06 19:53:05', 7),
+(83, 3, NULL, 'egrgperlgperl', '2018-12-06 19:55:34', 7),
+(84, 3, NULL, 'fefeprlfelrf', '2018-12-06 19:57:00', 7),
+(85, 3, NULL, 'Try again', '2018-12-06 19:58:54', 7),
+(86, 3, NULL, 'Please work! I want to go home!', '2018-12-06 20:00:49', 7),
+(87, 3, NULL, 'Fuck', '2018-12-06 20:01:33', 7),
+(88, 3, NULL, 'gergerg', '2018-12-06 20:03:47', 7),
+(89, 3, NULL, 'ergpergperpger', '2018-12-06 20:04:33', 7),
+(90, 4, NULL, 'This is a test', '2018-12-07 18:34:27', 6),
+(91, 4, NULL, 'etgrtg', '2018-12-07 18:44:44', 6),
+(92, 4, NULL, 'ttt', '2018-12-07 19:01:21', 6),
+(93, 3, NULL, 'Hi root!', '2018-12-07 19:10:29', 6),
+(94, 4, NULL, 'Hi, test! How are you?', '2018-12-07 19:11:37', 6),
+(95, 3, NULL, 'This is test. Root should not get this message! Hahahaha!', '2018-12-07 19:12:29', 7),
+(96, 3, NULL, 'Root should not get this message! Hahahaha!', '2018-12-07 19:13:54', 7),
+(97, 3, NULL, 'My test', '2018-12-07 19:15:03', 7),
+(98, 3, NULL, 'Hope this time i did everything right!', '2018-12-07 19:17:27', 7),
+(99, 3, NULL, 'A', '2018-12-07 19:17:39', 6),
+(100, 3, NULL, 'I\'m very well! I\'ve just send message to white_men, and you haven\'t got it!!! Ha-ha-ha! But you should get this message this time!', '2018-12-07 19:18:28', 6),
+(101, 3, NULL, 'What\'s happening?', '2018-12-07 19:20:05', 6),
+(102, 3, NULL, 'Root won\'t get this message.', '2018-12-07 19:20:29', 7),
+(103, 3, NULL, 'everfgre', '2018-12-07 19:20:49', 7),
+(104, 3, NULL, 'test', '2018-12-07 19:21:02', 6),
+(105, 3, NULL, 'Do you see it?', '2018-12-07 19:26:27', 6),
+(106, 4, NULL, 'Yeah! Hurrraaay!!!!!', '2018-12-07 19:26:44', 6),
+(107, 4, NULL, 'Hi test', '2018-12-07 19:38:15', 6),
+(108, 4, NULL, 'Hi there', '2018-12-07 19:39:04', 6),
+(109, 4, NULL, 'Hi one more time!', '2018-12-07 19:39:54', 6),
+(110, 4, NULL, 'You still don\'t see my messages?', '2018-12-07 19:41:42', 6),
+(111, 4, NULL, 'Hi test! Now you should see it', '2018-12-07 19:47:03', 6),
+(112, 2, NULL, 'Try me', '2018-12-07 19:47:36', 7),
+(113, 2, NULL, 'again', '2018-12-07 19:47:38', 7),
+(114, 2, NULL, 'Hahahahahaha', '2018-12-07 19:47:42', 7);
 
 -- --------------------------------------------------------
 
@@ -296,7 +339,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `photo`

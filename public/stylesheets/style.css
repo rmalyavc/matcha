@@ -1325,5 +1325,17 @@ label, textarea {
 	bottom: 0;
 }
 
-
-
+.unread_messages {
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	bottom: 10px;
+	right: 10px;
+	font-size: 80%;
+	color: white;
+	border-radius: 50%;
+	background-color: red;
+	display: none;
+	justify-content: center;
+	align-items: center;
+}
