@@ -9,6 +9,32 @@ socket.on('chat message', function(msg){
 	// $('#messages').append($('<li>').text(msg));
 });
 
+function show_invite() {
+	var win = document.getElementsByClassName('invite_to_chat')[0];
+	var cont = win.getElementsByClassName('invite_list')[0];
+
+	cont.innerHTML = '';
+	if (win.style.display != 'none') {
+		win.style.display = 'none';
+		return ;
+	}
+	$.get('/users/ajax', {action: 'invite_list', room_id: chat_with}, function(res) {
+		console.log(res);
+		if (!res.success)
+			console.log(res.error);
+		else {
+			for (var i = 0; i < res.data.length; i++) {
+				var avatar = res.data[i].avatar ? res.data[i].avatar : '/images/default_avatar.png';
+				cont.innerHTML += '<div class="to_invite" id="' + res.data[i].id + '">\
+					<div class="avatar" style="background-image:url(\'' + avatar + '\');"></div>\
+					<h3>' + res.data[i].login + '</h3>\
+				</div>';
+			}
+			win.style.display = 'block';
+		}
+	});
+}
+
 function unread_messages(cont_id, show = true) {
 	var cont = document.getElementById(cont_id).getElementsByClassName('unread_messages')[0];
 

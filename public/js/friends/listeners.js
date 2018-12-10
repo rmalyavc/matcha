@@ -28,7 +28,13 @@ function tools_listeners() {
 function chat_listeners() {
 	var close = document.getElementById('close_chat');
 	var chat = document.getElementById('chat_window');
+	var invite = [document.getElementById('close_invite'), document.getElementById('add_to_chat')];
 
+	for (var i = 0; i < invite.length; i++) {
+		invite[i].addEventListener('click', function() {
+			show_invite();
+		});
+	}
 	close.addEventListener('click', function() {
 		chat.style.display = 'none';
 	});

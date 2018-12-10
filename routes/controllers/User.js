@@ -604,6 +604,21 @@ module.exports = {
 					res.send({success: true, data: rows[0]});
 			});
 		}
+	},
+	invite_list: function(req, res) {
+		var sql = "SELECT u.id, u.login, p.url AS avatar\
+			FROM users u\
+				INNER JOIN friends fr ON (fr.id1 = ? AND fr.id2 = u.id) OR (fr.id1 = u.id AND fr.id2 = ?)\
+					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
+						WHERE u.id NOT IN (SELECT user_id FROM room_user WHERE room_id = ? AND user_id <> ?)";
+		db.query(sql, [req.session.user_id, req.session.user_id, req.query['room_id'], req.session.user_id], function (err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else if (!rows || rows.length < 1)
+				res.send({success: false, error: 'No users found to invite'});
+			else
+				res.send({success: true, data: rows});
+		});
 	}
 }
 
