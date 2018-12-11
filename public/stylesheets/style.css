@@ -304,8 +304,12 @@ a:hover {
 	top: 0;
 }
 
-.chat_user:hover, .to_invite:hover {
+.chat_user:hover {
 	background-color: rgba(200,200,200,0.2);
+}
+
+.to_invite:hover {
+	background-color: rgba(200,200,200,0.1);	
 }
 
 .req_info > .text_header {

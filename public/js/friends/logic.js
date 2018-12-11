@@ -1,31 +1,51 @@
 var chat_with = '';
-
+// DELETE FROM rooms WHERE id = '12'; DELETE FROM room_user WHERE room_id = '12'
 socket.on('chat message', function(msg){
 	if (msg.room_id == chat_with)
 		post_messages(chat_with);
 	else
 		unread_messages('chat_' + msg.room_id);
-	console.log(msg);
+	// console.log(msg);
 	// $('#messages').append($('<li>').text(msg));
 });
+
+function add_to_chat(elem) {
+	$.get('/users/ajax', {action: 'add_to_chat', room_id: chat_with, user_id: elem.id}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else {
+			var win = document.getElementsByClassName('invite_to_chat')[0];
+			win.style.display = null;
+			chat_with = res.data;
+			post_chats('chat_list');
+			wait_elem('id_name', 'chat_' + chat_with, document, start_chat, ['chat_' + chat_with]);
+			show_invite();
+			// start_chat('chat_' + res.data);
+		}
+	});
+}
 
 function show_invite() {
 	var win = document.getElementsByClassName('invite_to_chat')[0];
 	var cont = win.getElementsByClassName('invite_list')[0];
 
 	cont.innerHTML = '';
-	if (win.style.display != 'none') {
+	if (win.style.display && win.style.display != 'none') {
+		// console.log("Window display Is: " + win.style.display);
 		win.style.display = 'none';
 		return ;
 	}
 	$.get('/users/ajax', {action: 'invite_list', room_id: chat_with}, function(res) {
-		console.log(res);
+		// console.log('ROOM IS: ' + chat_with);
+		// console.log('Invite LIST is:');
+		// console.log(res);
 		if (!res.success)
 			console.log(res.error);
 		else {
+			cont.innerHTML = '';
 			for (var i = 0; i < res.data.length; i++) {
 				var avatar = res.data[i].avatar ? res.data[i].avatar : '/images/default_avatar.png';
-				cont.innerHTML += '<div class="to_invite" id="' + res.data[i].id + '">\
+				cont.innerHTML += '<div class="to_invite" id="' + res.data[i].id + '" onclick="add_to_chat(this);">\
 					<div class="avatar" style="background-image:url(\'' + avatar + '\');"></div>\
 					<h3>' + res.data[i].login + '</h3>\
 				</div>';
@@ -125,6 +145,7 @@ function post_friends(cont_id, funct) {
 function post_chats(cont_id) {
 	var cont = document.getElementById(cont_id);
 
+	cont.innerHTML = '';
 	$.get('/users/ajax', {action: 'get_chats'}, function(res) {
 		if (!res.success || !res.data)
 			console.log(res.error);
@@ -169,7 +190,7 @@ function proceed_action() {
 }
 
 function post_message(message, is_owner) {
-	console.log(message);
+	// console.log(message);
 	var cont = document.getElementById('chat_messages');
 	var add_class = is_owner ? ' owner' : '';
 

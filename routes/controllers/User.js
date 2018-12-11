@@ -530,12 +530,13 @@ module.exports = {
 		});
 	},
 	get_chats: function(req, res) {
-		var sql = "SELECT r.id, p.url AS avatar, u.login FROM room_user ru\
+		var sql = "SELECT r.id, GROUP_CONCAT(p.url) AS avatar, GROUP_CONCAT(u.login) AS login FROM room_user ru\
 			INNER JOIN rooms r ON r.id = ru.room_id\
 				INNER JOIN users u ON u.id = ru.user_id\
 					LEFT JOIN photo p ON p.user_id = ru.user_id AND r.private = '1' AND p.avatar = '1'\
 						WHERE  ru.user_id <> ?\
-							AND ru.room_id IN (SELECT room_id FROM room_user WHERE user_id = ?)";
+							AND ru.room_id IN (SELECT room_id FROM room_user WHERE user_id = ?)\
+								GROUP BY r.id";
 		db.query(sql, [req.session.user_id, req.session.user_id], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
@@ -619,6 +620,58 @@ module.exports = {
 			else
 				res.send({success: true, data: rows});
 		});
+	},
+	add_to_chat: function(req, res) {
+		var sql = "SELECT private FROM rooms WHERE id = ?";
+		db.query(sql, req.query['room_id'], function(err, rows) {
+			if (err || !rows || rows.length < 1) {
+				res.send({
+					success: false,
+					error: err ? err.sqlMessage : 'No such room ' + req.query['room_id']
+				});
+				return ;
+			}
+			// var room = req.query['room_id'];
+			if (rows[0]['private'] == '1') {
+				sql = "INSERT INTO rooms SET ?";
+				db.query(sql, {private: '0'}, function(err, result) {
+					if (err) {
+						res.send({success: false, error: err.sqlMessage});
+						return ;
+					}
+					var room = result.insertId;					
+					sql = "SELECT user_id FROM room_user WHERE room_id = ?";
+					db.query(sql, req.query['room_id'], function(err, rows) {
+						if (err || !rows || rows.lngth < 1) {
+							res.send({
+								success: false,
+								error: err ? err.sqlMessage : 'No users in room ' + req.query['room_id']
+							});
+							return ;
+						}
+						sql = "INSERT INTO room_user (room_id, user_id) VALUES ('" + room + "', '" + req.query['user_id'] + "')";
+						for (var i = 0; i < rows.length; i++) {
+							sql += ", ('" + room + "', '" + rows[i]['user_id'] + "')";
+						}
+						db.query(sql, function(err) {
+							if (err)
+								res.send({success: false, error: err.sqlMessage});
+							else
+								res.send({success: true, data: room});
+						});
+					});
+				});
+			}
+			else {
+				sql = "INSERT INTO room_user SET ?";
+				db.query(sql, {room_id: req.query['room_id'], user_id: req.query['user_id']}, function(err) {
+					if (err)
+						res.send({success: false, error: err.sqlMessage});
+					else
+						res.send({success: true, data: req.query['room_id']});
+				});
+			}
+		})
 	}
 }
 
