@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 07, 2018 at 11:48 AM
+-- Generation Time: Dec 11, 2018 at 10:52 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -67,7 +67,8 @@ CREATE TABLE `friends` (
 
 INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
 (3, 2, 1),
-(3, 4, 1);
+(3, 4, 1),
+(3, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -168,7 +169,17 @@ INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`, `room_id`) 
 (111, 4, NULL, 'Hi test! Now you should see it', '2018-12-07 19:47:03', 6),
 (112, 2, NULL, 'Try me', '2018-12-07 19:47:36', 7),
 (113, 2, NULL, 'again', '2018-12-07 19:47:38', 7),
-(114, 2, NULL, 'Hahahahahaha', '2018-12-07 19:47:42', 7);
+(114, 2, NULL, 'Hahahahahaha', '2018-12-07 19:47:42', 7),
+(115, 3, NULL, 'Hi white men!', '2018-12-10 17:35:33', 7),
+(116, 2, NULL, 'Hi test1!', '2018-12-10 17:35:56', 7),
+(117, 6, NULL, 'Hi, test1', '2018-12-11 18:46:42', 18),
+(118, 3, NULL, 'Hi Roman', '2018-12-11 18:47:00', 18),
+(119, 6, NULL, 'Hi, mate!', '2018-12-11 18:47:17', 19),
+(120, 3, NULL, 'Hi, buddy', '2018-12-11 18:47:34', 19),
+(121, 6, NULL, 'hi mate!', '2018-12-11 18:48:37', 19),
+(122, 3, NULL, 'try again', '2018-12-11 18:48:50', 19),
+(123, 6, NULL, 'One more attempt', '2018-12-11 18:49:54', 18),
+(124, 3, NULL, 'White men doesn\'t see this but he\'ll be happy)', '2018-12-11 18:50:26', 18);
 
 -- --------------------------------------------------------
 
@@ -222,7 +233,9 @@ CREATE TABLE `rooms` (
 
 INSERT INTO `rooms` (`id`, `active`, `private`) VALUES
 (6, 1, 1),
-(7, 1, 1);
+(7, 1, 1),
+(18, 1, 0),
+(19, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -243,7 +256,13 @@ INSERT INTO `room_user` (`room_id`, `user_id`) VALUES
 (6, 4),
 (6, 3),
 (7, 2),
-(7, 3);
+(7, 3),
+(18, 4),
+(18, 2),
+(18, 3),
+(19, 6),
+(19, 3),
+(18, 6);
 
 -- --------------------------------------------------------
 
@@ -339,7 +358,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `photo`
@@ -351,7 +370,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `users`
