@@ -193,12 +193,21 @@ function post_message(message, is_owner) {
 	// console.log(message);
 	var cont = document.getElementById('chat_messages');
 	var add_class = is_owner ? ' owner' : '';
+	var avatar = message.avatar ? message.avatar : '/images/default_avatar.png';
+	var add_style = is_owner ? ' style="justify-content:flex-end;padding-left:5px;"' : '';
+	// var db_time = message.time.split(/[- :]/);
+	// var time = db_time[2] + '/' + db_time[1] + '/' + db_time[0] + ' ' + db_time[3] + ':' + db_time[4];
 
-	cont.innerHTML += '<span class="message_time' + add_class + '">' + message.time + '</span><br><strong class="message_login' + add_class + '">' + message.login + '</strong><div class="message_wrapper' + add_class + '">\
-		<div class="message' + add_class + '">\
-			<p class="message_text">' + message.text + '</p>\
-		</div>\
-	</div>';
+	cont.innerHTML += '<span class="message_time' + add_class + '">' + message.time + '</span><br>\
+		<span class="author_wrapper"' + add_style + '>\
+			<div class="avatar" style="background-image:url(\'' + avatar + '\');"></div>\
+			<strong class="message_login' + add_class + '">' + message.login + '</strong>\
+		</span>\
+		<div class="message_wrapper' + add_class + '">\
+			<div class="message' + add_class + '">\
+				<p class="message_text">' + message.text + '</p>\
+			</div>\
+		</div>';
 }
 
 function post_messages(user_id) {

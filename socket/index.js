@@ -17,17 +17,12 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-	// console.log(socket.options);
 	socket.on('add_client', function(data){
+		socket.user_id = data.user_id;
 	    clients[data.user_id] = {
 	    	"socket": socket.id
 	    };
-	    // console.log('Clients are:');
-	    // console.log(clients);
 	});
-	// clients.push(socket.id);
-	
-	// console.log(clients);
 	socket.on('send_message', function(msg){
 		console.log(clients);
 		var sql = "SELECT user_id FROM room_user WHERE room_id = ?";
@@ -42,16 +37,13 @@ io.on('connection', function(socket){
 				}
 			}
 		});
-		// var to_send = ['3'];
-		// for (var i = 0; i < to_send.length; i++) {
-			
-		// }
-	  	// console.log(socket);
-	  	// console.log(io.sockets.connected[2]);
-	  	// io.sockets.connected[2].emit('chat message', msg.text);
-	  	// io.emit('chat message', msg.text, 2);
 	    console.log('message: ' + msg.text);
 	    console.log('room: ' + msg.room_id);
+	});
+
+	socket.on('disconnect', function () {
+		console.log('User ' + socket.user_id + ' is disconnected!');
+		delete clients[socket.user_id];
 	});
 });
 

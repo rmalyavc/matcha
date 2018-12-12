@@ -545,9 +545,12 @@ module.exports = {
 		});
 	},
 	get_messages: function(req, res) {
-		var sql = "SELECT m.*, u.login FROM messages m\
-			INNER JOIN users u ON u.id = m.author\
-				WHERE m.room_id = ?";
+		var sql = "SELECT m.*, u.login, p.url AS avatar\
+			FROM messages m\
+				INNER JOIN users u ON u.id = m.author\
+					LEFT JOIN photo p ON p.user_id = m.author AND p.avatar = '1'\
+						WHERE m.room_id = ?\
+							ORDER BY m.time";
 		db.query(sql, req.body['room_id'], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
