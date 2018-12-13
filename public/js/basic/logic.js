@@ -52,3 +52,10 @@ function get_requests() {
 			post_requests(res.data);
 	});
 }
+
+socket.on('friend_request', function(){
+	console.log('Friend request!');
+	get_requests();
+	// console.log(msg);
+	// $('#messages').append($('<li>').text(msg));
+});

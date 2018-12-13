@@ -337,6 +337,11 @@ function add_del_friend() {
 		else {
 			text.setAttribute('class', 'text_header green');
 			text.innerHTML = res.text;
+			if (action.value == 'add_friend') {
+				socket.emit('friend_request', {
+					user_id: user_id
+				});
+			}
 		}
 	}).catch(function(err) {
 		confirm.style.display = 'none';

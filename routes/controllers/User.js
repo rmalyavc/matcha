@@ -460,7 +460,30 @@ module.exports = {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else {
-				res.send({success: true, text: 'User has been removed from your friend list'});
+				sql = "INSERT INTO tmp_cont (id)\
+	                SELECT r.id FROM rooms r\
+	                INNER JOIN room_user ru ON ru.room_id = r.id\
+	                WHERE r.active = '1'\
+	                AND r.private = '1'\
+	                AND ru.user_id = ?\
+	                AND ru.room_id IN (\
+	                	SELECT rs.id\
+                        FROM rooms rs\
+                        INNER JOIN room_user rur ON rur.room_id = rs.id\
+                        WHERE rs.private = '1' AND rs.active = '1'\
+                        AND rur.user_id = ?);\
+                    UPDATE rooms SET active = '0' WHERE id IN (\
+                    	SELECT id FROM tmp_cont);\
+                    DELETE FROM room_user WHERE room_id IN (\
+                    	SELECT id FROM tmp_cont);\
+                    DELETE FROM tmp_cont;";
+                db.query(sql, [req.session.user_id, req.query['user_id']], function(err) {
+                	console.log(this.sql);
+                	if (err)
+                		res.send({success: false, error: err.sqlMessage});
+                	else
+                		res.send({success: true, text: 'User has been removed from your friend list'});
+                });
 			}
 		});
 	},
@@ -531,7 +554,7 @@ module.exports = {
 	},
 	get_chats: function(req, res) {
 		var sql = "SELECT r.id, GROUP_CONCAT(p.url) AS avatar, GROUP_CONCAT(u.login) AS login FROM room_user ru\
-			INNER JOIN rooms r ON r.id = ru.room_id\
+			INNER JOIN rooms r ON r.id = ru.room_id AND r.active = '1'\
 				INNER JOIN users u ON u.id = ru.user_id\
 					LEFT JOIN photo p ON p.user_id = ru.user_id AND r.private = '1' AND p.avatar = '1'\
 						WHERE  ru.user_id <> ?\

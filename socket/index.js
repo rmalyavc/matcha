@@ -24,6 +24,7 @@ io.on('connection', function(socket){
 	    };
 	});
 	socket.on('send_message', function(msg){
+		console.log('Send Message Event. Clients are:');
 		console.log(clients);
 		var sql = "SELECT user_id FROM room_user WHERE room_id = ?";
 
@@ -37,8 +38,11 @@ io.on('connection', function(socket){
 				}
 			}
 		});
-	    console.log('message: ' + msg.text);
-	    console.log('room: ' + msg.room_id);
+	});
+
+	socket.on('friend_request', function(query) {
+		if (clients[query['user_id']])
+			io.sockets.connected[clients[query['user_id']]['socket']].emit('friend_request');
 	});
 
 	socket.on('disconnect', function () {

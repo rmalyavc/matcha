@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 12, 2018 at 11:26 AM
+-- Generation Time: Dec 13, 2018 at 11:25 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -68,10 +68,7 @@ CREATE TABLE `friends` (
 INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
 (3, 2, 1),
 (3, 4, 1),
-(3, 6, 1),
-(4, 2, 1),
-(4, 6, 1),
-(4, 5, 1);
+(6, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -175,37 +172,11 @@ INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`, `room_id`) 
 (114, 2, NULL, 'Hahahahahaha', '2018-12-07 19:47:42', 7),
 (115, 3, NULL, 'Hi white men!', '2018-12-10 17:35:33', 7),
 (116, 2, NULL, 'Hi test1!', '2018-12-10 17:35:56', 7),
-(117, 6, NULL, 'Hi, test1', '2018-12-11 18:46:42', 18),
-(118, 3, NULL, 'Hi Roman', '2018-12-11 18:47:00', 18),
-(119, 6, NULL, 'Hi, mate!', '2018-12-11 18:47:17', 19),
-(120, 3, NULL, 'Hi, buddy', '2018-12-11 18:47:34', 19),
-(121, 6, NULL, 'hi mate!', '2018-12-11 18:48:37', 19),
-(122, 3, NULL, 'try again', '2018-12-11 18:48:50', 19),
-(123, 6, NULL, 'One more attempt', '2018-12-11 18:49:54', 18),
-(124, 3, NULL, 'White men doesn\'t see this but he\'ll be happy)', '2018-12-11 18:50:26', 18),
-(125, 2, NULL, 'I see this and I\'m happy)', '2018-12-12 17:22:48', 18),
-(126, 5, NULL, 'Hi guys! Thank You for adding me =)', '2018-12-12 17:26:55', 18),
-(127, 5, NULL, ':)', '2018-12-12 17:27:03', 18),
-(128, 5, NULL, ':-)', '2018-12-12 17:27:10', 18),
-(129, 4, NULL, ':-)', '2018-12-12 17:28:00', 18),
-(130, 5, NULL, 'Test', '2018-12-12 17:28:52', 18),
-(131, 4, NULL, 'Hi Stanly! Do you see it?', '2018-12-12 17:31:07', 18),
-(132, 2, NULL, 'I\'m back)', '2018-12-12 17:47:39', 18),
-(133, 2, NULL, 'Hi there', '2018-12-12 17:48:46', 18),
-(134, 4, NULL, 'I\'m leaving sorry', '2018-12-12 17:49:07', 18),
-(135, 5, NULL, 'Hi white_men! How are you?', '2018-12-12 17:50:15', 18),
-(136, 5, NULL, 'I\'m happy, because root was disconnected but we weren\'t! Great! Fucking bug seems to be fixed', '2018-12-12 17:51:20', 18),
-(137, 2, NULL, 'Very good! Congratulations)', '2018-12-12 17:51:37', 18),
-(138, 2, NULL, '-)', '2018-12-12 17:51:40', 18),
-(139, 2, NULL, ':-)', '2018-12-12 17:51:47', 18),
-(140, 5, NULL, 'Thanks mate)', '2018-12-12 17:52:02', 18),
-(141, 2, NULL, 'Hi', '2018-12-12 18:18:25', 22),
-(142, 2, NULL, 'Is there anybody out where?', '2018-12-12 18:58:28', 18),
-(143, 2, NULL, 'Is there anybody out where?', '2018-12-12 18:59:00', 18),
-(144, 4, NULL, 'Hey! What\'s happening?', '2018-12-12 19:00:06', 18),
-(145, 2, NULL, 'Hi there', '2018-12-12 19:01:23', 18),
-(146, 2, NULL, 'Oh! Thank gods! Near miss)', '2018-12-12 19:06:39', 18),
-(147, 4, NULL, 'Yeah mate, but we fixed it)', '2018-12-12 19:06:51', 18);
+(117, 4, NULL, 'Hi Roman, test)', '2018-12-13 17:07:57', 9),
+(118, 4, NULL, 'Hi Roman!', '2018-12-13 17:27:45', 8),
+(119, 4, NULL, 'Hi test', '2018-12-13 17:28:14', 9),
+(120, 4, NULL, 'Hi', '2018-12-13 17:29:06', 9),
+(121, 4, NULL, 'Test', '2018-12-13 17:29:08', 9);
 
 -- --------------------------------------------------------
 
@@ -260,11 +231,9 @@ CREATE TABLE `rooms` (
 INSERT INTO `rooms` (`id`, `active`, `private`) VALUES
 (6, 1, 1),
 (7, 1, 1),
-(18, 1, 0),
-(19, 1, 1),
-(20, 1, 1),
-(21, 1, 1),
-(22, 1, 1);
+(10, 0, 1),
+(11, 0, 1),
+(12, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -285,20 +254,17 @@ INSERT INTO `room_user` (`room_id`, `user_id`) VALUES
 (6, 4),
 (6, 3),
 (7, 2),
-(7, 3),
-(18, 4),
-(18, 2),
-(18, 3),
-(19, 6),
-(19, 3),
-(18, 6),
-(20, 5),
-(20, 4),
-(21, 6),
-(21, 4),
-(22, 2),
-(22, 4),
-(18, 5);
+(7, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tmp_cont`
+--
+
+CREATE TABLE `tmp_cont` (
+  `id` int(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -394,7 +360,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `photo`
@@ -406,7 +372,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `users`
