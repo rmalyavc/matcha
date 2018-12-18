@@ -102,6 +102,18 @@ function create_rooms() {
 	}
 }
 
+function create_hashtags() {
+	var sql = "CREATE TABLE hashtags (\
+		id INT(10) AUTO_INCREMENT PRIMARY KEY,\
+		name VARCHAR(30) NOT NULL,\
+		user_id INT(6) NOT NULL\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	})
+}
+
 module.exports = {
 	install: function() {
 		create_users();

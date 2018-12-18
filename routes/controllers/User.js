@@ -698,6 +698,26 @@ module.exports = {
 				});
 			}
 		})
+	},
+	add_hashtag: function(req, res) {
+		var sql = "INSERT INTO hashtags SET ?";
+		db.query(sql, {user_id: req.session.user_id, name: req.query['text'].trim()}, function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
+	},
+	get_tags: function(req, res) {
+		var sql = "SELECT id, name FROM hashtags WHERE user_id = ?";
+		db.query(sql, req.session.user_id, function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else if (!rows || rows.length < 1)
+				res.send({success: false, error: 'No hashtags found'});
+			else
+				res.send({success: true, data: rows});
+		});
 	}
 }
 

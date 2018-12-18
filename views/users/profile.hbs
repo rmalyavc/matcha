@@ -91,6 +91,17 @@
 		</select><br>
 		<label for="about">About:</label><textarea class="form_field profile_input" id="about" name="about">{{ about }}</textarea><br>
 		{{/user}}
+		<!-- <label for="hashtags">#HashTags:</label> -->
+		<div class="form_field profile_input tag_cont" id="hashtags">
+			<h3 class="text_header">HashTags</h3>
+			<div class="tag_list" id="tag_list"></div>
+			{{#if is_owner }}
+			<div class="rel_flex">
+				<input type="text" class="form_field new_hashtag" name="new_hashtag" id="new_hashtag" placeholder="Type new hashtag">
+				<button type="button" class="submit_button" id="add_hashtag"><span class="button_text">Add</span></button>
+			</div>
+			{{/if}}
+		</div>
 		{{#if is_owner }}
 			<button type="submit" class="submit_button" id="save_changes"><strong class="button_text">Save</strong></button>
 		{{ else if logged_user }}

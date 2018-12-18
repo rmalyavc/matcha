@@ -20,6 +20,38 @@ a:hover {
 	color: #4444FF;
 }
 
+.rel_flex {
+	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/*border: 1px solid yellow;*/
+}
+
+.rel_flex > .submit_button {
+	width: 12%;
+	font-size: 80%;
+	top: 0;
+	right: 0;
+	left: unset;
+	margin-right: 10px;
+	height: 25px;
+}
+
+.rel_flex > .form_field {
+	margin: 0;
+	left: 0;
+	width: 80%;
+	height: 25px;
+	margin-left: 10px;
+}
+
+.tag_cont > .rel_flex {
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
 .header {
 	position: absolute;
 	width: 101%;
@@ -631,6 +663,30 @@ button.header_icon {
 	height: 6%;
 	left: unset;
 	right: 4%;
+}
+
+.tag_cont {
+	position: relative;
+	height: unset;
+	left: unset;
+	float: right;
+	padding-left: 0;
+	width: 72%;
+	right: 4%;
+	/*border: 1px solid red;*/
+}
+
+.tag_list {
+	position: relative;
+	width: 100%;
+	margin-bottom: 10px;
+	text-align: center;
+	/*border: 1px solid red;*/
+}
+
+.tag_list > a {
+	margin-left: 10px;
+	display: inline-block;
 }
 
 select.form_field.profile_input {

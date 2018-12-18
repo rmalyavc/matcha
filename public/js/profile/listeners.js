@@ -168,6 +168,20 @@ function friends_listeners() {
 		});
 	}
 }
+
+function hashtags_listeners() {
+	var input = document.getElementById('new_hashtag');
+	var button = document.getElementById('add_hashtag');
+
+	button.addEventListener('click', function() {
+		if (input.value != '')
+			add_hashtag();
+	});
+	input.addEventListener('keypress', function(event) {
+		if (event.keyCode == 13 && input.value != '')
+			add_hashtag();
+	});
+}
 // function full_screen_listeners() {
 // 	var buttons = document.getElementsByClassName('full_screen');
 
@@ -190,7 +204,9 @@ function set_listeners() {
 	like_listeners();
 	del_listener();
 	friends_listeners();
+	hashtags_listeners();
 	post_images('preview_cont', 'img_wrapper');
+	post_tags();
 }
 
 set_listeners();

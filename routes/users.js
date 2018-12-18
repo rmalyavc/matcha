@@ -126,6 +126,10 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.invite_list(req, res);
 	else if (req.query['action'] == 'add_to_chat' && req.query['room_id'] && req.query['user_id'] && req.session.user_id && req.session.user_id != req.query['user_id'])
 		user_controller.add_to_chat(req, res);
+	else if (req.query['action'] == 'add_hashtag' && req.session.user_id && req.query['text'] && req.query['text'].trim() != '')
+		user_controller.add_hashtag(req, res);
+	else if (req.query['action'] == 'get_tags' && req.session.user_id)
+		user_controller.get_tags(req, res);
 	else {
 		res.send({
 			success: false,

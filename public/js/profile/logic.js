@@ -392,3 +392,43 @@ function check_friendship() {
 		}
 	});
 }
+
+function post_tags() {
+	var cont = document.getElementById('tag_list');
+	// var sep = '';
+
+	$.get('/users/ajax', {action: 'get_tags'}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else {
+			cont.innerHTML = '';
+			for (var i = 0; i < res.data.length; i++) {
+				// if (i > 0)
+				// 	sep = ',';
+				cont.innerHTML += '<a href="#" id="' + res.data[i]['id'] + '" onclick="del_hashtag(this);">' + res.data[i]['name'] + '</a>'; 
+			}
+		}
+	});
+}
+
+function add_hashtag() {
+	var input = document.getElementById('new_hashtag');
+	var button = document.getElementById('add_hashtag');
+
+	if (!input || !button || !input.value || input.value == '')
+		return ;
+	$.get('/users/ajax', {action: 'add_hashtag', text: input.value}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else {
+			input.value = '';
+			post_tags();
+		}
+	});
+	// alert('Test!');
+}
+
+function del_hashtag(elem) {
+	console.log(elem);
+}
+
