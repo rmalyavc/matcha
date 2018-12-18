@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 13, 2018 at 11:25 AM
+-- Generation Time: Dec 18, 2018 at 11:15 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -69,6 +69,31 @@ INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
 (3, 2, 1),
 (3, 4, 1),
 (6, 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hashtags`
+--
+
+CREATE TABLE `hashtags` (
+  `id` int(10) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `user_id` int(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `hashtags`
+--
+
+INSERT INTO `hashtags` (`id`, `name`, `user_id`) VALUES
+(1, '#TestTag', 4),
+(2, '#TestTag', 4),
+(3, '#NewHashTag', 4),
+(4, '#HashTagIsWorkingNow', 4),
+(5, '#oekgokr', 4),
+(6, '#grlegplrglerg', 4),
+(7, '#ekekkek', 4);
 
 -- --------------------------------------------------------
 
@@ -309,6 +334,12 @@ ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hashtags`
+--
+ALTER TABLE `hashtags`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `likes`
 --
 ALTER TABLE `likes`
@@ -351,6 +382,12 @@ ALTER TABLE `comments`
   MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `hashtags`
+--
+ALTER TABLE `hashtags`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
@@ -372,7 +409,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`
