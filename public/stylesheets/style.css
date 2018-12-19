@@ -52,6 +52,14 @@ a:hover {
 	margin-bottom: 10px;
 }
 
+.tag_cont > .error_text {
+	float: left;
+	margin-top: -5px;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	display: none;
+}
+
 .header {
 	position: absolute;
 	width: 101%;

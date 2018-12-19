@@ -173,12 +173,16 @@ function hashtags_listeners() {
 	var input = document.getElementById('new_hashtag');
 	var button = document.getElementById('add_hashtag');
 
+	if (!input || !button)
+		return ;
 	button.addEventListener('click', function() {
 		if (input.value != '')
 			add_hashtag();
 	});
-	input.addEventListener('keypress', function(event) {
-		if (event.keyCode == 13 && input.value != '')
+	input.addEventListener('keyup', function(event) {
+		console.log("KEY IS: " + event.keyCode);
+		check_tag();
+		if (event.keyCode == 13 && input.value != '' && is_hashtag(input.value))
 			add_hashtag();
 	});
 }

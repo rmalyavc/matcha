@@ -17,6 +17,18 @@ function is_email(email) {
 	return re.test(String(email).toLowerCase());
 }
 
+function is_hashtag(tag) {
+	var re = /(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/;
+	var restricted = [",", "'", '"', '`', '~', '^', '/', "\\", '{', '}', '[', ']', '(', ')', ' ', "\t", "\n", "\r", "*", "|", "%", "$", "=", "+", "@", "1", "<", ">", ";", ":", ".", "§", "±", "№"];
+	if (!re.test(String(tag).toLowerCase()) || tag.lastIndexOf("#") != 0)
+		return (false);
+	for (var i = 0; i < restricted.length; i++) {
+		if (tag.lastIndexOf(restricted[i]) != -1)
+			return (false);
+	}
+	return (true);
+}
+
 function get_upload_path(id) {
 	if (!id)
 		return (false);
@@ -701,6 +713,11 @@ module.exports = {
 	},
 	add_hashtag: function(req, res) {
 		var sql = "INSERT INTO hashtags SET ?";
+
+		if (!is_hashtag(req.query['text'])) {
+			res.send({success: false, error: 'Not a valid hashtag'});
+			return ;
+		}
 		db.query(sql, {user_id: req.session.user_id, name: req.query['text'].trim()}, function(err) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
@@ -710,13 +727,24 @@ module.exports = {
 	},
 	get_tags: function(req, res) {
 		var sql = "SELECT id, name FROM hashtags WHERE user_id = ?";
-		db.query(sql, req.session.user_id, function(err, rows) {
+		db.query(sql, req.query['user_id'], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else if (!rows || rows.length < 1)
 				res.send({success: false, error: 'No hashtags found'});
 			else
-				res.send({success: true, data: rows});
+				res.send({success: true, data: rows; is_owner: req.query['user_id'] == req.session.user_id});
+		});
+	},
+	del_hashtag: function(req, res) {
+		var sql = "DELETE FROM hashtags WHERE id = ? AND user_id = ?";
+		db.query(sql, [req.body['tag_id'], req.session.user_id], function(err, result) {
+			if (res.error)
+				res.send({success: false, error: err.sqlMessage});
+			else if (!result || result.affectedRows < 1)
+				res.send({success: false, error: 'Hashtag is not found'});
+			else
+				res.send({success: true});
 		});
 	}
 }

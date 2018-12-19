@@ -1,5 +1,5 @@
 var url = window.location.href;
-var user_id = url.substring(url.lastIndexOf('/') + 1);
+var user_id = parseInt(url.substring(url.lastIndexOf('/') + 1));
 
 function scroll_preview(offset, timeout, cont_id) {
 	var cont = document.getElementById(cont_id);
@@ -397,15 +397,16 @@ function post_tags() {
 	var cont = document.getElementById('tag_list');
 	// var sep = '';
 
-	$.get('/users/ajax', {action: 'get_tags'}, function(res) {
+	$.get('/users/ajax', {action: 'get_tags', user_id: user_id}, function(res) {
 		if (!res.success)
 			console.log(res.error);
 		else {
 			cont.innerHTML = '';
+			var onclick = res.is_owner ? 'onclick="del_hashtag(this);"' : '';
 			for (var i = 0; i < res.data.length; i++) {
 				// if (i > 0)
 				// 	sep = ',';
-				cont.innerHTML += '<a href="#" id="' + res.data[i]['id'] + '" onclick="del_hashtag(this);">' + res.data[i]['name'] + '</a>'; 
+				cont.innerHTML += '<a href="#" id="' + res.data[i]['id'] + '"' + onclick + '>' + res.data[i]['name'] + '</a>'; 
 			}
 		}
 	});
@@ -417,7 +418,7 @@ function add_hashtag() {
 
 	if (!input || !button || !input.value || input.value == '')
 		return ;
-	$.get('/users/ajax', {action: 'add_hashtag', text: input.value}, function(res) {
+	$.get('/users/ajax', {action: 'add_hashtag', text: input.value, user_id: user_id}, function(res) {
 		if (!res.success)
 			console.log(res.error);
 		else {
@@ -429,6 +430,28 @@ function add_hashtag() {
 }
 
 function del_hashtag(elem) {
-	console.log(elem);
+	var fog = document.getElementById('fog');
+	var conf = fog.getElementsByClassName('confirm_window')[0];
+	var quest = document.getElementById('confirm_question');
+	var yes = document.getElementById('yes_button');
+	var no = document.getElementById('no_button');
+
+	if (!fog || !conf || !quest || !yes || !no)
+		return ;
+	quest.innerHTML = 'Do You really want to delete this hashtag?';
+	fog.style.display = 'block';
+	no.onclick = function() {
+		fog.style.display = 'none';
+	};
+	yes.onclick = function() {
+		$.post('/users/ajax_post', {action: 'del_hashtag', tag_id: elem.id}, function(res) {
+			if (!res.success)
+				console.log(res.error);
+			else
+				post_tags();
+		});
+		fog.style.display = 'none';
+	};
+	// console.log(elem);
 }
 
