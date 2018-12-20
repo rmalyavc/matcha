@@ -733,7 +733,7 @@ module.exports = {
 			else if (!rows || rows.length < 1)
 				res.send({success: false, error: 'No hashtags found'});
 			else
-				res.send({success: true, data: rows; is_owner: req.query['user_id'] == req.session.user_id});
+				res.send({success: true, data: rows, is_owner: req.query['user_id'] == req.session.user_id});
 		});
 	},
 	del_hashtag: function(req, res) {
@@ -745,6 +745,26 @@ module.exports = {
 				res.send({success: false, error: 'Hashtag is not found'});
 			else
 				res.send({success: true});
+		});
+	},
+	copy_hashtag: function(req, res) {
+		var sql = "SELECT id FROM hashtags WHERE name = ? AND user_id = ?";
+		db.query(sql, [req.query['tag_name'].trim(), req.session.user_id], function(err, rows) {
+			if (err || !rows)
+				res.send({success: false, error: 'DB Error'});
+			else if (rows.length > 0)
+				res.send({success: false, error: 'You already have such tag'});
+			else if (is_hashtag(req.query['tag_name'].trim())){
+				sql = "INSERT INTO hashtags SET ?";
+				db.query(sql, {name: req.query['tag_name'].trim(), user_id: req.session.user_id}, function(err) {
+					if (err)
+						res.send({success: false, error: 'DB Error'});
+					else
+						res.send({success: true, text: 'Tag has been copied'});
+				});
+			}
+			else
+				res.send({success: false, error: 'Unknown Error'});
 		});
 	}
 }

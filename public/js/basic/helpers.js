@@ -1,5 +1,8 @@
-function fog_visible(fog_id, show_fog, show_conf) {
+function fog_visible(fog_id, show_fog, show_conf, show_res = false) {
 	var fog = document.getElementById(fog_id);
+	// console.log('Fog is:');
+	// console.log(fog);
+	// console.log()
 
 	if (!fog) {
 		console.log('Fog is not found');
@@ -8,6 +11,10 @@ function fog_visible(fog_id, show_fog, show_conf) {
 	var conf = fog.getElementsByClassName('confirm_window');
 	if (conf && conf.length > 0)
 		conf[0].style.display = show_conf ? 'block' : 'none';
+	var conf_res = fog.getElementsByClassName('confirm_result');
+	if (conf_res && conf_res.length > 0) {
+		conf_res[0].style.display = show_res ? 'block' : 'none';
+	}
 	fog.style.display = show_fog ? 'block' : 'none';
 }
 

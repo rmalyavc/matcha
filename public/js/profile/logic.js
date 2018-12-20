@@ -402,7 +402,7 @@ function post_tags() {
 			console.log(res.error);
 		else {
 			cont.innerHTML = '';
-			var onclick = res.is_owner ? 'onclick="del_hashtag(this);"' : '';
+			var onclick = res.is_owner ? 'onclick="del_hashtag(this);"' : 'onclick="copy_hashtag(this);"';
 			for (var i = 0; i < res.data.length; i++) {
 				// if (i > 0)
 				// 	sep = ',';
@@ -455,3 +455,28 @@ function del_hashtag(elem) {
 	// console.log(elem);
 }
 
+function copy_hashtag(elem) {
+	var quest = document.getElementById('confirm_question');
+	var yes = document.getElementById('yes_button');
+	var no = document.getElementById('no_button');
+	var conf = document.getElementById('fog').getElementsByClassName('confirm_result')[0];
+	var conf_text = conf.getElementsByClassName('text_header')[0];
+	var button = document.getElementById('confirm_close');
+
+	fog_visible('fog', true, true);
+	quest.innerHTML = 'Do you want to copy ' + elem.innerHTML + ' tag?';
+	no.onclick = function() {
+		fog_visible('fog', true, true);
+	}
+	yes.onclick = function() {
+		$.get('/users/ajax', {action: 'copy_hashtag', tag_id: elem.id, tag_name: elem.innerHTML}, function(res) {
+			conf_text.innerHTML = res.success ? res.text : res.error;
+			var new_class = res.success ? 'text_header green' : 'text_header error_text';
+			conf_text.setAttribute('class', new_class);
+			fog_visible('fog', true, false, true);
+			button.onclick = function() {
+				fog_visible('fog', false, true);
+			}
+		});
+	}
+}

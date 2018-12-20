@@ -130,6 +130,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.add_hashtag(req, res);
 	else if (req.query['action'] == 'get_tags' && req.query['user_id'])
 		user_controller.get_tags(req, res);
+	else if (req.query['action'] == 'copy_hashtag' && req.query['tag_id'] && req.session.user_id && req.query['tag_name'] && req.query['tag_name'] != '')
+		user_controller.copy_hashtag(req, res);
 	else {
 		res.send({
 			success: false,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 19, 2018 at 11:21 AM
+-- Generation Time: Dec 20, 2018 at 11:11 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -68,7 +68,9 @@ CREATE TABLE `friends` (
 INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
 (3, 2, 1),
 (3, 4, 1),
-(6, 2, 0);
+(6, 2, 1),
+(4, 6, 1),
+(2, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -96,7 +98,13 @@ INSERT INTO `hashtags` (`id`, `name`, `user_id`) VALUES
 (8, '#NEWTAG', 4),
 (10, '#ad', 4),
 (17, '#igjfirgirjgigr', 4),
-(18, '#rkkkgr', 4);
+(18, '#rkkkgr', 4),
+(19, '#TestTag', 4),
+(20, '#NewHashTag', 2),
+(21, '#NEWTAG', 2),
+(22, '#TestTag', 2),
+(24, '#fqeffeqfeqf', 2),
+(25, '#HashTagIsWorkingNow', 2);
 
 -- --------------------------------------------------------
 
@@ -261,7 +269,10 @@ INSERT INTO `rooms` (`id`, `active`, `private`) VALUES
 (7, 1, 1),
 (10, 0, 1),
 (11, 0, 1),
-(12, 0, 1);
+(12, 0, 1),
+(13, 1, 1),
+(14, 1, 1),
+(15, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -282,7 +293,13 @@ INSERT INTO `room_user` (`room_id`, `user_id`) VALUES
 (6, 4),
 (6, 3),
 (7, 2),
-(7, 3);
+(7, 3),
+(13, 6),
+(13, 4),
+(14, 2),
+(14, 6),
+(15, 4),
+(15, 2);
 
 -- --------------------------------------------------------
 
@@ -388,7 +405,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `hashtags`
 --
 ALTER TABLE `hashtags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -412,7 +429,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `users`
