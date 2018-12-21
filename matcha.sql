@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 20, 2018 at 11:11 AM
+-- Generation Time: Dec 21, 2018 at 11:42 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -131,6 +131,28 @@ INSERT INTO `likes` (`id`, `photo_id`, `author`) VALUES
 (8, 10, 4),
 (9, 8, 2),
 (11, 12, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `locations`
+--
+
+CREATE TABLE `locations` (
+  `id` int(6) NOT NULL,
+  `user_id` int(6) NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL,
+  `approved` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `locations`
+--
+
+INSERT INTO `locations` (`id`, `user_id`, `latitude`, `longitude`, `approved`) VALUES
+(1, 11, 50.4642, 30.4665, 1),
+(2, 12, 50.4547, 30.5238, 0);
 
 -- --------------------------------------------------------
 
@@ -341,7 +363,9 @@ INSERT INTO `users` (`id`, `login`, `password`, `email`, `first_name`, `last_nam
 (3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', NULL, 'Female', 'Other'),
 (4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', '', '', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual'),
 (5, 'Stanly', 'sha256$794be04a$1$b2772c8bafb16ea1e3ff510d0eba864fdb38a04bd4c303d2821ff00c923eec1a', 'test@example.com', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL),
-(6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.com.au', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', NULL, 'Male', 'Heterosexual');
+(6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.com.au', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', NULL, 'Male', 'Heterosexual'),
+(11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL),
+(12, 'location_tester', 'sha256$b4e6109c$1$c1de63ef4385626fce71419ba98c785a03208cad4f7a747c40521514f18350c6', 'loc_test@test.com', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -364,6 +388,13 @@ ALTER TABLE `hashtags`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `locations`
+--
+ALTER TABLE `locations`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `messages`
@@ -414,6 +445,12 @@ ALTER TABLE `likes`
   MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `locations`
+--
+ALTER TABLE `locations`
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
@@ -435,7 +472,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

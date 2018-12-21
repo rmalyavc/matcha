@@ -116,6 +116,10 @@ function before_submit() {
 		paint_field(email, false);
 		alert('Invalid email');
 	}
-	else if (form.checkValidity())
+	else if (form.checkValidity() && current_user.location) {
+		document.getElementById('latitude').value = current_user.location['latitude'];
+		document.getElementById('longitude').value = current_user.location['longitude'];
+		document.getElementById('approved').value = current_user.location['approved'];
 		form.submit();
+	}
 }

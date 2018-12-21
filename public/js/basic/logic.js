@@ -45,17 +45,35 @@ function post_requests(data) {
 
 function get_requests() {
 	$.get('/users/ajax', {action: 'get_requests'}, function(res) {
-		console.log(res);
-		if (!res.success)
-			console.log(res.error);
-		else if (res.data)
+		if (res.data)
 			post_requests(res.data);
 	});
 }
 
-socket.on('friend_request', function(){
-	console.log('Friend request!');
-	get_requests();
-	// console.log(msg);
-	// $('#messages').append($('<li>').text(msg));
-});
+function get_location() {
+	console.log('Test!');
+	navigator.geolocation.getCurrentPosition(function(location) {
+		current_user.location = {
+			latitude: location.coords.latitude,
+			longitude: location.coords.longitude,
+			approved: 1
+		}
+	}, function(err) {
+		$.getJSON('https://geoip-db.com/json/').done(function(location) {
+			current_user.location = {
+				latitude: location.latitude,
+				longitude: location.longitude,
+				approved: 0
+			}
+		});
+	});
+}
+if (socket) {
+	socket.on('friend_request', function(){
+		console.log('Friend request!');
+		get_requests();
+		// console.log(msg);
+		// $('#messages').append($('<li>').text(msg));
+	});
+}
+

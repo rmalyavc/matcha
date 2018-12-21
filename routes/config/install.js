@@ -111,7 +111,21 @@ function create_hashtags() {
 	conn.query(sql, function(err) {
 		if (err)
 			console.log(err);
-	})
+	});
+}
+
+function create_locations() {
+	var sql = "CREATE TABLE locations (\
+		id INT(6) AUTO_INCREMENT PRIMARY KEY,\
+		user_id INT(6) NOT NULL UNIQUE,\
+		latitude FLOAT(20) NOT NULL,\
+		longitude FLOAT(20) NOT NULL,\
+		approved TINYINT(1) NOT NULL\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});
 }
 
 module.exports = {
@@ -123,5 +137,6 @@ module.exports = {
 		create_friends();
 		create_messages();
 		create_rooms();
+		create_locations();
 	}
 }

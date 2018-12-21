@@ -70,15 +70,33 @@ module.exports = {
 				if (err) {
 					res.render('./auth/valid', {
 						registred: false,
-						error: err
+						error: 'DB Error'
 					});
 					return ;
 				}
 				req.session.user_id = results.insertId;
 				req.session.user_login = data['login'];
-				res.render('./auth/valid', {
-					registred: true,
-					login: new_user['login']
+				sql = "INSERT INTO locations SET ?";
+				db.query(sql, {
+					user_id: req.session.user_id,
+					latitude: data['latitude'],
+					longitude: data['longitude'],
+					approved: data['approved']
+				}, function(err) {
+					if (err) {
+						console.log(err.sqlMessage);
+						res.render('./auth/valid', {
+							registred: false,
+							error: 'DB Error'
+						});
+						return ;
+					}
+					else {
+						res.render('./auth/valid', {
+							registred: true,
+							login: new_user['login']
+						});
+					}	
 				});
 			});
 		}

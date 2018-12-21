@@ -33,7 +33,7 @@ function password_listener() {
 }
 
 function form_listener() {
-	var button = document.getElementsByClassName('submit_button')[0];
+	var button = document.getElementById('signup');
 	if (!button)
 		return ;
 	button.addEventListener('click', before_submit);

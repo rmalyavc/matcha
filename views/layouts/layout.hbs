@@ -10,6 +10,18 @@
 <body>
 	<div class="header">
 		<img class="logo" onclick="location.href='/'" src="/images/logo.png">
+		<script type="text/javascript">
+			var current_user = {};
+			var socket = false;
+
+			$.get('/users/ajax', {action: 'current_user'}, function(res) {
+				if (!res.success)
+					console.log(res.error);
+				else {
+					current_user['info'] = res.data;
+				}
+			});
+		</script>
 		<div class="header_tools">
 			{{# if login}}
 			{{ else if logged_user }}
@@ -21,33 +33,14 @@
 				<img class="header_icon" id="logout_icon" onclick="location.href='/users/logout'" src="/images/logout.png">
 				<a id="profile_link" href="/users/profile/{{ logged_user }}"></a>
 				<script type="text/javascript">
-					// var socket = require("socket.io-client");
-					// client.connect("http://localhost:3001");
-					// client.emit("chat message", "foo");
-// client.connect("http://localhost:3001");
-// client.emit("test", "foo");
 					var id = '{{ logged_user }}';
-					var current_user = false;
-					var socket = io.connect('http://localhost:3001', {user_id: id});
+					
+					socket = io.connect('http://localhost:3001', {user_id: id});
 
 					socket.emit('add_client', {
 						user_id: id
 					});
-					$.get('/users/ajax', {action: 'current_user'}, function(res) {
-						if (!res.success)
-							console.log(res.error);
-						else {
-							current_user = res.data;
-							// socket['id'] = current_user.id;
-						}
-					});
-					// var socket = io.connect('http://localhost:3001');
-					// var socket = io.connect('http://localhost:3001', {user_id: current_user ? current_user.id : false});
 					console.log(socket);
-					
-					
-					
-
 					$.get('/users/ajax', {id: id, action: 'get_user'}, function(result) {
 						if (!result)
 							return ;
@@ -99,9 +92,8 @@
 			</div>
 		</div>
 	</div>
-	{{# if logged_user }}
 		<script type="text/javascript" src="/js/basic/helpers.js"></script>
 		<script type="text/javascript" src="/js/basic/logic.js"></script>
 		<script type="text/javascript" src="/js/basic/listeners.js"></script>
-	{{/if}}
+
 </html>

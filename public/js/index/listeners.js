@@ -13,8 +13,8 @@ function search_listeners() {
 	var search = document.getElementById('search_button');
 	var closers = document.getElementsByClassName('close_button');
 
-	if (!close)
-		return ;
+	// if (!close)
+	// 	return ;
 	search.addEventListener('click', function() {
 		find_users();
 	});

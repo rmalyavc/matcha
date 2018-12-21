@@ -38,6 +38,7 @@ router.get('/forgot', function(req, res, next) {
 });
 
 router.post('/valid', function(req, res, next) {
+	console.log(req.body);
 	if (req.body.page === 'register')
 		user_controller.register(req, res);
 	else if (req.body.page === 'login')
@@ -135,7 +136,8 @@ router.get('/ajax', function(req, res, next) {
 	else {
 		res.send({
 			success: false,
-			error: 'Invalid request'
+			error: 'Invalid request',
+			request: req.query
 		});
 	}
 });
@@ -179,7 +181,8 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 	else {
 		res.send({
 			success: false,
-			error: 'Invalid request'
+			error: 'Invalid request',
+			request: req.query
 		});
 	}
 });
