@@ -10,7 +10,7 @@ var fs = require('fs');
 var shell = require('shelljs');
 var multer  = require('multer');
 var db = require('../config/connection.js');
-
+var matches = require('../config/matches.js');
 
 function is_email(email) {
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -443,23 +443,106 @@ module.exports = {
 		});
 	},
 	find_users: function(req, res) {
-		var sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url FROM users u\
-			LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
-				WHERE u.id <> ?";
+		// var sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url FROM users u\
+		// 	LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
+		// 		WHERE u.id <> ?";
 
-		db.query(sql, req.query['user_id'], function(err, rows) {
+		// db.query(sql, req.query['user_id'], function(err, rows) {
+		// 	if (err || !rows || rows.length < 1) {
+		// 		res.send({
+		// 			success: false,
+		// 			error: err ? err : 'No users found'
+		// 		});
+		// 	}
+		// 	else {
+		// 		res.send({
+		// 			success: true,
+		// 			data: rows
+		// 		});
+		// 	}
+		// });
+		var sql = "SELECT u.*, l.*\
+					FROM users u\
+					LEFT JOIN locations l ON l.user_id = u.id\
+					WHERE u.id = ?";
+		db.query(sql, req.session.user_id, function(err, rows) {
 			if (err || !rows || rows.length < 1) {
-				res.send({
-					success: false,
-					error: err ? err : 'No users found'
-				});
+				res.send({success: false, error: err ? err.sqlMessage : 'DB error'});
+				console.log(err ? err.sqlMessage : 'DB error');
+				return ;
 			}
-			else {
-				res.send({
-					success: true,
-					data: rows
-				});
-			}
+			var user = rows[0];
+			if (!user.gender)
+				user.gender = 'Other';
+			if (!user.orientation)
+				user.orientation = 'Other';
+			if (!user.age)
+				user.age = 0;
+			if (!user.latitude)
+				user.latitude = 0;
+			if (!user.longitude)
+				user.longitude = 0;
+			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, ABS(l.latitude - 50.4447) + ABS(l.longitude - 30.5238) AS diff\
+					FROM users u\
+					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
+					LEFT JOIN locations l ON l.user_id = u.id\
+					WHERE u.id <> ?\
+					AND u.active = '1'\
+					ORDER BY\
+						CASE\
+					    	WHEN u.gender = 'Male' THEN ?\
+					    	WHEN u.gender = 'Female' THEN ?\
+					        WHEN u.gender = 'Other' THEN ?\
+					        ELSE 42\
+					    END,\
+					    CASE\
+					    	WHEN u.orientation = 'Heterosexual' THEN ?\
+					        WHEN u.orientation = 'Bisexual' THEN ?\
+					        WHEN u.orientation = 'Homosexual' THEN ?\
+					        WHEN u.orientation = 'Asexual' THEN ?\
+					        WHEN u.orientation = 'Other' THEN ?\
+					        ELSE 42\
+					    END,\
+					    CASE\
+					    	WHEN l.latitude IS NOT NULL THEN ABS(l.latitude - ?) + ABS(l.longitude - ?)\
+					        ELSE 42\
+					    END,\
+					    CASE\
+					    	WHEN u.age IS NOT NULL THEN ABS(? - CAST(u.age AS SIGNED))\
+					    	ELSE 42\
+					    END";
+			db.query(sql, [
+				req.session.user_id,
+				matches[user.gender][user.orientation]['gender']['Male'],
+				matches[user.gender][user.orientation]['gender']['Female'],
+				matches[user.gender][user.orientation]['gender']['Other'],
+				matches[user.gender][user.orientation]['orientation']['Heterosexual'],
+				matches[user.gender][user.orientation]['orientation']['Bisexual'],
+				matches[user.gender][user.orientation]['orientation']['Homosexual'],
+				matches[user.gender][user.orientation]['orientation']['Asexual'],
+				matches[user.gender][user.orientation]['orientation']['Other'],
+				user.latitude,
+				user.longitude,
+				user.age
+			], function(err, rows) {
+				console.log(this.sql);
+				// console.log('Rows are:');
+				// console.log(rows);
+				// console.log('Err is:');
+				// console.log(err.sqlMessage);
+				if (err || !rows || rows.length < 1) {
+					res.send({
+						success: false,
+						error: err ? err : 'No users found'
+					});
+				}
+				else {
+					res.send({
+						success: true,
+						data: rows
+					});
+				}
+			});
 		});
 	},
 	add_friend: function(req, res) {
