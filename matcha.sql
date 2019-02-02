@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 01, 2019 at 11:19 AM
+-- Generation Time: Feb 02, 2019 at 09:05 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -105,7 +105,8 @@ INSERT INTO `hashtags` (`id`, `name`, `user_id`) VALUES
 (22, '#TestTag', 2),
 (24, '#fqeffeqfeqf', 2),
 (25, '#HashTagIsWorkingNow', 2),
-(26, '#fqeffeqfeqf', 4);
+(26, '#fqeffeqfeqf', 4),
+(27, '#likeme', 13);
 
 -- --------------------------------------------------------
 
@@ -155,7 +156,8 @@ INSERT INTO `locations` (`id`, `user_id`, `latitude`, `longitude`, `approved`) V
 (2, 12, 50.4642, 30.4665, 1),
 (5, 5, 50.4642, 30.4665, 1),
 (6, 4, 50.4242, 30.4242, 1),
-(7, 11, 50.4642, 30.4665, 1);
+(7, 11, 50.4642, 30.4665, 1),
+(8, 13, 50.4684, 30.4519, 1);
 
 -- --------------------------------------------------------
 
@@ -271,7 +273,8 @@ INSERT INTO `photo` (`id`, `user_id`, `url`, `avatar`) VALUES
 (16, 3, '/uploads/test1/2018/11/15/d0b53c2eec81b7c5ff1ef3f195be9417.jpeg', 0),
 (17, 5, '/uploads/Stanly/2018/11/15/119ffdb79a6a4bff6ee585efc8a99797.jpeg', 0),
 (18, 6, '/uploads/Roman/2018/11/15/257ee8b97c5400a85aa8f24ab51f048d.jpeg', 1),
-(19, 6, '/uploads/Roman/2018/11/15/cad088c6ec17bb7eba39067370b64df4.jpeg', 0);
+(19, 6, '/uploads/Roman/2018/11/15/cad088c6ec17bb7eba39067370b64df4.jpeg', 0),
+(20, 13, '/uploads/girl/2019/2/2/9ebb9a299fb0b2397f9215f2f1d6a5fa.jpeg', 1);
 
 -- --------------------------------------------------------
 
@@ -368,7 +371,8 @@ INSERT INTO `users` (`id`, `login`, `password`, `email`, `first_name`, `last_nam
 (5, 'Stanly', 'sha256$794be04a$1$b2772c8bafb16ea1e3ff510d0eba864fdb38a04bd4c303d2821ff00c923eec1a', 'test@example.com', NULL, NULL, 0, 1, NULL, 27, 'Male', 'Asexual'),
 (6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.com.au', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', 18, 'Male', 'Bisexual'),
 (11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, 42, 'Female', 'Heterosexual'),
-(12, 'location_tester', 'sha256$b4e6109c$1$c1de63ef4385626fce71419ba98c785a03208cad4f7a747c40521514f18350c6', 'loc_test@test.com', NULL, NULL, 0, 1, NULL, 48, 'Female', 'Heterosexual');
+(12, 'location_tester', 'sha256$b4e6109c$1$c1de63ef4385626fce71419ba98c785a03208cad4f7a747c40521514f18350c6', 'loc_test@test.com', NULL, NULL, 0, 1, NULL, 48, 'Female', 'Heterosexual'),
+(13, 'girl', 'sha256$8c166a20$1$1bf8fcf17cee9639b4c4abe094d1b040d330b6df4d1e4fab5a4d0e88825037e9', 'girl@gmail.co', '', '', 0, 1, '', 22, 'Female', 'Bisexual');
 
 --
 -- Indexes for dumped tables
@@ -439,7 +443,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `hashtags`
 --
 ALTER TABLE `hashtags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -451,7 +455,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -463,7 +467,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `rooms`
@@ -475,7 +479,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
