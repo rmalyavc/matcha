@@ -52,6 +52,39 @@ function close_search(button_id) {
 	start_slider();
 }
 
+function apply_filters() {
+	var cont = document.getElementById('filters_cont');
+	var filters;
+	var params = {};
+
+	if (cont)
+		filters = cont.getElementsByClassName('filter_row'); 
+	if (!cont || !filters || filters.length < 1)
+		return ;
+	for (var i = 0; i < filters.length; i++) {
+		var field = filters[i].id.replace('_filter', '');
+		var list = filters[i].getElementsByTagName('input');
+		if (list && list.length > 0) {
+			for (var j = 0; j < list.length; j++) {
+				if (list[j].type == 'checkbox' && list[j].checked) {
+					if (!params[field])
+						params[field] = [];
+					params[field].push(list[j].value);
+				}
+				else if (list[j].type == 'number' && list[j].value && list[j].value != '') {
+					if (!params[field])
+						params[field] = {};
+					var param = list[j].id.replace(field + '_', '');
+					params[field][param] = list[j].value;
+				}
+				else if (list[j].type == 'text' && list[j].value && list[j].value != '')
+					params[field] = list[j].value;
+			}
+		}
+	}
+	find_users(params);
+}
+
 // <div class="search_result">
 // 					<a href="/">
 // 						<img class="avatar" src="/images/avatar.png">
@@ -69,14 +102,47 @@ function close_search(button_id) {
 
 function post_users(rows) {
 	var cont = document.getElementsByClassName('results_cont')[0];
-	console.log(rows[0].id);
-	// var full_name = '';
-	// var avatar = '';
 
-	cont.innerHTML = '';
+	// if (!cont.innerHTML || cont.innerHTML == '') {
+	// 	cont.innerHTML = '<div class="filters" id="filters_cont">\
+	// 		<div class="filter_group">\
+	// 			<h2 class="text_header green">Filters</h2>\
+	// 			<div class="filter_row" id="gender_filter">\
+	// 				<h5>By Gender</h5>\
+	// 				<input type="checkbox" value="Male">&nbsp<span class="checkbox_text">Male</span><br>\
+	// 				<input type="checkbox" value="Female">&nbsp<span class="checkbox_text">Female</span><br>\
+	// 				<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>\
+	// 			</div>\
+	// 			<div class="filter_row" id="orientation_filter">\
+	// 				<h5>By Orientation</h5>\
+	// 				<input type="checkbox" value="Heterosexual">&nbsp<span class="checkbox_text">Heterosexual</span><br>\
+	// 				<input type="checkbox" value="Bisexual">&nbsp<span class="checkbox_text">Bisexual</span><br>\
+	// 				<input type="checkbox" value="Homosexual">&nbsp<span class="checkbox_text">Homosexual</span><br>\
+	// 				<input type="checkbox" value="Asexual">&nbsp<span class="checkbox_text">Asexual</span><br>\
+	// 				<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>\
+	// 			</div>\
+	// 			<div class="filter_row" id="age_filter">\
+	// 				<h5>By Age</h5>\
+	// 				<label>From:</label><input class="form_field" type="number" min="12" max="120" id="age_from">\
+	// 				<label>To:&nbsp&nbsp&nbsp&nbsp</label><input class="form_field" type="number" min="12" max="120" id="age_to">\
+	// 				<p></p>\
+	// 			</div>\
+	// 			<div class="filter_row" id="hashtag_filter">\
+	// 				<h5>By Hashtag</h5>\
+	// 				<label>Hashtag:</label><input class="form_field" type="text" min="12" max="120" id="hashtag">\
+	// 				<p></p>\
+	// 			</div>\
+	// 			<button class="submit_button" type="button" onclick="apply_filters();"><strong class="button_text">Apply Filters</strong></button>\
+	// 			<button class="submit_button" type="button" onclick="clear_filters();"><strong class="button_text">Clear Filters</strong></button>\
+	// 		</div>\
+	// 	</div>';
+	// }
+	// else
+	// 	console.log(cont.innerHTML);
+	$('.search_result').remove();
 	for (var i = 0; i < rows.length; i++) {
 		var age = rows[i].age ? rows[i].age : '';
-		var avatar = rows[i].url ? rows[i].url : '/images/avatar.png';
+		var avatar = rows[i].avatar ? rows[i].avatar : '/images/avatar.png';
 		var about = rows[i].about ? rows[i].about : '';
 		var full_name = rows[i].first_name ? rows[i].first_name + ' ' : '';
 
@@ -99,15 +165,17 @@ function post_users(rows) {
 	}
 }
 
-function find_users() {
+function find_users(params = {}) {
 	var form = document.getElementById('index_form');
 	var fields = form.getElementsByClassName('form_field profile_input');
 	var results = document.getElementsByClassName('search_results')[0];
 	var req = {
 		action: 'find_users',
-		user_id: user_id 
+		user_id: user_id
 	};
-
+	if (params != {})
+		req.params = params;
+	console.log(req);
 	form.style.display = 'none';
 	results.style.display = 'block';
 	for (var i = 0; i < fields.length; i++) {

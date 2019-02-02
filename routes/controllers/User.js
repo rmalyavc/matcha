@@ -443,24 +443,6 @@ module.exports = {
 		});
 	},
 	find_users: function(req, res) {
-		// var sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url FROM users u\
-		// 	LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
-		// 		WHERE u.id <> ?";
-
-		// db.query(sql, req.query['user_id'], function(err, rows) {
-		// 	if (err || !rows || rows.length < 1) {
-		// 		res.send({
-		// 			success: false,
-		// 			error: err ? err : 'No users found'
-		// 		});
-		// 	}
-		// 	else {
-		// 		res.send({
-		// 			success: true,
-		// 			data: rows
-		// 		});
-		// 	}
-		// });
 		var sql = "SELECT u.*, l.*\
 					FROM users u\
 					LEFT JOIN locations l ON l.user_id = u.id\
@@ -471,6 +453,7 @@ module.exports = {
 				console.log(err ? err.sqlMessage : 'DB error');
 				return ;
 			}
+			var where = '';
 			var user = rows[0];
 			if (!user.gender)
 				user.gender = 'Other';
@@ -482,12 +465,38 @@ module.exports = {
 				user.latitude = 0;
 			if (!user.longitude)
 				user.longitude = 0;
+			if (req.query.params && req.query.params != {}) {
+				var params = req.query.params;
+				var keys = Object.keys(params);
+				for (var i = 0; i < keys.length; i++) {
+					var param = params[keys[i]];
+					if (keys[i] == 'gender' || keys[i] == 'orientation') {
+						for (var j = 0; j < params[keys[i]].length; j++) {
+							if (j == 0)
+								where += " AND (u." + keys[i] + " = '" + params[keys[i]][j] + "'";
+							else
+								where += " OR u." + keys[i] + " = '" + params[keys[i]][j] + "'";
+							if (j == params[keys[i]].length - 1)
+								where += ")";
+						}
+					}
+					else if (keys[i] == 'age') {
+						var age_keys = Object.keys(params[keys[i]]);
+						for (var j = 0; j < age_keys.length; j++) {
+							if (age_keys[j] == 'from')
+								where += " AND u.age >= '" + params[keys[i]]['from'] + "'";
+							else if (age_keys[j] == 'to')
+								where += " AND u.age <= '" + params[keys[i]]['to'] + "'";
+						}
+					}
+				}
+			}
 			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, ABS(l.latitude - 50.4447) + ABS(l.longitude - 30.5238) AS diff\
 					FROM users u\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
 					LEFT JOIN locations l ON l.user_id = u.id\
 					WHERE u.id <> ?\
-					AND u.active = '1'\
+					AND u.active = '1'" + where + "\
 					ORDER BY\
 						CASE\
 					    	WHEN u.gender = 'Male' THEN ?\
@@ -504,7 +513,12 @@ module.exports = {
 					        ELSE 42\
 					    END,\
 					    CASE\
-					    	WHEN l.latitude IS NOT NULL THEN ABS(l.latitude - ?) + ABS(l.longitude - ?)\
+					    	WHEN l.latitude IS NOT NULL THEN 111.111 *\
+											    	DEGREES(ACOS(LEAST(COS(RADIANS(l.latitude))\
+													* COS(RADIANS(?))\
+													* COS(RADIANS(l.longitude - ?))\
+													+ SIN(RADIANS(l.latitude))\
+													* SIN(RADIANS(?)), 1.0)))\
 					        ELSE 42\
 					    END,\
 					    CASE\
@@ -523,13 +537,10 @@ module.exports = {
 				matches[user.gender][user.orientation]['orientation']['Other'],
 				user.latitude,
 				user.longitude,
+				user.latitude,
 				user.age
 			], function(err, rows) {
-				console.log(this.sql);
-				// console.log('Rows are:');
-				// console.log(rows);
-				// console.log('Err is:');
-				// console.log(err.sqlMessage);
+				console.log(req.query);
 				if (err || !rows || rows.length < 1) {
 					res.send({
 						success: false,

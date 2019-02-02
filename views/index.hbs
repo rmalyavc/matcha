@@ -15,20 +15,38 @@
 			<h1 class="text_header green">Search Results</h1>
 			<img type="button" id="close_results" class="close_button" src="/images/close.png">
 			<div class="results_cont">
-			<!-- 	<div class="search_result">
-					<a href="/">
-						<img class="avatar" src="/images/avatar.png">
-						<div class="user_info">
-							<div class="user_info_wrapper">
-								<label class="admin_label">Login:</label><strong>root</strong><br>
-								<label class="admin_label">Full Name:</label><strong>Root Rootovich</strong><br>
-								<label class="admin_label">Age:</label><strong>42</strong><br>
-								<label class="admin_label" id="about_label">About me:</label>
-								<div class="search_about">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento</div>
-							</div>
+				<div class="filters" id="filters_cont">
+					<div class="filter_group">
+						<h2 class="text_header green">Filters</h2>
+						<div class="filter_row" id="gender_filter">
+							<h5>By Gender</h5>
+							<input type="checkbox" value="Male">&nbsp<span class="checkbox_text">Male</span><br>
+							<input type="checkbox" value="Female">&nbsp<span class="checkbox_text">Female</span><br>
+							<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>
 						</div>
-					</a>
-				</div> -->
+						<div class="filter_row" id="orientation_filter">
+							<h5>By Orientation</h5>
+							<input type="checkbox" value="Heterosexual">&nbsp<span class="checkbox_text">Heterosexual</span><br>
+							<input type="checkbox" value="Bisexual">&nbsp<span class="checkbox_text">Bisexual</span><br>
+							<input type="checkbox" value="Homosexual">&nbsp<span class="checkbox_text">Homosexual</span><br>
+							<input type="checkbox" value="Asexual">&nbsp<span class="checkbox_text">Asexual</span><br>
+							<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>
+						</div>
+						<div class="filter_row" id="age_filter">
+							<h5>By Age</h5>
+							<label>From:</label><input class="form_field" type="number" min="12" max="120" id="age_from">
+							<label>To:&nbsp&nbsp&nbsp&nbsp</label><input class="form_field" type="number" min="12" max="120" id="age_to">
+							<p></p>
+						</div>
+						<div class="filter_row" id="hashtag_filter">
+							<h5>By Hashtag</h5>
+							<label>Hashtag:</label><input class="form_field" type="text" min="12" max="120" id="hashtag">
+							<p></p>
+						</div>
+						<button class="submit_button" type="button" onclick="apply_filters();"><strong class="button_text">Apply Filters</strong></button>
+						<button class="submit_button" type="button" onclick="clear_filters();"><strong class="button_text">Clear Filters</strong></button>
+					</div>
+				</div>
 			</div>
 			<div class="results_tools">
 				<button class="close_button submit_button" type="button" id="back_button"><strong class="button_text">Back to search</strong></button>

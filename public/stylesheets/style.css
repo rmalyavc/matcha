@@ -593,13 +593,50 @@ button.header_icon {
 
 .search_result {
 	position: relative;
-	width: 96%;
-	left: 2%;
+	width: 82%;
+	left: 16%;
 	height: 250px;
 	border-bottom: 1px solid rgba(100, 100, 100, 0.2);
 	margin-top: 5px;
 	/*top: 100px;*/
 	/*border: 1px solid green;*/
+}
+
+.filters {
+	position: fixed;
+	width: 14%;
+	height: 60vh;
+	left: 3vw;
+	/*border: 1px solid red;*/
+}
+
+.filter_group {
+	position: relative;
+	width: 98%;
+	left: 0.5%;
+	top: 1%;
+	padding-left: 1%;
+	/*border: 1px solid green;*/
+}
+
+.filter_row {
+	position: relative;
+	width: 100%;
+	/*border: 1px solid blue;*/
+}
+
+.filter_row > .form_field {
+	width: 70%;
+	left: 0;
+	margin-bottom: 5px;
+}
+
+.filter_group > .submit_button {
+	width: 99%;
+	left: 0;
+	top: unset;
+	margin-top: 15px;
+	height: 35px;
 }
 
 .search_about {
