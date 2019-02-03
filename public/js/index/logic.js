@@ -35,16 +35,17 @@ function start_search() {
 	fog.innerHTML = '';
 	fog.style.display = 'block';
 	wrapper.style.display = 'flex';
+	find_users();
 }
 
 function close_search(button_id) {
 	var fog = document.getElementById('fog');
 	var wrapper = document.getElementById('index_wrapper');
 	var results = document.getElementById('search_results');
-	var form = document.getElementById('index_form');
+	// var form = document.getElementById('index_form');
 
 	results.style.display = 'none';
-	form.style.display = 'block';
+	// form.style.display = 'block';
 	if (button_id == 'close_search') {
 		fog.style.display = 'none';
 		wrapper.style.display = 'none';
@@ -59,7 +60,7 @@ function apply_filters() {
 
 	if (cont)
 		filters = cont.getElementsByClassName('filter_row'); 
-	if (!cont || !filters || filters.length < 1)
+	if (!cont || !filters)
 		return ;
 	for (var i = 0; i < filters.length; i++) {
 		var field = filters[i].id.replace('_filter', '');
@@ -85,6 +86,28 @@ function apply_filters() {
 	find_users(params);
 }
 
+function clear_filters() {
+	var cont = document.getElementById('filters_cont');
+	var filters;
+
+	if (cont)
+		filters = cont.getElementsByClassName('filter_row'); 
+	if (!cont || !filters)
+		return ;
+	for (var i = 0; i < filters.length; i++) {
+		var field = filters[i].id.replace('_filter', '');
+		var list = filters[i].getElementsByTagName('input');
+		if (list && list.length > 0) {
+			for (var j = 0; j < list.length; j++) {
+				if (list[j].type == 'checkbox')
+					list[j].checked = false;
+				else
+					list[j].value = '';
+			}
+		}
+	}
+}
+
 // <div class="search_result">
 // 					<a href="/">
 // 						<img class="avatar" src="/images/avatar.png">
@@ -103,43 +126,10 @@ function apply_filters() {
 function post_users(rows) {
 	var cont = document.getElementsByClassName('results_cont')[0];
 
-	// if (!cont.innerHTML || cont.innerHTML == '') {
-	// 	cont.innerHTML = '<div class="filters" id="filters_cont">\
-	// 		<div class="filter_group">\
-	// 			<h2 class="text_header green">Filters</h2>\
-	// 			<div class="filter_row" id="gender_filter">\
-	// 				<h5>By Gender</h5>\
-	// 				<input type="checkbox" value="Male">&nbsp<span class="checkbox_text">Male</span><br>\
-	// 				<input type="checkbox" value="Female">&nbsp<span class="checkbox_text">Female</span><br>\
-	// 				<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>\
-	// 			</div>\
-	// 			<div class="filter_row" id="orientation_filter">\
-	// 				<h5>By Orientation</h5>\
-	// 				<input type="checkbox" value="Heterosexual">&nbsp<span class="checkbox_text">Heterosexual</span><br>\
-	// 				<input type="checkbox" value="Bisexual">&nbsp<span class="checkbox_text">Bisexual</span><br>\
-	// 				<input type="checkbox" value="Homosexual">&nbsp<span class="checkbox_text">Homosexual</span><br>\
-	// 				<input type="checkbox" value="Asexual">&nbsp<span class="checkbox_text">Asexual</span><br>\
-	// 				<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>\
-	// 			</div>\
-	// 			<div class="filter_row" id="age_filter">\
-	// 				<h5>By Age</h5>\
-	// 				<label>From:</label><input class="form_field" type="number" min="12" max="120" id="age_from">\
-	// 				<label>To:&nbsp&nbsp&nbsp&nbsp</label><input class="form_field" type="number" min="12" max="120" id="age_to">\
-	// 				<p></p>\
-	// 			</div>\
-	// 			<div class="filter_row" id="hashtag_filter">\
-	// 				<h5>By Hashtag</h5>\
-	// 				<label>Hashtag:</label><input class="form_field" type="text" min="12" max="120" id="hashtag">\
-	// 				<p></p>\
-	// 			</div>\
-	// 			<button class="submit_button" type="button" onclick="apply_filters();"><strong class="button_text">Apply Filters</strong></button>\
-	// 			<button class="submit_button" type="button" onclick="clear_filters();"><strong class="button_text">Clear Filters</strong></button>\
-	// 		</div>\
-	// 	</div>';
-	// }
-	// else
-	// 	console.log(cont.innerHTML);
 	$('.search_result').remove();
+	$('.error_text').remove();
+	if (rows.length < 1)
+		$(cont).append('<h2 class="text_header error_text">No users found =(</h2>');
 	for (var i = 0; i < rows.length; i++) {
 		var age = rows[i].age ? rows[i].age : '';
 		var avatar = rows[i].avatar ? rows[i].avatar : '/images/avatar.png';
@@ -148,7 +138,7 @@ function post_users(rows) {
 
 		if (rows[i].last_name)
 			full_name += rows[i].last_name;
-		cont.innerHTML += '<div class="search_result">\
+		$(cont).append('<div class="search_result">\
 			<a href="/users/profile/' + rows[i].id + '">\
 				<div class="search_avatar" style="background-image: url(\'' + avatar + '\');"></div>\
 				<div class="user_info">\
@@ -161,13 +151,13 @@ function post_users(rows) {
 					</div>\
 				</div>\
 			</a>\
-		</div>';
+		</div>');
 	}
 }
 
 function find_users(params = {}) {
-	var form = document.getElementById('index_form');
-	var fields = form.getElementsByClassName('form_field profile_input');
+	// var form = document.getElementById('index_form');
+	// var fields = form.getElementsByClassName('form_field profile_input');
 	var results = document.getElementsByClassName('search_results')[0];
 	var req = {
 		action: 'find_users',
@@ -175,13 +165,13 @@ function find_users(params = {}) {
 	};
 	if (params != {})
 		req.params = params;
-	console.log(req);
-	form.style.display = 'none';
+	// console.log(req);
+	// form.style.display = 'none';
 	results.style.display = 'block';
-	for (var i = 0; i < fields.length; i++) {
-		if (fields[i].value != '')
-			req[fields[i].getAttribute('name')] = fields[i].value;
-	}
+	// for (var i = 0; i < fields.length; i++) {
+	// 	if (fields[i].value != '')
+	// 		req[fields[i].getAttribute('name')] = fields[i].value;
+	// }
 	$.get('/users/ajax', req, function(res) {
 		console.log(res);
 		if (!res.success)

@@ -81,8 +81,8 @@ router.get('/friends', function(req, res, next) {
 });
 
 router.get('/ajax', function(req, res, next) {
-	// console.log('Query is:');
-	// console.log(req.query);
+	console.log('Query is:');
+	console.log(req.query);
 	if (req.query['action'] == 'is_unique')
 		user_controller.is_unique(req, res);
 	else if (req.query['action'] == 'current_user')
@@ -133,6 +133,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_tags(req, res);
 	else if (req.query['action'] == 'copy_hashtag' && req.query['tag_id'] && req.session.user_id && req.query['tag_name'] && req.query['tag_name'] != '')
 		user_controller.copy_hashtag(req, res);
+	else if (req.query['action'] == 'auto_complete' && req.query['to_find'] && req.query['to_find'] != '' && req.query['find_from'] && req.query['find_from'] != '')
+		user_controller.auto_complete(req, res);
 	else {
 		res.send({
 			success: false,
@@ -143,8 +145,8 @@ router.get('/ajax', function(req, res, next) {
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {
-	console.log('REQ BODY IS: ');
-	console.log(req.body);
+// 	console.log('REQ BODY IS: ');
+// 	console.log(req.body);
 	if (req.body['action'] == 'upload_photo' && req.body['user_id'] == req.session.user_id && req.files)
 		user_controller.upload(req, res);
 	else if (req.body['action'] == 'get_album' && req.body['user_id'])

@@ -13,17 +13,16 @@ function search_listeners() {
 	var search = document.getElementById('search_button');
 	var closers = document.getElementsByClassName('close_button');
 
-	// if (!close)
-	// 	return ;
-	search.addEventListener('click', function() {
-		find_users();
-	});
+	// search.addEventListener('click', function() {
+	// 	find_users();
+	// });
 	start.addEventListener('click', function() {
 		start_search();
 	});
 	for (var i = 0; i < closers.length; i++) {
 		closers[i].addEventListener('click', function() {
-			close_search(this.id);
+			var arg = this.id == 'back_button' ? 'close_search' : this.id;
+			close_search(arg);
 		});
 	}
 }

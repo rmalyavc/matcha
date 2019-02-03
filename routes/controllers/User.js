@@ -489,14 +489,18 @@ module.exports = {
 								where += " AND u.age <= '" + params[keys[i]]['to'] + "'";
 						}
 					}
+					else if (keys[i] == 'hashtag')
+						where += " AND h.name LIKE '%" + param + "%'";
 				}
 			}
-			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, ABS(l.latitude - 50.4447) + ABS(l.longitude - 30.5238) AS diff\
+			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags\
 					FROM users u\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
 					LEFT JOIN locations l ON l.user_id = u.id\
+					LEFT JOIN hashtags h ON h.user_id = u.id\
 					WHERE u.id <> ?\
 					AND u.active = '1'" + where + "\
+					GROUP BY u.id, p.url\
 					ORDER BY\
 						CASE\
 					    	WHEN u.gender = 'Male' THEN ?\
@@ -540,11 +544,10 @@ module.exports = {
 				user.latitude,
 				user.age
 			], function(err, rows) {
-				console.log(req.query);
-				if (err || !rows || rows.length < 1) {
+				if (err || !rows) {
 					res.send({
 						success: false,
-						error: err ? err : 'No users found'
+						error: err ? err : 'DB error'
 					});
 				}
 				else {
@@ -555,6 +558,25 @@ module.exports = {
 				}
 			});
 		});
+	},
+	auto_complete: function(req, res) {
+		if (req.query['find_from'] == 'hashtag') {
+			var sql = "SELECT DISTINCT name\
+						FROM hashtags\
+						WHERE name LIKE ?";
+			var needle = "%" + req.query['to_find'] + "%";
+			db.query(sql, needle, function(err, rows) {
+				console.log(this.sql);
+				console.log('Rows are:');
+				console.log(rows);
+				if (err || !rows)
+					res.send({success: false, error: err ? err.sqlMessage : 'DB error'});
+				else
+					res.send({success: true, data: rows});
+			});
+		}
+		else
+			res.send({success: false, error: 'Unable to find ' + req.query['to_find']});
 	},
 	add_friend: function(req, res) {
 		var sql = "SELECT * FROM friends WHERE (id1 = ? AND id2 = ?) OR (id1 = ? AND id2 = ?);";

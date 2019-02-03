@@ -13,19 +13,19 @@
 	<div class="form_wrapper" id="index_wrapper">
 		<div class="search_results" id="search_results">
 			<h1 class="text_header green">Search Results</h1>
-			<img type="button" id="close_results" class="close_button" src="/images/close.png">
+			<img type="button" id="close_search" class="close_button" src="/images/close.png">
 			<div class="results_cont">
 				<div class="filters" id="filters_cont">
 					<div class="filter_group">
 						<h2 class="text_header green">Filters</h2>
 						<div class="filter_row" id="gender_filter">
-							<h5>By Gender</h5>
+							<p class="green">By Gender</p>
 							<input type="checkbox" value="Male">&nbsp<span class="checkbox_text">Male</span><br>
 							<input type="checkbox" value="Female">&nbsp<span class="checkbox_text">Female</span><br>
 							<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>
 						</div>
 						<div class="filter_row" id="orientation_filter">
-							<h5>By Orientation</h5>
+							<p class="green">By Orientation</p>
 							<input type="checkbox" value="Heterosexual">&nbsp<span class="checkbox_text">Heterosexual</span><br>
 							<input type="checkbox" value="Bisexual">&nbsp<span class="checkbox_text">Bisexual</span><br>
 							<input type="checkbox" value="Homosexual">&nbsp<span class="checkbox_text">Homosexual</span><br>
@@ -33,17 +33,22 @@
 							<input type="checkbox" value="Other">&nbsp<span class="checkbox_text">Other</span><br>
 						</div>
 						<div class="filter_row" id="age_filter">
-							<h5>By Age</h5>
-							<label>From:</label><input class="form_field" type="number" min="12" max="120" id="age_from">
-							<label>To:&nbsp&nbsp&nbsp&nbsp</label><input class="form_field" type="number" min="12" max="120" id="age_to">
+							<p class="green">By Age</p>
+							<input class="form_field" type="number" min="12" max="120" id="age_from" placeholder="Minimal age">
+							<input class="form_field" type="number" min="12" max="120" id="age_to"  placeholder="Maximal age">
 							<p></p>
 						</div>
 						<div class="filter_row" id="hashtag_filter">
-							<h5>By Hashtag</h5>
-							<label>Hashtag:</label><input class="form_field" type="text" min="12" max="120" id="hashtag">
+							<p class="green">By Hashtag</p>
+							<div style="position:relative;width:80%;">
+								<input class="form_field" onkeyup="auto_complete(this);" onfocusout="select_option('hashtag');" type="text" min="12" max="120" id="hashtag" placeholder="Start to type a hashtag">
+								<div class="auto_complete">
+									
+								</div>
+							</div>
 							<p></p>
 						</div>
-						<button class="submit_button" type="button" onclick="apply_filters();"><strong class="button_text">Apply Filters</strong></button>
+						<button class="submit_button" type="button" onclick="apply_filters(); return ;"><strong class="button_text">Apply Filters</strong></button>
 						<button class="submit_button" type="button" onclick="clear_filters();"><strong class="button_text">Clear Filters</strong></button>
 					</div>
 				</div>
@@ -52,7 +57,7 @@
 				<button class="close_button submit_button" type="button" id="back_button"><strong class="button_text">Back to search</strong></button>
 			</div>
 		</div>
-		<form class="login_form" id="index_form" action="#" submit="false">
+		<!-- <form class="login_form" id="index_form" action="#" submit="false">
 			<img type="button" id="close_search" class="close_button" src="/images/close.png">
 			<h2 class="text_header green">Who are you looking for?</h2>
 			<div class="fields_wrapper">
@@ -78,10 +83,19 @@
 				</select><br>
 				<button class="submit_button search_button" type="button" id="search_button"><strong class="button_text">Find Matches</strong></button>
 			</div>	
-		</form>
+		</form> -->
 	</div>
 <script type="text/javascript" src="/js/index/logic.js"></script>
 <script type="text/javascript" src="/js/index/listeners.js"></script>
+<!-- <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
+<!-- <script type="text/javascript">
+	$(document).ready(function() {
+		$( "#hashtag" ).autocomplete({
+	       source: "/users/ajax?action=auto_complete&to_find=hashtags",
+	       minLength: 2
+	    });
+	});
+</script> -->
 
 <!-- {{# if logged_user }}
 <h2>Hi, {{ user_login }}</h2>

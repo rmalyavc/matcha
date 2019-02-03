@@ -1,3 +1,49 @@
+function hide_auto_complete(field) {
+	var cont = field.parentElement.getElementsByClassName('auto_complete');
+
+	if (field && cont && cont.length > 0)
+		cont[0].style.display = 'none';
+}
+
+function select_option(field_id, option = false) {
+	console.log(option);
+	var field = document.getElementById(field_id);
+	if (option && field && option.value != '') {
+		field.value = option.value;
+		$('.auto_complete_row').remove();
+		return ;
+	}
+	
+	// alert('test');
+	// console.log(field);
+	// console.log(option);
+	// 
+	// field.value = option.innerHTML;
+	setTimeout(function() {
+		hide_auto_complete(field)
+	}, 200);
+}
+
+function auto_complete(field) {
+	var cont = field.parentElement.getElementsByClassName('auto_complete');
+
+	if (!cont || field.value.length < 2)
+		return ;
+	cont = cont[0];
+	cont.innerHTML = '';
+	$.get('/users/ajax', {action: 'auto_complete', find_from: field.id, to_find: field.value}, function(res) {
+		if (!res.success) {
+			console.log(res.error);
+			return ;
+		}
+		var rows = res.data;
+		for (var i = 0; i < rows.length; i++) {
+			cont.innerHTML += '<input class="auto_complete_row" value="' + rows[i]['name'] + '" onclick="select_option(\'' + field.id + '\', this);">';
+		}
+		cont.style.display = 'block';
+	});
+}
+
 function req_confirm(elem, user_id) {
 	var action = elem.getAttribute('class') == 'req_tool req_refuse' ? 'refuse_friend' : 'confirm_friend';
 
@@ -51,7 +97,6 @@ function get_requests() {
 }
 
 function get_location() {
-	console.log('Test!');
 	navigator.geolocation.getCurrentPosition(function(location) {
 		current_user.location = {
 			latitude: location.coords.latitude,
@@ -72,8 +117,6 @@ if (socket) {
 	socket.on('friend_request', function(){
 		console.log('Friend request!');
 		get_requests();
-		// console.log(msg);
-		// $('#messages').append($('<li>').text(msg));
 	});
 }
 
