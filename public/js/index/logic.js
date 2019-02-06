@@ -3,6 +3,7 @@ var slides = 5;
 var slide = 0;
 var link = document.getElementById('profile_link');
 var user_id = link ? link.href.substring(link.href.lastIndexOf('/') + 1) : false;
+var search_results = [];
 
 function start_slider() {
 	var img = document.getElementsByClassName('slider_photo')[0];
@@ -123,7 +124,7 @@ function clear_filters() {
 // 					</a>
 // 				</div>
 
-function post_users(rows) {
+function post_users(rows = search_results) {
 	var cont = document.getElementsByClassName('results_cont')[0];
 
 	$('.search_result').remove();
@@ -176,9 +177,73 @@ function find_users(params = {}) {
 		console.log(res);
 		if (!res.success)
 			console.log(res.error);
-		else
-			post_users(res.data);
+		else {
+			search_results = res.data;
+			post_users();
+		}
 	});
+}
+
+function sort_results(button) {
+	var sort_order = document.getElementById('sort_order');
+	var order_by = document.getElementById('order_by');
+	var swap = false;
+
+	// console.log('sort_order');
+	// console.log(sort_order);
+	// console.log('order_by');
+	// console.log(order_by);
+	// var curr_user = {};
+
+	// curr_user['age'] = current_user['info']['age'];
+	// curr_user['latitude'] = current_user['location']['latitude'];
+	// curr_user['longitude'] = current_user['location']['longitude'];
+	if (!sort_order || !order_by || !sort_order || !order_by || order_by.value == '' || sort_order.value == '')
+		return ;
+	for (var i = 0; i < search_results.length; i++) {
+		console.log('I = ' + i);
+		if (i == search_results.length - 1 && swap) {
+			i = 0;
+			swap = false;
+		}
+		if (order_by.value == 'age' && search_results[i + 1]) {
+			var age1 = search_results[i].age ? parseInt(search_results[i].age) : (sort_order.value == 'asc' ? 42000 : 0);
+			var age2 = search_results[i + 1].age ? parseInt(search_results[i + 1].age) : (sort_order.value == 'asc' ? 42000 : 0);
+			
+
+			if ((sort_order.value == 'asc' && age1 > age2) || (sort_order.value == 'desc' && age1 < age2)) {
+				var tmp = search_results[i];
+				search_results[i] = search_results[i + 1];
+				search_results[i + 1] = tmp;
+				i--;
+				swap = true;
+			}
+		}
+		else if (order_by.value == 'location' && search_results[i + 1] && current_user['location'] && current_user['location']['latitude'] && current_user['location']['longitude']) {
+			var dist1 = (search_results[i].latitude && search_results[i].longitude) ? distance(search_results[i].latitude, current_user['location']['latitude'], search_results[i].longitude, current_user['location']['longitude']) : 42000;
+			var dist2 = (search_results[i + 1].latitude && search_results[i + 1].longitude) ? distance(search_results[i + 1].latitude, current_user['location']['latitude'], search_results[i + 1].longitude, current_user['location']['longitude']) : 42000;
+			if (sort_order.value == 'desc' && dist1 == 42000)
+				dist1 = 0;
+			if (sort_order.value == 'desc' && dist2 == 42000)
+				dist2 = 0;
+			console.log('Dist1 = ' + dist1);
+			console.log('Dist2 = ' + dist2);
+			console.log('Dist1 > Dist2: ' + (dist1 > dist2));
+			console.log('Sort order is asc: ' + (sort_order.value == 'asc'));
+			console.log('Sort Order is: ' + sort_order.value);
+			if ((sort_order.value == 'asc' && dist1 > dist2) || (sort_order.value == 'desc' && dist1 < dist2)) {
+				console.log('If worked!!!');
+				var tmp = search_results[i];
+				search_results[i] = search_results[i + 1];
+				search_results[i + 1] = tmp;
+				i--;
+				swap = true;
+			}
+ 		}
+	}
+	button.src = sort_order.value == 'asc' ? '/images/down.png' : '/images/up.png';
+	sort_order.value = sort_order.value == 'asc' ? 'desc' : 'asc';
+	post_users();
 }
 
 start_slider();

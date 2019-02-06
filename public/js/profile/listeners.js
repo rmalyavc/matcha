@@ -1,3 +1,13 @@
+socket.on('user_connected', function(msg){
+	if (msg.user_id == user_id && user_id != current_user['info']['id'])
+		update_user_status();
+});
+
+socket.on('user_disconnected', function(msg){
+	if (msg.user_id == user_id && user_id != current_user['info']['id'])
+		update_user_status();
+});
+
 function login_listener() {
 	var login = document.getElementById('login');
 
@@ -214,3 +224,4 @@ function set_listeners() {
 }
 
 set_listeners();
+update_user_status();

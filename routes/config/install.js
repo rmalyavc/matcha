@@ -14,6 +14,8 @@ function create_users() {
 		age INT(3) UNSIGNED,\
 		gender ENUM('Male', 'Female', 'Other'),\
 		orientation ENUM('Heterosexual','Homosexual','Bisexual','Asexual','Other'),\
+		last_seen DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,\
+		connected TINYINT(1) NOT NULL DEFAULT 0\
 	)";
 	conn.query(sql, function(err) {
 		if (err)

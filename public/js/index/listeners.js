@@ -12,10 +12,14 @@ function search_listeners() {
 	var start = document.getElementById('start_button');
 	var search = document.getElementById('search_button');
 	var closers = document.getElementsByClassName('close_button');
+	var sort = document.getElementById('sort_button');
 
 	// search.addEventListener('click', function() {
 	// 	find_users();
 	// });
+	sort.addEventListener('click', function() {
+		sort_results(this);
+	});
 	start.addEventListener('click', function() {
 		start_search();
 	});

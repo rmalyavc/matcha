@@ -1,6 +1,27 @@
 var url = window.location.href;
 var user_id = parseInt(url.substring(url.lastIndexOf('/') + 1));
 
+function update_user_status() {
+	var status = document.getElementById('user_status');
+	var cont = document.getElementById('status_cont');
+	var last_seen = document.getElementById('last_seen');
+
+	if (current_user['info']['id'] == user_id) {
+		cont.style.display = 'none';
+		return ;
+	}
+	$.get('/users/ajax', {action: 'get_user', id: user_id}, function(res) {
+		if (!res)
+			console.log('User is not found');
+		else {
+			status.src = res.connected ? '/images/confirm.png' : '/images/close.png';
+			status.setAttribute('class', res.connected ? 'tool_button connected' : 'tool_button disconnected');
+			last_seen.innerHTML = res.connected ? 'Online' : get_last_seen(res.last_seen);
+			cont.style.display = 'flex';
+		}
+	});
+}
+
 function scroll_preview(offset, timeout, cont_id) {
 	var cont = document.getElementById(cont_id);
 	var delta = parseInt(document.getElementById('delta').value);

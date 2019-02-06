@@ -1,3 +1,23 @@
+function get_last_seen(db_date) {
+	var date1 = new Date();
+	var date2 = new Date(db_date);
+	var unit = ' minute';
+	var diff = parseInt((date1 - date2) / 1000 / 60);
+	console.log('diff is: ' + diff);
+
+	if (diff >= 60 * 24) {
+		diff = parseInt(diff / 60 / 24);
+		unit = ' day';
+	}
+	else if (diff > 59) {
+		diff = parseInt(diff / 60);
+		unit = ' hour';
+	}
+	if (diff != 1)
+		unit += 's';
+	return 'Last seen: ' + diff + unit + ' ago';
+}
+
 function get_authors(comms) {
 	var ids = [];
 

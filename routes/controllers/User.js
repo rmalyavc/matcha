@@ -493,7 +493,7 @@ module.exports = {
 						where += " AND h.name LIKE '%" + param + "%'";
 				}
 			}
-			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags\
+			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude\
 					FROM users u\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
 					LEFT JOIN locations l ON l.user_id = u.id\

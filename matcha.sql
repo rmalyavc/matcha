@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 02, 2019 at 09:05 AM
+-- Generation Time: Feb 06, 2019 at 11:18 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -70,7 +70,8 @@ INSERT INTO `friends` (`id1`, `id2`, `active`) VALUES
 (3, 4, 1),
 (6, 2, 1),
 (4, 6, 1),
-(2, 4, 1);
+(2, 4, 1),
+(11, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -239,7 +240,15 @@ INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`, `room_id`) 
 (118, 4, NULL, 'Hi Roman!', '2018-12-13 17:27:45', 8),
 (119, 4, NULL, 'Hi test', '2018-12-13 17:28:14', 9),
 (120, 4, NULL, 'Hi', '2018-12-13 17:29:06', 9),
-(121, 4, NULL, 'Test', '2018-12-13 17:29:08', 9);
+(121, 4, NULL, 'Test', '2018-12-13 17:29:08', 9),
+(122, 4, NULL, 'Test message', '2019-02-06 17:29:14', 13),
+(123, 6, NULL, 'Hey root?', '2019-02-06 17:30:05', 13),
+(124, 6, NULL, 'Is chat still working?', '2019-02-06 17:30:16', 13),
+(125, 4, NULL, 'Almost', '2019-02-06 17:30:34', 13),
+(126, 4, NULL, 'It posts my messages like I\'m not their autor =(', '2019-02-06 17:30:55', 13),
+(127, 6, NULL, 'Same shit mate)', '2019-02-06 17:31:07', 13),
+(128, 4, NULL, 'Test', '2019-02-06 17:32:24', 13),
+(129, 6, NULL, 'Test', '2019-02-06 17:32:46', 13);
 
 -- --------------------------------------------------------
 
@@ -300,7 +309,8 @@ INSERT INTO `rooms` (`id`, `active`, `private`) VALUES
 (12, 0, 1),
 (13, 1, 1),
 (14, 1, 1),
-(15, 1, 1);
+(15, 1, 1),
+(16, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -327,7 +337,9 @@ INSERT INTO `room_user` (`room_id`, `user_id`) VALUES
 (14, 2),
 (14, 6),
 (15, 4),
-(15, 2);
+(15, 2),
+(16, 6),
+(16, 11);
 
 -- --------------------------------------------------------
 
@@ -357,22 +369,24 @@ CREATE TABLE `users` (
   `about` varchar(500) DEFAULT NULL,
   `age` int(3) UNSIGNED DEFAULT NULL,
   `gender` enum('Male','Female','Other') DEFAULT NULL,
-  `orientation` enum('Heterosexual','Homosexual','Bisexual','Asexual','Other') DEFAULT NULL
+  `orientation` enum('Heterosexual','Homosexual','Bisexual','Asexual','Other') DEFAULT NULL,
+  `last_seen` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `connected` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `password`, `email`, `first_name`, `last_name`, `admin`, `active`, `about`, `age`, `gender`, `orientation`) VALUES
-(2, 'white_men', 'sha256$31587c1a$1$8eb5df5ae1026bc28119893c5f16ff21357e87d40f5efb202cc61c86aeede679', 'white_men@bigmir.net', 'Stanly', 'White', 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento', 29, 'Male', 'Heterosexual'),
-(3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', NULL, 'Female', 'Other'),
-(4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', '', '', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual'),
-(5, 'Stanly', 'sha256$794be04a$1$b2772c8bafb16ea1e3ff510d0eba864fdb38a04bd4c303d2821ff00c923eec1a', 'test@example.com', NULL, NULL, 0, 1, NULL, 27, 'Male', 'Asexual'),
-(6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.com.au', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', 18, 'Male', 'Bisexual'),
-(11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, 42, 'Female', 'Heterosexual'),
-(12, 'location_tester', 'sha256$b4e6109c$1$c1de63ef4385626fce71419ba98c785a03208cad4f7a747c40521514f18350c6', 'loc_test@test.com', NULL, NULL, 0, 1, NULL, 48, 'Female', 'Heterosexual'),
-(13, 'girl', 'sha256$8c166a20$1$1bf8fcf17cee9639b4c4abe094d1b040d330b6df4d1e4fab5a4d0e88825037e9', 'girl@gmail.co', '', '', 0, 1, '', 22, 'Female', 'Bisexual');
+INSERT INTO `users` (`id`, `login`, `password`, `email`, `first_name`, `last_name`, `admin`, `active`, `about`, `age`, `gender`, `orientation`, `last_seen`, `connected`) VALUES
+(2, 'white_men', 'sha256$31587c1a$1$8eb5df5ae1026bc28119893c5f16ff21357e87d40f5efb202cc61c86aeede679', 'white_men@bigmir.net', 'Stanly', 'White', 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento', 29, 'Male', 'Heterosexual', '2019-02-06 19:05:31', 0),
+(3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', NULL, 'Female', 'Other', '2019-02-06 19:05:31', 0),
+(4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', '', '', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual', '2019-02-06 21:15:41', 0),
+(5, 'Stanly', 'sha256$794be04a$1$b2772c8bafb16ea1e3ff510d0eba864fdb38a04bd4c303d2821ff00c923eec1a', 'test@example.com', NULL, NULL, 0, 1, NULL, 27, 'Male', 'Asexual', '2019-02-06 19:05:31', 0),
+(6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.com.au', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', 18, 'Male', 'Bisexual', '2019-02-06 19:05:31', 0),
+(11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, 42, 'Female', 'Heterosexual', '2019-02-06 21:17:33', 1),
+(12, 'location_tester', 'sha256$b4e6109c$1$c1de63ef4385626fce71419ba98c785a03208cad4f7a747c40521514f18350c6', 'loc_test@test.com', NULL, NULL, 0, 1, NULL, 48, 'Female', 'Heterosexual', '2019-02-06 19:05:31', 0),
+(13, 'girl', 'sha256$8c166a20$1$1bf8fcf17cee9639b4c4abe094d1b040d330b6df4d1e4fab5a4d0e88825037e9', 'girl@gmail.co', '', '', 0, 1, '', 22, 'Female', 'Bisexual', '2019-02-06 19:05:31', 0);
 
 --
 -- Indexes for dumped tables
@@ -455,13 +469,13 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `photo`
@@ -473,7 +487,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`

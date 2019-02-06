@@ -14,6 +14,16 @@
 		<div class="search_results" id="search_results">
 			<h1 class="text_header green">Search Results</h1>
 			<img type="button" id="close_search" class="close_button" src="/images/close.png">
+			<div class="sort_cont">
+				<span>Order By:&nbsp;</span>
+				<select class="form_field" id="order_by">
+					<option value="">Select</option>
+					<option value="age">Age</option>
+					<option value="location">Distance</option>
+				</select>
+				<input type="hidden" id="sort_order" value="asc">
+				<img class="req_tool" src="/images/up.png" id="sort_button">
+			</div>
 			<div class="results_cont">
 				<div class="filters" id="filters_cont">
 					<div class="filter_group">

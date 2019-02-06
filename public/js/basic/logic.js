@@ -13,12 +13,6 @@ function select_option(field_id, option = false) {
 		$('.auto_complete_row').remove();
 		return ;
 	}
-	
-	// alert('test');
-	// console.log(field);
-	// console.log(option);
-	// 
-	// field.value = option.innerHTML;
 	setTimeout(function() {
 		hide_auto_complete(field)
 	}, 200);
