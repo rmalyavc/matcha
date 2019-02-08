@@ -900,6 +900,41 @@ module.exports = {
 			else
 				res.send({success: false, error: 'Unknown Error'});
 		});
+	},
+	update_unread_messages: function(req, res) {
+		var sql = "INSERT INTO message_user (message_id, user_id)\
+					SELECT m.id, ?\
+					FROM messages m\
+					WHERE room_id = ?\
+					AND id NOT IN (\
+								SELECT mu.message_id FROM message_user mu\
+								WHERE mu.user_id = ? AND mu.message_id = m.id\
+					)";
+		db.query(sql, [req.session.user_id, req.body['room_id'], req.session.user_id], function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
+	},
+	get_unread_messages: function(req, res) {
+		var sql = "SELECT u.id AS user_id, u.login, p.url AS avatar, m.room_id, COUNT(m.id) AS total\
+					FROM users u\
+					INNER JOIN messages m ON m.author = u.id\
+					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = 1\
+					WHERE m.author <> ?\
+					AND m.id NOT IN (\
+								SELECT mu.message_id\
+								FROM message_user mu\
+								WHERE mu.user_id = ?\
+								AND mu.message_id = m.id)\
+                    GROUP BY u.id, m.room_id, p.url";
+        db.query(sql, [req.session.user_id, req.session.user_id], function(err, rows) {
+        	if (err)
+        		res.send({success: false, error: err.sqlMessage});
+        	else
+        		res.send({success: true, data: rows});
+        });
 	}
 }
 

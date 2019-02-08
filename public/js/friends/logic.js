@@ -56,6 +56,9 @@ function show_invite() {
 }
 
 function unread_messages(cont_id, show = true) {
+	if (!document.getElementById(cont_id))
+		return ;
+	
 	var cont = document.getElementById(cont_id).getElementsByClassName('unread_messages')[0];
 
 	if (show) {
@@ -225,6 +228,10 @@ function post_messages(user_id) {
 		}
 		var target = cont.scrollTop + cont.offsetHeight * 42000;
     	$('#chat_messages').animate({scrollTop: target}, 0);
+    	$.post('/users/ajax_post', {action: 'update_unread_messages', room_id: chat_with}, function(res) {
+			if (!res.success)
+				console.log(res.error);
+		});
 	});
 }
 
@@ -242,6 +249,7 @@ function start_chat(cont_id) {
 	}
 	console.log(cont_id);
 	// var user_id = cont_id.replace('chat_', '');
+	
 	unread_messages(cont_id, false);
 	post_messages(chat_with);
 }

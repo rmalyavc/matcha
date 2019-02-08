@@ -76,7 +76,8 @@ router.get('/friends', function(req, res, next) {
 	else
 		res.render('users/friends', {
 			logged_user: req.session.user_id,
-			friends: true
+			friends: true,
+			chat_with: req.query.room_id ? req.query.room_id : false
 		});
 });
 
@@ -135,6 +136,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.copy_hashtag(req, res);
 	else if (req.query['action'] == 'auto_complete' && req.query['to_find'] && req.query['to_find'] != '' && req.query['find_from'] && req.query['find_from'] != '')
 		user_controller.auto_complete(req, res);
+	else if (req.query['action'] == 'get_unread_messages' && req.session.user_id && req.session.user_id != '')
+		user_controller.get_unread_messages(req, res);
 	else {
 		res.send({
 			success: false,
@@ -180,6 +183,8 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		user_controller.send_message(req, res);
 	else if (req.body['action'] == 'del_hashtag' && req.body['tag_id'] && req.session.user_id)
 		user_controller.del_hashtag(req, res);
+	else if (req.body['action'] == 'update_unread_messages' && req.body['room_id'] && req.body['room_id'] != '' && req.session.user_id && req.session.user_id != '')
+		user_controller.update_unread_messages(req, res);
 	else {
 		res.send({
 			success: false,

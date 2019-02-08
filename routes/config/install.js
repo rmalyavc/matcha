@@ -79,10 +79,19 @@ function create_messages() {
 		time TIMESTAMP NOT NULL DEFAULT now(),\
 		room_id INT(6) NOT NULL\
 	)";
-	conn.query(sql, function(err) {
-		if (err)
-			console.log(err);
-	});
+	var rel_sql = "CREATE TABLE message_user (\
+		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
+		message_id INT(6) NOT NULL,\
+		user_id INT(6) NOT NULL,\
+		read_date TIMESTAMP NOT NULL DEFAULT now()\
+	)";
+	var queries = [sql, rel_sql];
+	for (var i = 0; i < queries.length; i++) {
+		conn.query(queries[i], function(err) {
+			if (err)
+				console.log(err);
+		});
+	}
 }
 
 function create_rooms() {

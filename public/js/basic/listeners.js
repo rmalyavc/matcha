@@ -29,4 +29,5 @@ $(document).ready(function() {
 	get_location();
 
 	get_requests();
+	get_unread_messages();
 });

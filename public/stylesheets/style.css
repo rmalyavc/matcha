@@ -1205,7 +1205,7 @@ label, textarea {
 	background-repeat: no-repeat;
 }
 
-.request {
+.request, .unread_message {
 	position: relative;
 	width: 100%;
 	height: 30%;

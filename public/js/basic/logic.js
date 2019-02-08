@@ -77,10 +77,43 @@ function post_requests(data) {
 	if (!button || !qty || !cont || !data)
 		return ;
 	qty.innerHTML = data.length;
-	cont.innerHTML = '';
+	// cont.innerHTML = '';
+	$('.request').remove();
 	for (var i = 0; i < data.length; i++) {
 		post_request(data[i]);
 	}
+}
+
+function post_unread_messages(rows) {
+	console.log(rows);
+	var qty = document.getElementById('req_qty');
+	var cont = $('requests_cont');
+	var total = 0;
+	var html = '';
+
+	$('.unread_message').remove();
+	for (var i = 0; i < rows.length; i++) {
+		total += parseInt(rows[i].total);
+		var avatar = rows[i].avatar ? rows[i].avatar : '/images/default_avatar.png';
+		var unit = total > 1 ? ' new messages ' : ' new message ';
+		html += '<div class="unread_message">\
+					<div class="req_avatar" style="background-image: url(' + "'" + avatar + "'" + ')"></div>\
+					<a class="req_info" href="/users/friends?room_id=' + rows[i].room_id + '">\
+						<span>You got ' + rows[i].total + unit + 'from&nbsp;' + rows[i].login + '</span>\
+					</a>\
+				</div>';
+	}
+	$('#requests_cont').append(html);
+	qty.innerHTML = $('.unread_message').length + $('.request').length;
+}
+
+function get_unread_messages() {
+	$.get('/users/ajax', {action: 'get_unread_messages'}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else
+			post_unread_messages(res.data);
+	});
 }
 
 function get_requests() {
