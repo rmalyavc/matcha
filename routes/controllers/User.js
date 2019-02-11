@@ -624,6 +624,7 @@ module.exports = {
                     	SELECT id FROM tmp_cont);\
                     DELETE FROM tmp_cont;";
                 db.query(sql, [req.session.user_id, req.query['user_id']], function(err) {
+                	console.log('THIS IS SQL:');
                 	console.log(this.sql);
                 	if (err)
                 		res.send({success: false, error: err.sqlMessage});
@@ -921,6 +922,7 @@ module.exports = {
 		var sql = "SELECT u.id AS user_id, u.login, p.url AS avatar, m.room_id, COUNT(m.id) AS total\
 					FROM users u\
 					INNER JOIN messages m ON m.author = u.id\
+					INNER JOIN room_user ru ON ru.room_id = m.room_id AND ru.user_id = ?\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = 1\
 					WHERE m.author <> ?\
 					AND m.id NOT IN (\
@@ -929,7 +931,7 @@ module.exports = {
 								WHERE mu.user_id = ?\
 								AND mu.message_id = m.id)\
                     GROUP BY u.id, m.room_id, p.url";
-        db.query(sql, [req.session.user_id, req.session.user_id], function(err, rows) {
+        db.query(sql, [req.session.user_id, req.session.user_id, req.session.user_id], function(err, rows) {
         	if (err)
         		res.send({success: false, error: err.sqlMessage});
         	else

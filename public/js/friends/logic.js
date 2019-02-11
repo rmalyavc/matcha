@@ -4,7 +4,7 @@ socket.on('chat message', function(msg){
 	if (msg.room_id == chat_with)
 		post_messages(chat_with);
 	else
-		unread_messages('chat_' + msg.room_id);
+		unread_messages();
 	// console.log(msg);
 	// $('#messages').append($('<li>').text(msg));
 });
@@ -55,25 +55,47 @@ function show_invite() {
 	});
 }
 
-function unread_messages(cont_id, show = true) {
-	if (!document.getElementById(cont_id))
-		return ;
+// function unread_messages(cont_id, show = true) {
+// 	if (!document.getElementById(cont_id))
+// 		return ;
 	
-	var cont = document.getElementById(cont_id).getElementsByClassName('unread_messages')[0];
+// 	var cont = document.getElementById(cont_id).getElementsByClassName('unread_messages')[0];
 
-	if (show) {
-		cont.innerHTML = parseInt(cont.innerHTML) + 1;
-		cont.style.display = 'flex';	
-	}
-	else {
-		cont.innerHTML = 0;
-		cont.style.display = 'none';
-	}
-	// var list = document.getElementsByClassName('chat_user');
+// 	if (show) {
+// 		cont.innerHTML = parseInt(cont.innerHTML) + 1;
+// 		cont.style.display = 'flex';	
+// 	}
+// 	else {
+// 		cont.innerHTML = 0;
+// 		cont.style.display = 'none';
+// 	}
+// 	// var list = document.getElementsByClassName('chat_user');
 
-	// for (var i = 0; i < list.length; i++) {
+// 	// for (var i = 0; i < list.length; i++) {
 
-	// }
+// 	// }
+// }
+
+function unread_messages() {
+	$.get('/users/ajax', {action: 'get_unread_messages'}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else {
+			var list = res.data;
+			for (var i = 0; i < list.length; i++) {
+				var nb;
+				var cont = document.getElementById('chat_' + list[i]['room_id']);
+				if (chat_with != list[i]['room_id']) {					
+					if (cont && (nb = cont.getElementsByClassName('unread_messages')) && nb.length > 0) {
+						nb[0].innerHTML = list[i].total;
+						nb[0].style.display = 'flex';
+					}
+				}
+				else if (cont && (nb = cont.getElementsByClassName('unread_messages')) && nb.length > 0)
+					nb[0].style.display = 'none';
+			}
+		}
+	});
 }
 
 function uncheck_users(elem_id) {
@@ -224,13 +246,15 @@ function post_messages(user_id) {
 		}
 		cont.innerHTML = '';
 		for (var i = 0; i < res.data.length; i++) {
-			post_message(res.data[i], res.data[i].author == current_user.id);
+			post_message(res.data[i], res.data[i].author == current_user.info.id);
 		}
 		var target = cont.scrollTop + cont.offsetHeight * 42000;
     	$('#chat_messages').animate({scrollTop: target}, 0);
     	$.post('/users/ajax_post', {action: 'update_unread_messages', room_id: chat_with}, function(res) {
 			if (!res.success)
 				console.log(res.error);
+			get_unread_messages();
+			unread_messages();
 		});
 	});
 }
@@ -240,6 +264,8 @@ function start_chat(cont_id) {
 	var list = document.getElementsByClassName('chat_user');
 
 	// console.log(Array.isArray(cont_id));
+	console.log("Cont id is: " + cont_id + "List is:");
+	console.log(list);
 	if (Array.isArray(cont_id))
 		cont_id = cont_id[0];
 	chat_with = cont_id.replace('chat_', '');
@@ -250,7 +276,7 @@ function start_chat(cont_id) {
 	console.log(cont_id);
 	// var user_id = cont_id.replace('chat_', '');
 	
-	unread_messages(cont_id, false);
+	unread_messages();
 	post_messages(chat_with);
 }
 
@@ -325,7 +351,7 @@ function action(elem_id) {
 	var full_size = document.getElementById('friends_window');
 	var checked = full_size.querySelector('input:checked');
 
-	if (!checked) {
+	if (!checked && (!chat_with || chat_with == '')) {
 		alert('Select a user');
 		return ;
 	}

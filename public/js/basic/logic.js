@@ -76,12 +76,18 @@ function post_requests(data) {
 	
 	if (!button || !qty || !cont || !data)
 		return ;
-	qty.innerHTML = data.length;
+
+	// qty.innerHTML = data.length;
 	// cont.innerHTML = '';
 	$('.request').remove();
 	for (var i = 0; i < data.length; i++) {
 		post_request(data[i]);
 	}
+	setTimeout(function() {
+		qty.innerHTML = $('.unread_message').length + $('.request').length;	
+		if ($('.unread_message').length + $('.request').length)
+			cont.style.display = 'none';
+	}, 1000);
 }
 
 function post_unread_messages(rows) {
@@ -104,15 +110,22 @@ function post_unread_messages(rows) {
 				</div>';
 	}
 	$('#requests_cont').append(html);
-	qty.innerHTML = $('.unread_message').length + $('.request').length;
+	setTimeout(function() {
+		qty.innerHTML = $('.unread_message').length + $('.request').length;	
+		if ($('.unread_message').length + $('.request').length < 1)
+			cont.hide();
+	}, 1000);
 }
 
 function get_unread_messages() {
 	$.get('/users/ajax', {action: 'get_unread_messages'}, function(res) {
 		if (!res.success)
 			console.log(res.error);
-		else
+		else {
+			console.log('Unread messages are:');
+			console.log(res.data);
 			post_unread_messages(res.data);
+		}
 	});
 }
 
@@ -144,6 +157,9 @@ if (socket) {
 	socket.on('friend_request', function(){
 		console.log('Friend request!');
 		get_requests();
+	});
+	socket.on('chat message', function(msg){
+		get_unread_messages();
 	});
 }
 

@@ -1221,6 +1221,12 @@ label, textarea {
 	text-align: center;
 }
 
+.unread_message .req_info {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .req_tools {
 	position: absolute;
 	width: 30%;
