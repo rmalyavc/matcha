@@ -23,6 +23,11 @@ a:hover {
 	color: #4444FF;
 }
 
+#block_user:hover {
+	border-radius: 50%;
+	background: linear-gradient(0deg, #ff3232, #CD2421);
+}
+
 .rel_flex {
 	position: relative;
 	width: 100%;

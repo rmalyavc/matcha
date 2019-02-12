@@ -138,6 +138,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.auto_complete(req, res);
 	else if (req.query['action'] == 'get_unread_messages' && req.session.user_id && req.session.user_id != '')
 		user_controller.get_unread_messages(req, res);
+	else if (req.query['action'] == 'is_blocked' && req.session.user_id && req.session.user_id != '' && req.query['user_id'] && req.query['user_id'] != '' && req.query['user_id'] != req.session.user_id)
+		user_controller.is_blocked(req, res);
 	else {
 		res.send({
 			success: false,
@@ -148,8 +150,8 @@ router.get('/ajax', function(req, res, next) {
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {
-// 	console.log('REQ BODY IS: ');
-// 	console.log(req.body);
+	console.log('REQ BODY IS: ');
+	console.log(req.body);
 	if (req.body['action'] == 'upload_photo' && req.body['user_id'] == req.session.user_id && req.files)
 		user_controller.upload(req, res);
 	else if (req.body['action'] == 'get_album' && req.body['user_id'])
@@ -185,6 +187,10 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		user_controller.del_hashtag(req, res);
 	else if (req.body['action'] == 'update_unread_messages' && req.body['room_id'] && req.body['room_id'] != '' && req.session.user_id && req.session.user_id != '')
 		user_controller.update_unread_messages(req, res);
+	else if (req.body['action'] == 'update_rating' && req.body['user_id'] && req.body['user_id'] != '0' && req.body['points'] && req.body['points'] != 0 && req.body['points'] != '')
+		user_controller.update_rating(req, res);
+	else if (req.body['action'] == 'block_user' && req.body['user_id'] && req.body['user_id'] != '' && req.session.user_id && req.session.user_id != '' && req.session.user_id != req.body['user_id'])
+		user_controller.block_user(req, res);
 	else {
 		res.send({
 			success: false,

@@ -1,6 +1,8 @@
 var url = window.location.href;
 var user_id = parseInt(url.substring(url.lastIndexOf('/') + 1));
 
+check_blocked();
+
 function update_user_status() {
 	var status = document.getElementById('user_status');
 	var cont = document.getElementById('status_cont');
@@ -294,9 +296,11 @@ function like_photo() {
 	var button = document.getElementById('like_button');
 
 	$.get('/users/ajax', {action: 'like_photo', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
-		console.log(res);
+		// console.log(res);
 		if (!res.success)
 			console.log(res.error);
+		var points = button.getAttribute('liked') == 'true' ? -1 : 1;
+		update_rating(user_id, points);
 		draw_likes();
 	}).catch(function(err) {
 		console.log(err);
@@ -309,7 +313,6 @@ function del_photo() {
 	var yes = document.getElementById('yes_del');
 	var no = document.getElementById('no_del');
 
-	alert('Del Photo');
 	fog.style.display = 'block';
 	no.onclick = function() {
 		fog.style.display = 'none';
@@ -342,6 +345,7 @@ function add_del_friend() {
 	var res_window = document.getElementsByClassName('confirm_result')[0];
 	var text = res_window.getElementsByClassName('text_header')[0];
 	var action = document.getElementById('action');
+	var tmp = action.value;
 
 	document.getElementById('confirm_close').addEventListener('click', function() {
 		confirm.style.display = 'block';
@@ -356,6 +360,8 @@ function add_del_friend() {
 			text.innerHTML = res.error;
 		}
 		else {
+			var points = tmp == 'add_friend' ? 10 : -10;
+			update_rating(user_id, points);
 			text.setAttribute('class', 'text_header green');
 			text.innerHTML = res.text;
 			if (action.value == 'add_friend') {
@@ -373,16 +379,59 @@ function add_del_friend() {
 	check_friendship();
 }
 
+function block_user() {
+	var fog = document.getElementById('fog');
+	var confirm = fog.getElementsByClassName('confirm_window')[0];
+	var res_window = document.getElementsByClassName('confirm_result')[0];
+	var text = res_window.getElementsByClassName('text_header')[0];
+
+	document.getElementById('confirm_close').addEventListener('click', function() {
+		confirm.style.display = 'block';
+		res_window.style.display = 'none';
+		fog.style.display = 'none';
+	});
+	$.post('/users/ajax_post', {action: 'block_user', user_id: user_id}, function(res) {
+		confirm.style.display = 'none';
+		res_window.style.display = 'block';
+		if (!res.success) {
+			text.setAttribute('class', 'text_header error_text');
+			text.innerHTML = res.error;
+		}
+		else {
+			$.get('/users/ajax', {action: 'del_friend', user_id: user_id}, function(res) {
+				if (!res.success) {
+					text.setAttribute('class', 'text_header error_text');
+					text.innerHTML = res.error;
+				}
+				else {
+					update_rating(user_id, -15);
+					text.setAttribute('class', 'text_header green');
+					text.innerHTML = 'User has been blocked';
+				}
+			});			
+		}
+	});
+	check_blocked();
+}
+
 function friends(button_id) {
 	var fog = document.getElementById('fog');
 	var text = fog.getElementsByClassName('text_header')[0];
 	var yes = document.getElementById('yes_button');
 	var no = document.getElementById('no_button');
+	var question = document.getElementById('confirm_question');
 
 	fog.style.display = 'block';
 	if (button_id == 'add_friend') {
 		// text.innerHTML = 'Send invitation?';
 		yes.onclick = add_del_friend;
+		no.onclick = function() {
+			fog.style.display = 'none';
+		}
+	}
+	else if (button_id == 'block_user') {
+		question.innerHTML = 'Do you really want to block this user?';
+		yes.onclick = block_user;
 		no.onclick = function() {
 			fog.style.display = 'none';
 		}
@@ -398,7 +447,6 @@ function check_friendship() {
 	if (!button || !text || !fog || !action)
 		return ;
 	$.get('/users/ajax', {action: 'is_friend', user_id: user_id}, function(res) {
-		console.log('RES IS: ' + res);
 		if (!res) {
 			button.src = '/images/add_friend.png';
 			button.style['border-radius'] = '50%';
@@ -410,6 +458,16 @@ function check_friendship() {
 			button.src = '/images/delete.png';
 			text.innerHTML = 'Do you really want to delete this user?';
 			action.value = 'del_friend';
+		}
+	});
+}
+
+function check_blocked() {
+	$.get('/users/ajax', {action: 'is_blocked', user_id: user_id}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else if (res.blocked) {
+			document.getElementById('profile_form').getElementsByClassName('tools_wrapper')[0].innerHTML = '<h3 class="error_text">User is blocked</h3>';
 		}
 	});
 }

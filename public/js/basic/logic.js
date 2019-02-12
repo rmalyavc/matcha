@@ -153,6 +153,14 @@ function get_location() {
 		});
 	});
 }
+
+function update_rating(user, nb) {
+	$.post('/users/ajax_post', {action: 'update_rating', user_id: user, points: nb}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+	});
+}
+
 if (socket) {
 	socket.on('friend_request', function(){
 		console.log('Friend request!');

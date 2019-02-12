@@ -937,6 +937,36 @@ module.exports = {
         	else
         		res.send({success: true, data: rows});
         });
+	},
+	update_rating: function(req, res) {
+		var sql = "UPDATE users SET rating = rating + ? WHERE id = ?";
+
+		db.query(sql, [parseInt(req.body['points']), req.body['user_id']], function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
+	},
+	block_user: function(req, res) {
+		var sql = "INSERT INTO black_list SET ?";
+
+		db.query(sql, {blocker: req.session.user_id, blocked: req.body['user_id']}, function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
+	},
+	is_blocked: function(req, res) {
+		var sql = "SELECT id FROM black_list WHERE blocker = ? AND blocked = ? LIMIT 1";
+
+		db.query(sql, [req.session.user_id, req.query['user_id']], function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true, blocked: (rows && rows.length > 0)});
+		});
 	}
 }
 

@@ -15,7 +15,8 @@ function create_users() {
 		gender ENUM('Male', 'Female', 'Other'),\
 		orientation ENUM('Heterosexual','Homosexual','Bisexual','Asexual','Other'),\
 		last_seen DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,\
-		connected TINYINT(1) NOT NULL DEFAULT 0\
+		connected TINYINT(1) NOT NULL DEFAULT 0,\
+		rating INT(11) NOT NULL DEFAULT 0\
 	)";
 	conn.query(sql, function(err) {
 		if (err)
@@ -139,6 +140,18 @@ function create_locations() {
 	});
 }
 
+function create_black_list() {
+	var sql = "CREATE TABLE black_list (\
+		id INT(6) AUTO_INCREMENT PRIMARY KEY,\
+		blocker INT(6) NOT NULL,\
+		blocked INT(6) NOT NULL\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});
+}
+
 module.exports = {
 	install: function() {
 		create_users();
@@ -149,5 +162,6 @@ module.exports = {
 		create_messages();
 		create_rooms();
 		create_locations();
+		create_black_list();
 	}
 }
