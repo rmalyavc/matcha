@@ -11,15 +11,6 @@ function requets_listeners() {
 	});
 }
 
-function requests_visible() {
-	button = document.getElementById('requests_button');
-	cont = document.getElementById('requests_cont');
-
-	if (!button || !cont)
-		return ;
-	cont.style.display = (cont.style.display == 'none' || !cont.style.display) ? 'block' : 'none';
-}
-
 function set_listeners() {
 	requets_listeners();
 }
@@ -30,4 +21,5 @@ $(document).ready(function() {
 
 	get_requests();
 	get_unread_messages();
+	update_history();
 });

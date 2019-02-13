@@ -364,9 +364,20 @@ function add_del_friend() {
 			update_rating(user_id, points);
 			text.setAttribute('class', 'text_header green');
 			text.innerHTML = res.text;
-			if (action.value == 'add_friend') {
+			if (tmp == 'add_friend') {
 				socket.emit('friend_request', {
 					user_id: user_id
+				});
+			}
+			else {
+				$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'remove', confirm: 0}, function(res) {
+					if (!res.success)
+						console.log(res.error);
+					else {
+						socket.emit('history_request', {
+							user_id: user_id
+						});
+					}
 				});
 			}
 		}
@@ -407,6 +418,15 @@ function block_user() {
 					update_rating(user_id, -15);
 					text.setAttribute('class', 'text_header green');
 					text.innerHTML = 'User has been blocked';
+					$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'block', confirm: 0}, function(res) {
+						if (!res.success)
+							console.log(res.error);
+						else {
+							socket.emit('history_request', {
+								user_id: user_id
+							});
+						}
+					});
 				}
 			});			
 		}
@@ -555,6 +575,20 @@ function copy_hashtag(elem) {
 			fog_visible('fog', true, false, true);
 			button.onclick = function() {
 				fog_visible('fog', false, true);
+			}
+		});
+	}
+}
+
+function update_visit() {
+	if (current_user['info']['id'] != user_id) {
+		$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'visit', confirm: 0}, function(res) {
+			if (!res.success)
+				console.log(res.error);
+			else {
+				socket.emit('history_request', {
+					user_id: user_id
+				});
 			}
 		});
 	}

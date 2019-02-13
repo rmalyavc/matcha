@@ -140,6 +140,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_unread_messages(req, res);
 	else if (req.query['action'] == 'is_blocked' && req.session.user_id && req.session.user_id != '' && req.query['user_id'] && req.query['user_id'] != '' && req.query['user_id'] != req.session.user_id)
 		user_controller.is_blocked(req, res);
+	else if (req.query['action'] == 'get_history' && req.session.user_id && req.session.user_id != '')
+		user_controller.get_history(req, res);
 	else {
 		res.send({
 			success: false,
@@ -191,6 +193,12 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		user_controller.update_rating(req, res);
 	else if (req.body['action'] == 'block_user' && req.body['user_id'] && req.body['user_id'] != '' && req.session.user_id && req.session.user_id != '' && req.session.user_id != req.body['user_id'])
 		user_controller.block_user(req, res);
+	else if (req.body['action'] == 'read_history' && req.session.user_id && req.session.user_id != '')
+		user_controller.read_history(req, res);
+	else if (req.body['action'] == 'insert_history' && req.session.user_id && req.session.user_id != '' &&
+			req.body['owner'] && req.body['owner'] != '' && req.body['owner'] != req.session.user_id &&
+			req.body['type'] && req.body['type'] != '' && (req.body['confirm'] !== null || req.body['type'] != 'request'))
+		user_controller.insert_history(req, res);
 	else {
 		res.send({
 			success: false,

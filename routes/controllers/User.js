@@ -967,6 +967,48 @@ module.exports = {
 			else
 				res.send({success: true, blocked: (rows && rows.length > 0)});
 		});
+	},
+	get_history: function(req, res) {
+		var sql = "SELECT h.id, h.visitor, h.type, h.confirm, h.time, u.login, p.url AS avatar\
+					FROM history h\
+					INNER JOIN users u ON u.id = h.visitor\
+					LEFT JOIN photo p ON p.user_id = h.visitor AND p.avatar = 1\
+					WHERE h.owner = ?\
+					AND h.reviewed = 0\
+					ORDER BY h.time DESC";
+
+		db.query(sql, req.session.user_id, function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true, data: rows});
+		});
+	},
+	insert_history: function(req, res) {
+		console.log('INSERT HISTORY');
+		var sql = "INSERT INTO history SET ?";
+
+		db.query(sql, {
+			owner: req.body['owner'],
+			visitor: req.session.user_id,
+			type: req.body['type'],
+			confirm: req.body['confirm'],
+		}, function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
+	},
+	read_history: function(req, res) {
+		var sql = "UPDATE history SET reviewed = 1 WHERE owner = ?";
+
+		db.query(sql, req.session.user_id, function(err) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true});
+		});
 	}
 }
 

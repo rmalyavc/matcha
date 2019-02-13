@@ -44,14 +44,23 @@ function req_confirm(elem, user_id) {
 	$.get('/users/ajax', {action: action, user_id: user_id}, function(res) {
 		if (!res.success)
 			console.log(res.error);
-		else
+		else {
+			var confirm = action == 'confirm_friend' ? 1 : 0;
+			$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'request', confirm: confirm}, function(res) {
+				if (!res.success)
+					console.log(res.error);
+				else {
+					socket.emit('history_request', {
+						user_id: user_id
+					});	
+				}
+			});
 			get_requests();
+		}
 	});
 }
 
 function post_request(req) {
-	console.log(req);
-
 	var cont = document.getElementById('requests_cont');
 	if (!cont)
 		return ;
@@ -67,8 +76,7 @@ function post_request(req) {
 		</div>\
 	</div>'
 }
-// background-image: url(' +
-				// "'"  + res.album[i].url + "'" + ');
+
 function post_requests(data) {
 	var button = document.getElementById('requests_button');
 	var cont = document.getElementById('requests_cont');
@@ -77,21 +85,18 @@ function post_requests(data) {
 	if (!button || !qty || !cont || !data)
 		return ;
 
-	// qty.innerHTML = data.length;
-	// cont.innerHTML = '';
 	$('.request').remove();
 	for (var i = 0; i < data.length; i++) {
 		post_request(data[i]);
 	}
 	setTimeout(function() {
-		qty.innerHTML = $('.unread_message').length + $('.request').length;	
-		if ($('.unread_message').length + $('.request').length)
+		qty.innerHTML = $('.unread_message').length + $('.request').length + $('.history').length;	
+		if ($('.unread_message').length + $('.request').length + $('.history').length < 1)
 			cont.style.display = 'none';
 	}, 1000);
 }
 
 function post_unread_messages(rows) {
-	console.log(rows);
 	var qty = document.getElementById('req_qty');
 	var cont = $('requests_cont');
 	var total = 0;
@@ -111,8 +116,8 @@ function post_unread_messages(rows) {
 	}
 	$('#requests_cont').append(html);
 	setTimeout(function() {
-		qty.innerHTML = $('.unread_message').length + $('.request').length;	
-		if ($('.unread_message').length + $('.request').length < 1)
+		qty.innerHTML = $('.unread_message').length + $('.request').length + $('.history').length;	
+		if ($('.unread_message').length + $('.request').length + $('.history').length < 1)
 			cont.hide();
 	}, 1000);
 }
@@ -121,11 +126,8 @@ function get_unread_messages() {
 	$.get('/users/ajax', {action: 'get_unread_messages'}, function(res) {
 		if (!res.success)
 			console.log(res.error);
-		else {
-			console.log('Unread messages are:');
-			console.log(res.data);
+		else 
 			post_unread_messages(res.data);
-		}
 	});
 }
 
@@ -161,13 +163,78 @@ function update_rating(user, nb) {
 	});
 }
 
+function update_history() {
+	$.get('/users/ajax', {action: 'get_history'}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else
+			post_history(res.data);
+	});
+}
+
+function post_history(rows) {
+	var qty = document.getElementById('req_qty');
+	var cont = $('requests_cont');
+	var html = '';
+
+	$('.history').remove();
+	for (var i = 0; i < rows.length; i++) {
+		var avatar = rows[i].avatar ? rows[i].avatar : '/images/default_avatar.png';
+		var message = 'User ' + rows[i].login;
+		var text_class = 'green';
+		if (rows[i].type == 'request')
+			message += (rows[i].confirm == 0 && (text_class = 'error_text')) ? ' refused your request' : ' accepted your request';
+		else if (rows[i].type == 'block' && (text_class = 'error_text'))
+			message += ' blocked you';
+		else if (rows[i].type == 'remove' && (text_class = 'error_text'))
+			message += ' removed you from friends';
+		else if (rows[i].type == 'visit')
+			message += ' visited your page';
+		html += '<div class="history">\
+					<div class="req_avatar" style="background-image: url(' + "'" + avatar + "'" + ')"></div>\
+					<a class="req_info" href="/users/profile/' + rows[i].visitor + '">\
+						<span class="' + text_class + '">' + message + '</span>\
+					</a>\
+				</div>';
+	}
+	$('#requests_cont').append(html);
+	setTimeout(function() {
+		qty.innerHTML = $('.unread_message').length + $('.request').length + $('.history').length;	
+		if ($('.unread_message').length + $('.request').length + $('.history').length < 1)
+			cont.hide();
+	}, 1000);
+}
+
+function requests_visible() {
+	button = document.getElementById('requests_button');
+	cont = document.getElementById('requests_cont');
+
+	if (!button || !cont)
+		return ;
+	if (cont.style.display == 'none' || !cont.style.display)
+		cont.style.display = 'block';
+	else {
+		cont.style.display = 'none';
+		$.post('/users/ajax_post', {action: 'read_history'}, function(res) {
+			if (!res.success)
+				console.log(res.error);
+			else
+				update_history();
+		});
+	}
+	// cont.style.display = (cont.style.display == 'none' || !cont.style.display) ? 'block' : 'none';
+}
+
 if (socket) {
 	socket.on('friend_request', function(){
-		console.log('Friend request!');
+		// console.log('Friend request!');
 		get_requests();
 	});
 	socket.on('chat message', function(msg){
 		get_unread_messages();
+	});
+	socket.on('history_request', function(){
+		update_history();
 	});
 }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 12, 2019 at 11:17 AM
+-- Generation Time: Feb 13, 2019 at 11:00 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -39,7 +39,8 @@ CREATE TABLE `black_list` (
 --
 
 INSERT INTO `black_list` (`id`, `blocker`, `blocked`) VALUES
-(2, 4, 3);
+(2, 4, 3),
+(3, 11, 4);
 
 -- --------------------------------------------------------
 
@@ -128,6 +129,55 @@ INSERT INTO `hashtags` (`id`, `name`, `user_id`) VALUES
 (25, '#HashTagIsWorkingNow', 2),
 (26, '#fqeffeqfeqf', 4),
 (27, '#likeme', 13);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history`
+--
+
+CREATE TABLE `history` (
+  `id` int(11) NOT NULL,
+  `owner` int(6) NOT NULL,
+  `visitor` int(6) NOT NULL,
+  `type` enum('visit','request','block','remove') NOT NULL,
+  `confirm` tinyint(1) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reviewed` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`id`, `owner`, `visitor`, `type`, `confirm`, `time`, `reviewed`) VALUES
+(1, 11, 4, 'visit', 0, '2019-02-13 18:24:17', 1),
+(2, 4, 11, 'visit', 0, '2019-02-13 18:24:30', 1),
+(3, 4, 11, 'visit', 0, '2019-02-13 18:24:39', 1),
+(4, 4, 11, 'visit', 0, '2019-02-13 18:30:42', 1),
+(5, 4, 11, 'visit', 0, '2019-02-13 18:33:17', 1),
+(6, 4, 11, 'visit', 0, '2019-02-13 18:35:11', 1),
+(7, 11, 4, 'request', 0, '2019-02-13 18:40:06', 1),
+(8, 11, 4, 'request', 1, '2019-02-13 18:40:57', 1),
+(9, 4, 11, 'visit', 0, '2019-02-13 18:44:53', 1),
+(10, 4, 11, 'visit', 0, '2019-02-13 18:48:11', 1),
+(11, 11, 4, 'request', 1, '2019-02-13 18:48:29', 1),
+(12, 4, 11, 'visit', 0, '2019-02-13 18:48:46', 1),
+(13, 4, 11, 'visit', 0, '2019-02-13 18:50:04', 1),
+(14, 4, 11, 'visit', 0, '2019-02-13 18:50:32', 1),
+(15, 11, 4, 'request', 1, '2019-02-13 18:50:51', 1),
+(16, 4, 11, 'visit', 0, '2019-02-13 18:50:59', 1),
+(17, 4, 11, 'visit', 0, '2019-02-13 18:52:11', 1),
+(18, 11, 4, 'request', 1, '2019-02-13 18:52:22', 1),
+(19, 4, 11, 'visit', 0, '2019-02-13 18:52:28', 1),
+(20, 4, 11, 'remove', 0, '2019-02-13 18:52:33', 1),
+(21, 4, 11, 'visit', 0, '2019-02-13 18:56:07', 1),
+(22, 11, 4, 'request', 1, '2019-02-13 18:56:13', 1),
+(23, 4, 11, 'visit', 0, '2019-02-13 18:56:24', 1),
+(24, 4, 11, 'remove', 0, '2019-02-13 18:56:27', 1),
+(25, 4, 11, 'visit', 0, '2019-02-13 18:56:43', 1),
+(26, 11, 4, 'request', 0, '2019-02-13 18:56:53', 1),
+(27, 4, 11, 'block', 0, '2019-02-13 18:57:06', 1);
 
 -- --------------------------------------------------------
 
@@ -674,7 +724,18 @@ INSERT INTO `rooms` (`id`, `active`, `private`) VALUES
 (27, 0, 1),
 (28, 0, 1),
 (29, 0, 1),
-(30, 0, 1);
+(30, 0, 1),
+(31, 0, 1),
+(32, 0, 1),
+(33, 0, 1),
+(34, 0, 1),
+(35, 0, 1),
+(36, 0, 1),
+(37, 0, 1),
+(38, 0, 1),
+(39, 0, 1),
+(40, 0, 1),
+(41, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -753,11 +814,11 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `login`, `password`, `email`, `first_name`, `last_name`, `admin`, `active`, `about`, `age`, `gender`, `orientation`, `last_seen`, `connected`, `rating`) VALUES
 (2, 'white_men', 'sha256$31587c1a$1$8eb5df5ae1026bc28119893c5f16ff21357e87d40f5efb202cc61c86aeede679', 'white_men@bigmir.net', 'Stanly', 'White', 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento', 29, 'Male', 'Heterosexual', '2019-02-11 21:05:27', 0, 0),
-(3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', NULL, 'Female', 'Other', '2019-02-12 20:50:30', 1, -5),
-(4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', '', '', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual', '2019-02-12 21:15:53', 1, 0),
+(3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', NULL, 'Female', 'Other', '2019-02-12 21:18:35', 0, -5),
+(4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', '', '', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual', '2019-02-13 20:58:32', 1, 35),
 (5, 'Stanly', 'sha256$794be04a$1$b2772c8bafb16ea1e3ff510d0eba864fdb38a04bd4c303d2821ff00c923eec1a', 'test@example.com', NULL, NULL, 0, 1, NULL, 27, 'Male', 'Asexual', '2019-02-06 19:05:31', 0, 0),
 (6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.com.au', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', 18, 'Male', 'Bisexual', '2019-02-08 22:06:25', 1, 0),
-(11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, 42, 'Female', 'Heterosexual', '2019-02-06 21:17:33', 1, 0),
+(11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, 42, 'Female', 'Heterosexual', '2019-02-13 20:59:50', 0, 0),
 (12, 'location_tester', 'sha256$b4e6109c$1$c1de63ef4385626fce71419ba98c785a03208cad4f7a747c40521514f18350c6', 'loc_test@test.com', NULL, NULL, 0, 1, NULL, 48, 'Female', 'Heterosexual', '2019-02-06 19:05:31', 0, 0),
 (13, 'girl', 'sha256$8c166a20$1$1bf8fcf17cee9639b4c4abe094d1b040d330b6df4d1e4fab5a4d0e88825037e9', 'girl@gmail.co', '', '', 0, 1, '', 22, 'Female', 'Bisexual', '2019-02-11 21:06:23', 0, 0);
 
@@ -781,6 +842,12 @@ ALTER TABLE `comments`
 -- Indexes for table `hashtags`
 --
 ALTER TABLE `hashtags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `history`
+--
+ALTER TABLE `history`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -836,7 +903,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `black_list`
 --
 ALTER TABLE `black_list`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -849,6 +916,12 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `hashtags`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `history`
+--
+ALTER TABLE `history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -884,7 +957,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `users`

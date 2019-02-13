@@ -58,6 +58,13 @@ io.on('connection', function(socket){
 			io.sockets.connected[clients[query['user_id']]['socket']].emit('friend_request');
 	});
 
+	socket.on('history_request', function(query) {
+		if (clients[query['user_id']])
+			io.sockets.connected[clients[query['user_id']]['socket']].emit('history_request');
+		else
+			console.log("User " + query['user_id'] + ' isn\'t connected');
+	});
+
 	socket.on('disconnect', function () {
 		console.log('User ' + socket.user_id + ' is disconnected!');
 		if (!socket.user_id)

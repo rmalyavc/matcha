@@ -225,3 +225,4 @@ function set_listeners() {
 
 set_listeners();
 update_user_status();
+update_visit();
