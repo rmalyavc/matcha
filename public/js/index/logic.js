@@ -166,15 +166,9 @@ function find_users(params = {}) {
 	};
 	if (params != {})
 		req.params = params;
-	// console.log(req);
-	// form.style.display = 'none';
+
 	results.style.display = 'block';
-	// for (var i = 0; i < fields.length; i++) {
-	// 	if (fields[i].value != '')
-	// 		req[fields[i].getAttribute('name')] = fields[i].value;
-	// }
 	$.get('/users/ajax', req, function(res) {
-		console.log(res);
 		if (!res.success)
 			console.log(res.error);
 		else {
@@ -189,19 +183,9 @@ function sort_results(button) {
 	var order_by = document.getElementById('order_by');
 	var swap = false;
 
-	// console.log('sort_order');
-	// console.log(sort_order);
-	// console.log('order_by');
-	// console.log(order_by);
-	// var curr_user = {};
-
-	// curr_user['age'] = current_user['info']['age'];
-	// curr_user['latitude'] = current_user['location']['latitude'];
-	// curr_user['longitude'] = current_user['location']['longitude'];
 	if (!sort_order || !order_by || !sort_order || !order_by || order_by.value == '' || sort_order.value == '')
 		return ;
 	for (var i = 0; i < search_results.length; i++) {
-		console.log('I = ' + i);
 		if (i == search_results.length - 1 && swap) {
 			i = 0;
 			swap = false;
@@ -226,19 +210,25 @@ function sort_results(button) {
 				dist1 = 0;
 			if (sort_order.value == 'desc' && dist2 == 42000)
 				dist2 = 0;
-			console.log('Dist1 = ' + dist1);
-			console.log('Dist2 = ' + dist2);
-			console.log('Dist1 > Dist2: ' + (dist1 > dist2));
-			console.log('Sort order is asc: ' + (sort_order.value == 'asc'));
-			console.log('Sort Order is: ' + sort_order.value);
 			if ((sort_order.value == 'asc' && dist1 > dist2) || (sort_order.value == 'desc' && dist1 < dist2)) {
-				console.log('If worked!!!');
 				var tmp = search_results[i];
 				search_results[i] = search_results[i + 1];
 				search_results[i + 1] = tmp;
 				i--;
 				swap = true;
 			}
+ 		}
+ 		else if (order_by.value == 'rating' && search_results[i + 1]) {
+ 			console.log('Test');
+ 			console.log(search_results[i]);
+ 			if ((search_results[i]['rating'] > search_results[i + 1]['rating'] && sort_order.value == 'asc') || (search_results[i]['rating'] < search_results[i + 1]['rating'] && sort_order.value == 'desc')) {
+ 				console.log('IF WORKED');
+ 				var tmp = search_results[i];
+ 				search_results[i] = search_results[i + 1];
+				search_results[i + 1] = tmp;
+				i--;
+				swap = true;
+ 			}
  		}
 	}
 	button.src = sort_order.value == 'asc' ? '/images/down.png' : '/images/up.png';

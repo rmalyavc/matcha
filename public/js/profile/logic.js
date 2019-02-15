@@ -76,10 +76,11 @@ function upload_image() {
 		data: form_data,
 	}).done(function(res) {
 		if (res) {
-			alert('Done!');
-			if (res.success === true) {
+			// alert('Done!');
+			if (res.success === true)
 				post_images('preview_cont', 'img_wrapper');
-			}
+			else
+				alert(res.error);
 		}
 		else
 			alert('res is empty...');
@@ -487,7 +488,7 @@ function check_blocked() {
 		if (!res.success)
 			console.log(res.error);
 		else if (res.blocked) {
-			document.getElementById('profile_form').getElementsByClassName('tools_wrapper')[0].innerHTML = '<h3 class="error_text">User is blocked</h3>';
+			document.getElementById('profile_form').getElementsByClassName('tools_wrapper')[0].innerHTML = '<h3 class="error_text">' + res.response + '</h3>';
 		}
 	});
 }

@@ -165,30 +165,38 @@ module.exports = {
 		else if (!is_image(get_extension(file))) {
 			res.send({
 				success: false,
-				errors: ['Only JPEG, PNG or GIF files are allowed']
+				error: 'Only JPEG, PNG or GIF files are allowed'
 			});
 			return ;
 		}
 		else {
-			if (!fs.existsSync('public' + path))
-				shell.mkdir('-p', 'public' + path);
-			shell.mv(file.path, 'public' + path + file.filename + get_extension(file));
+			var sql = "SELECT COUNT(id) AS qty FROM photo WHERE user_id = ?";
 
-			var sql = "INSERT INTO photo SET ?";
-			var photo = {
-				user_id: data['user_id'],
-				url: path + file.filename + get_extension(file)
-			}
+			db.query(sql, req.session.user_id, function(err, rows) {
+				if (err || rows[0]['qty'] > 4)
+					res.send({success: false, error: err ? err.sqlMessage : 'You cannot upload more then 5 photos'});
+				else {
+					if (!fs.existsSync('public' + path))
+					shell.mkdir('-p', 'public' + path);
+					shell.mv(file.path, 'public' + path + file.filename + get_extension(file));
 
-			db.query(sql, photo, function(err) {
-				if (err) {
-					res.send({
-						success: false,
-						error: err
+					var sql = "INSERT INTO photo SET ?";
+					var photo = {
+						user_id: data['user_id'],
+						url: path + file.filename + get_extension(file)
+					}
+
+					db.query(sql, photo, function(err) {
+						if (err) {
+							res.send({
+								success: false,
+								error: err.sqlMessage
+							});
+						}
+						else
+							res.send({success: true});
 					});
 				}
-				else
-					res.send({success: true});
 			});
 		}
 	},
@@ -493,12 +501,15 @@ module.exports = {
 						where += " AND h.name LIKE '%" + param + "%'";
 				}
 			}
-			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude\
+			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.rating, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude\
 					FROM users u\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
 					LEFT JOIN locations l ON l.user_id = u.id\
 					LEFT JOIN hashtags h ON h.user_id = u.id\
 					WHERE u.id <> ?\
+					AND u.id NOT IN(SELECT blocked\
+									FROM black_list\
+									WHERE blocker = ?)\
 					AND u.active = '1'" + where + "\
 					GROUP BY u.id, p.url\
 					ORDER BY\
@@ -531,6 +542,7 @@ module.exports = {
 					    END";
 			db.query(sql, [
 				req.session.user_id,
+				req.session.user_id,
 				matches[user.gender][user.orientation]['gender']['Male'],
 				matches[user.gender][user.orientation]['gender']['Female'],
 				matches[user.gender][user.orientation]['gender']['Other'],
@@ -544,6 +556,7 @@ module.exports = {
 				user.latitude,
 				user.age
 			], function(err, rows) {
+				console.log(this.sql);
 				if (err || !rows) {
 					res.send({
 						success: false,
@@ -589,13 +602,22 @@ module.exports = {
 				return ;
 			}
 			else {
-				sql = "INSERT INTO friends SET ?";
-				db.query(sql, {id1: req.session.user_id, id2: req.query['user_id']}, function(err) {
-					if (err)
-						res.send({success: false, error: err});
-					else
-						res.send({success: true, text: 'Request has been sent'});
+				sql = "SELECT DISTINCT user_id FROM photo WHERE user_id = ? OR user_id = ?";
+				db.query(sql, [req.session.user_id, req.query['user_id']], function(err, rows) {
+					if (err || rows.length < 2)
+						res.send({success: false, error: err ? err.sqlMessage : 'Both users should have at least 1 photo to make friendship'});
+					else {
+						sql = "INSERT INTO friends SET ?";
+						db.query(sql, {id1: req.session.user_id, id2: req.query['user_id']}, function(err) {
+							if (err)
+								res.send({success: false, error: err.sqlMessage});
+							else
+								res.send({success: true, text: 'Request has been sent'});
+						});
+					}
 				});
+
+				
 			}
 		});
 	},
@@ -959,13 +981,19 @@ module.exports = {
 		});
 	},
 	is_blocked: function(req, res) {
-		var sql = "SELECT id FROM black_list WHERE blocker = ? AND blocked = ? LIMIT 1";
+		var sql = "SELECT blocker, blocked FROM black_list WHERE (blocker = ? AND blocked = ?) OR (blocker = ? AND blocked = ?) LIMIT 1";
 
-		db.query(sql, [req.session.user_id, req.query['user_id']], function(err, rows) {
+		db.query(sql, [req.session.user_id, req.query['user_id'], req.query['user_id'], req.session.user_id], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
-			else
-				res.send({success: true, blocked: (rows && rows.length > 0)});
+			else {
+				var blocked = rows && rows.length > 0;
+				var response = '';
+
+				if (blocked)
+					response = rows[0]['blocker'] == req.session.user_id ? 'You blocked this user' : 'This user blocked you';
+				res.send({success: true, blocked: blocked, response: response});
+			}
 		});
 	},
 	get_history: function(req, res) {
@@ -975,9 +1003,14 @@ module.exports = {
 					LEFT JOIN photo p ON p.user_id = h.visitor AND p.avatar = 1\
 					WHERE h.owner = ?\
 					AND h.reviewed = 0\
+					AND h.visitor NOT IN(\
+										SELECT blocked\
+										FROM black_list\
+										WHERE blocker = ?\
+										)\
 					ORDER BY h.time DESC";
 
-		db.query(sql, req.session.user_id, function(err, rows) {
+		db.query(sql, [req.session.user_id, req.session.user_id], function(err, rows) {
 			if (err)
 				res.send({success: false, error: err.sqlMessage});
 			else
@@ -985,7 +1018,6 @@ module.exports = {
 		});
 	},
 	insert_history: function(req, res) {
-		console.log('INSERT HISTORY');
 		var sql = "INSERT INTO history SET ?";
 
 		db.query(sql, {
