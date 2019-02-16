@@ -3,6 +3,22 @@ var user_id = parseInt(url.substring(url.lastIndexOf('/') + 1));
 
 check_blocked();
 
+function update_fame_rating() {
+	var rating = document.getElementById('fame_rating');
+
+	if (!rating)
+		return ;
+	$.get('/users/ajax', {action: 'get_rating', user_id: user_id}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else {
+			var class_name = (parseInt(res.data)) < 0 ? 'error_text' : 'green';
+			rating.setAttribute('class', class_name);
+			rating.innerHTML = res.data;
+		}
+	});
+}
+
 function update_user_status() {
 	var status = document.getElementById('user_status');
 	var cont = document.getElementById('status_cont');

@@ -173,9 +173,11 @@ function friends_listeners() {
 	if (!tools || tools.length < 1)
 		return ;
 	for (var i = 0; i < tools.length; i++) {
-		tools[i].addEventListener('click', function() {
-			friends(this.id);
-		});
+		if (tools[i].id != 'user_status') {
+			tools[i].addEventListener('click', function() {
+				friends(this.id);
+			});	
+		}
 	}
 }
 
@@ -226,3 +228,4 @@ function set_listeners() {
 set_listeners();
 update_user_status();
 update_visit();
+update_fame_rating();

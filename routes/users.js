@@ -38,13 +38,21 @@ router.get('/forgot', function(req, res, next) {
 });
 
 router.post('/valid', function(req, res, next) {
-	console.log(req.body);
 	if (req.body.page === 'register')
 		user_controller.register(req, res);
 	else if (req.body.page === 'login')
 		user_controller.login(req, res);
 	else
 		res.redirect('/users/login');
+});
+
+router.get('/history', function(req, res, next) {
+	if (!req.session.user_id || req.session.user_id == '')
+		res.redirect('/users/login');
+	else
+		res.render('users/history', {
+			logged_user: req.session.user_id,
+		});
 });
 
 router.get('/profile/:id', function(req, res, next) {
@@ -79,6 +87,36 @@ router.get('/friends', function(req, res, next) {
 			friends: true,
 			chat_with: req.query.room_id ? req.query.room_id : false
 		});
+});
+
+router.get('/activate', function(req, res, next) {
+	if (!req.query['link'] || req.query['link'] == '') {
+		res.redirect('/error?error=No Link');
+		return ;
+	}
+	var sql = "SELECT l.user_id, u.login\
+				FROM links l\
+				INNER JOIN users u ON u.id = l.user_id\
+				WHERE hash = ?";
+	db.query(sql, req.query['link'], function(err, rows) {
+		if (err)
+			res.redirect('/error?error=DB error');
+		else if (!rows || rows.length < 1)
+			res.redirect('/error?error=Invalid link');
+		else {
+			sql = "UPDATE users SET active = '1' WHERE id = ?;\
+					DELETE FROM links WHERE hash = ?";
+			db.query(sql, [rows[0].user_id, req.query['link']], function(err) {
+				if (err)
+					res.redirect('/error?error=DB error');
+				else {
+					req.session.user_id = rows[0].user_id;
+					req.session.user_login = rows[0].login;
+					res.redirect('/');
+				}
+			});
+		}
+	});
 });
 
 router.get('/ajax', function(req, res, next) {
@@ -142,6 +180,10 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.is_blocked(req, res);
 	else if (req.query['action'] == 'get_history' && req.session.user_id && req.session.user_id != '')
 		user_controller.get_history(req, res);
+	else if (req.query['action'] == 'get_rating' && req.query['user_id'] && req.query['user_id'] != '')
+		user_controller.get_rating(req, res);
+	else if (req.query['action'] == 'get_visits' && req.session.user_id && req.session.user_id != '' && req.query['button_id'] && req.query['button_id'] != '')
+		user_controller.get_visits(req, res);
 	else {
 		res.send({
 			success: false,
@@ -163,8 +205,6 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		var sql = "SELECT * FROM users WHERE id = ?;";
 		db.query(sql, req.session.user_id, function(err, rows) {
 			var curr_user = rows[0];
-			console.log('CURR USER IS: ');
-			console.log(curr_user);
 			if (!Admin.check_access(req, res, curr_user))
 				return ;
 			if (req.body['action'] === 'del_user')

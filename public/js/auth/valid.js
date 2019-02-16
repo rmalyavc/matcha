@@ -94,12 +94,40 @@ function valid_login(submit) {
 	return (res);
 }
 
+function valid_name(elem) {
+	if (!elem) {
+		alert('Unable to find the field to valid. Please try to refresh the page');
+		return false;
+	}
+	var error = document.getElementById(elem.id + '_error');
+	if (!error) {
+		console.log('Cannot found relative error span...');
+		return false;
+	}
+	if (!elem.value || elem.value.trim() == '') {
+		error.innerHTML = 'This field is required';
+		display_error(error, false);
+		return false;
+	}
+	else if (elem.value.trim().length < 4) {
+		var field_name = elem.id == 'first_name' ? 'First Name ' : 'Last Name ';
+		error.innerHTML = field_name + 'should be at least 4 symbols length';
+		display_error(error, false);
+		return false;
+	}
+	paint_field(elem, true);
+	display_error(error, true);
+	return true;
+}
+
 function before_submit() {
 	var form = document.getElementsByClassName('login_form')[0];
 	var login = document.getElementById('login');
 	var passwd = document.getElementById('password');
 	var again = document.getElementById('password_again');
 	var email = document.getElementById('email');
+	var first_name = document.getElementById('first_name');
+	var last_name = document.getElementById('last_name');
 
 	if (!form)
 		alert('Form to submit is not found. Please, try to refresh the page');
@@ -115,6 +143,12 @@ function before_submit() {
 	else if (!valid_email(true)) {
 		paint_field(email, false);
 		alert('Invalid email');
+	}
+	else if (!valid_name(first_name)) {
+		paint_field(first_name, false);
+	}
+	else if (!valid_name(last_name)) {
+		paint_field(last_name, false);
 	}
 	else if (form.checkValidity() && current_user.location) {
 		document.getElementById('latitude').value = current_user.location['latitude'];

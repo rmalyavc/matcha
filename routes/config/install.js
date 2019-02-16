@@ -152,6 +152,18 @@ function create_black_list() {
 	});
 }
 
+function create_links() {
+	var sql = "CREATE TABLE links (\
+		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
+		user_id INT(6) NOT NULL,\
+		hash VARCHAR(100)\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});
+}
+
 module.exports = {
 	install: function() {
 		create_users();
@@ -163,5 +175,6 @@ module.exports = {
 		create_rooms();
 		create_locations();
 		create_black_list();
+		create_links();
 	}
 }

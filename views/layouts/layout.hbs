@@ -27,6 +27,7 @@
 		<div class="header_tools">
 			{{# if login}}
 			{{ else if logged_user }}
+				<img class="header_icon" id="history" onclick="location.href='/users/history'" src="/images/history.png">
 				{{# if friends }}
 				{{ else }}
 					<img class="header_icon" id="friends_button" onclick="location.href='/users/friends'" src="/images/friends.png">

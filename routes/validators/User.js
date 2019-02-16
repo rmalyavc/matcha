@@ -7,6 +7,8 @@ module.exports = {
 	valid_register_data: function(data) {
 		return (data['login'] !== '' && data['password'] !== '' &&
 				data['password_again'] !== '' && data['password'] === data['password_again'] &&
-				data['email'] != '' && is_email(data['email']));
+				data['email'] != '' && is_email(data['email']) &&
+				data['first_name'] && data['first_name'] != '' &&
+				data['last_name'] && data['last_name'] != '');
 	}
 }

@@ -124,7 +124,7 @@ a:hover {
 	margin-right: 10px;
 }
 
-#friends_button {
+#friends_button, #history {
 	/*height: 80%;*/
 	min-width: 0;
 	border-radius: 50%;
@@ -433,7 +433,7 @@ a:hover {
 	margin-top: 10%;
 }
 
-button.header_icon {
+button.header_icon, .qty_div {
 	border-radius: 50%;
 	border: 2px solid #82B436;
 	background-color: white;
@@ -445,7 +445,7 @@ button.header_icon {
 	background: linear-gradient(0deg, #ff3232, #CD2421);
 }*/
 
-#requests_button:hover strong {
+#requests_button:hover strong, .qty_div:hover strong {
 	color: white;
 }
 
@@ -596,6 +596,36 @@ button.header_icon {
 	height: 75vh;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+#history_cont {
+	position: absolute;
+	height: 75vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	/*border: 1px solid red;*/
+}
+
+#history_cont > .rel_flex {
+	height: 40px;
+}
+
+#history_cont > .rel_flex > .submit_button {
+	height: 100%;
+	width: 10%;
+	border: 1px solid #8CC13D;
+	/*background: none;*/
+	/*background: linear-gradient(180deg, #6F9C1B, #8CC13D);*/
+}
+
+.history_results {
+	position: absolute;
+	width: 100%;
+	height: 90%;
+	bottom: 0;
+	/*border: 1px solid green;*/
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .search_results {

@@ -39,11 +39,26 @@ function form_listener() {
 	button.addEventListener('click', before_submit);
 }
 
+function names_listeners() {
+	var first_name = document.getElementById('first_name');
+	var last_name = document.getElementById('last_name');
+
+	if (!first_name || !last_name)
+		return ;
+	first_name.addEventListener('keyup', function() {
+		valid_name(first_name);
+	});
+	last_name.addEventListener('keyup', function() {
+		valid_name(last_name);
+	});
+}
+
 function set_listeners() {
 	login_listener();
 	email_listener();
 	password_listener();
 	form_listener();
+	names_listeners();
 }
 
 set_listeners();

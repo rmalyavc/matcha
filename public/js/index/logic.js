@@ -139,6 +139,7 @@ function post_users(rows = search_results) {
 
 		if (rows[i].last_name)
 			full_name += rows[i].last_name;
+		var class_name = parseInt(rows[i].rating) < 0 ? 'error_text' : (parseInt(rows[i].rating) > 0 ? 'green' : '');
 		$(cont).append('<div class="search_result">\
 			<a href="/users/profile/' + rows[i].id + '">\
 				<div class="search_avatar" style="background-image: url(\'' + avatar + '\');"></div>\
@@ -147,6 +148,7 @@ function post_users(rows = search_results) {
 						<label class="admin_label">Login:</label><strong>' + rows[i].login + '</strong><br>\
 						<label class="admin_label">Full Name:</label><strong>' + full_name + '</strong><br>\
 						<label class="admin_label">Age:</label><strong>' + age + '</strong><br>\
+						<label class="admin_label">Fame Rating:</label><strong class="' + class_name + '" style="font-size: 0.7rem;vertical-align:middle;">' + rows[i].rating + '</strong><br>\
 						<label class="admin_label about_label">About me:</label>\
 						<div class="search_about">' + about + '</div>\
 					</div>\
@@ -219,10 +221,9 @@ function sort_results(button) {
 			}
  		}
  		else if (order_by.value == 'rating' && search_results[i + 1]) {
- 			console.log('Test');
+ 			
  			console.log(search_results[i]);
  			if ((search_results[i]['rating'] > search_results[i + 1]['rating'] && sort_order.value == 'asc') || (search_results[i]['rating'] < search_results[i + 1]['rating'] && sort_order.value == 'desc')) {
- 				console.log('IF WORKED');
  				var tmp = search_results[i];
  				search_results[i] = search_results[i + 1];
 				search_results[i + 1] = tmp;

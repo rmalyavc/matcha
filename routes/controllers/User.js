@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/test', { useNewUrlParser: true });
-// var User = require('../models/User.js');
-// var Photo = require('../models/Photo.js');
-// var Comment = require('../models/Comment.js');
-// var Like = require('../models/Like.js');
 var user_validator = require('../validators/User.js');
 var hash = require('password-hash');
 var fs = require('fs');
@@ -11,6 +7,17 @@ var shell = require('shelljs');
 var multer  = require('multer');
 var db = require('../config/connection.js');
 var matches = require('../config/matches.js');
+
+var nodemailer = require('nodemailer');
+var md5 = require('md5');
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'fattest89@gmail.com',
+        pass: 'Stanly106601'
+    }
+});
 
 function is_email(email) {
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -62,11 +69,11 @@ module.exports = {
 				login: data['login'],
 				password: hash.generate(data['password'], {algorithm: 'sha256'}),
 				email: data['email'],
-				admin: data['login'] === 'root' ? true : false
+				admin: data['login'] === 'root' ? true : false,
+				first_name: data['first_name'],
+				last_name: data['last_name'],
 			}
 			db.query(sql, new_user, function(err, results) {
-				console.log('Results are: ');
-				console.log(results);
 				if (err) {
 					res.render('./auth/valid', {
 						registred: false,
@@ -74,11 +81,9 @@ module.exports = {
 					});
 					return ;
 				}
-				req.session.user_id = results.insertId;
-				req.session.user_login = data['login'];
 				sql = "INSERT INTO locations SET ?";
 				db.query(sql, {
-					user_id: req.session.user_id,
+					user_id: results.insertId,
 					latitude: data['latitude'],
 					longitude: data['longitude'],
 					approved: data['approved']
@@ -89,27 +94,66 @@ module.exports = {
 							registred: false,
 							error: 'DB Error'
 						});
-						return ;
 					}
 					else {
-						res.render('./auth/valid', {
-							registred: true,
-							login: new_user['login']
-						});
+						var link_hash = md5(new Date());
+						console.log("LINK HASH:");
+						console.log(link_hash);
+						var body = '<h3>Hey ' + data['login'] + '!</h3>\
+									<span>Please activate your account by clicking&nbsp;</span><a href="http://localhost:3000/users/activate?link=' + link_hash + '">here</a>';
+						var mailOptions = {
+				            from: 'fattest89@gmail.com',
+				            to: data['email'],
+				            subject: 'Activate your account on Matcha web site',
+				            html: body,
+				        };
+				        transporter.sendMail(mailOptions, function(error, info){
+				            if (error) {
+				            	console.log(error);
+				                res.render('./auth/valid', {
+									registred: false,
+									error: error
+								});
+				            }
+				            else {
+				            	sql = "INSERT INTO links SET ?";
+				            	db.query(sql, {
+				            		user_id: results.insertId,
+				            		hash: link_hash
+				            	}, function(err) {
+				            		if (err) {
+				            			res.render('./auth/valid', {
+											registred: false,
+											error: err.sqlMessage
+										});
+				            		}
+				            		else {
+				            			res.render('./auth/valid', {
+											registred: true,
+											login: new_user['login']
+										});
+				            		}
+				            	});
+				            }
+				        });
 					}	
 				});
 			});
 		}
 	},
 	login: function(req, res) {
-		var sql = "SELECT id, login, password FROM users WHERE login = ? OR email = ?;";
+		var sql = "SELECT id, login, password, active FROM users WHERE login = ? OR email = ?;";
 
 		db.query(sql, [req.body.login, req.body.login], function(err, result) {
 			if (err)
-				res.redirect('/users/login?error=' + err);
+				res.redirect('/users/login?error=' + err.sqlMessage);
 			else {
 				if (result.length == 0) {
 					res.redirect('/users/login?error=Invalid login or email');
+					return ;
+				}
+				else if (result[0].active == '0') {
+					res.redirect('/users/login?error=You need to activate your account with link from your email');
 					return ;
 				}
 				var user = result[0];
@@ -1040,6 +1084,49 @@ module.exports = {
 				res.send({success: false, error: err.sqlMessage});
 			else
 				res.send({success: true});
+		});
+	},
+	get_rating: function(req, res) {
+		var sql = "SELECT rating FROM users WHERE id = ?";
+
+		db.query(sql, req.query['user_id'], function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else if (!rows || rows.length < 1 || rows[0].rating === null)
+				res.send({success: false, error: 'No such user'});
+			else
+				res.send({success: true, data: rows[0].rating});
+		});
+	},
+	get_visits: function(req, res) {
+		// var sql = false;
+		if (req.query['button_id'] == 'by_you') {
+			var sql = "SELECT h.owner AS id, u.login, p.url AS avatar, h.time\
+					FROM history h\
+					INNER JOIN users u ON u.id = h.owner\
+					LEFT JOIN photo p ON p.user_id = h.owner AND p.avatar = '1'\
+					WHERE h.visitor = ?\
+					AND h.type = 'visit'\
+					ORDER BY h.time DESC";
+		}
+		else if (req.query['button_id'] == 'by_other') {
+			var sql = "SELECT h.visitor AS id, u.login, p.url AS avatar, h.time\
+					FROM history h\
+					INNER JOIN users u ON u.id = h.visitor\
+					LEFT JOIN photo p ON p.user_id = h.visitor AND p.avatar = '1'\
+					WHERE h.owner = ?\
+					AND h.type = 'visit'\
+					ORDER BY h.time DESC";
+		}
+		else {
+			res.send({success: false, error: 'Invalid param \"button_id\" = ' + req.query['button_id']});
+			return ;
+		}
+		db.query(sql, req.session.user_id, function(err, rows) {
+			if (err)
+				res.send({success: false, error: err.sqlMessage});
+			else
+				res.send({success: true, data: rows});
 		});
 	}
 }
