@@ -78,7 +78,9 @@
 		<label for="login">Login:</label><input type="text" class="form_field profile_input" id="login" name="login" minlength="4" value="{{ login }}" required><br>
 		<span class="error profile_error" id="login_error">User already exists</span>
 		<label for="first_name">First Name:</label><input type="text" class="form_field profile_input" id="first_name" name="first_name" value="{{ first_name }}" minlength="3"><br>
+		<span class="error profile_error" id="first_name_error">This field is required</span>
 		<label for="last_name">Last Name:</label><input type="text" class="form_field profile_input" id="last_name" name="last_name" value="{{ last_name }}" minlength="3" ><br>
+		<span class="error profile_error" id="last_name_error">This field is required</span>
 		<label for="email">Email:</label><input type="email" class="form_field profile_input" id="email" name="email" value="{{ email }}"><br>
 		<span class="error profile_error" id="email_error">User already exists</span>
 		<label for="age">Age:</label><input type="number" class="form_field profile_input" id="age" name="age" value="{{ age }}" min="12" max="120"><br>
@@ -115,7 +117,7 @@
 			{{/if}}
 		</div>
 		{{#if is_owner }}
-			<button type="button" class="submit_button" id="save_changes" onclick="$('#profile_form').submit();"><strong class="button_text">Save</strong></button>
+			<button type="button" class="submit_button" id="save_changes" onclick="check_profile_form();"><strong class="button_text">Save</strong></button>
 		{{ else if logged_user }}
 			<div class="tools_wrapper">
 				<img class="tool_button" src="/images/add_friend.png" id="add_friend">

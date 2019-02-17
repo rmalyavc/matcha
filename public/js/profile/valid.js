@@ -82,7 +82,38 @@ function valid_city(update_city) {
 			if (update_city)
 				city.value = get_city(res);
 		}
-		else
+		else {
+			lat.value = '';
+			long.value = '';
 			error.style.display = 'block';
+		}
 	});
+}
+
+function check_profile_form() {
+	var form = document.getElementById('profile_form');
+	var login = document.getElementById('login');
+	var email = document.getElementById('email');
+	var first_name = document.getElementById('first_name');
+	var last_name = document.getElementById('last_name');
+	var city = document.getElementById('city');
+
+	valid_city(true);
+	if (!form)
+		alert('Form to submit is not found. Please, try to refresh the page');
+	else if (!valid_login(true)) {
+		paint_field(login, false);
+	}
+	else if (!valid_email(true)) {
+		paint_field(email, false);
+	}
+	else if (!valid_name(first_name)) {
+		paint_field(first_name, false);
+	}
+	else if (!valid_name(last_name)) {
+		paint_field(last_name, false);
+	}
+	else if (form.checkValidity()) {
+		form.submit();
+	}
 }

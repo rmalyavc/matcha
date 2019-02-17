@@ -186,12 +186,27 @@ module.exports = {
 		}
 		data['age'] ? user.age = data['age'] : false;
 		db.query(sql, [user, data['user_id']], function(err) {
-			if (err) {
-				// console.log(err);
-				res.redirect('/error?error=' + err);
+			if (err)
+				res.redirect('/error?error=' + err.sqlMessage);
+			else {
+				if (data['latitude'] && data['longitude'] && data['city']) {
+					sql = "UPDATE locations SET ? WHERE user_id = ?";
+					db.query(sql, [
+						{
+							latitude: data['latitude'],
+							longitude: data['longitude'],
+							city: data['city']
+						}, data['user_id']], function(err) {
+							if (err)
+								res.redirect('/error?error=' + err.sqlMessage);
+							else
+								res.redirect(url);
+						}
+					);
+				}
+				else
+					res.redirect(url);
 			}
-			else
-				res.redirect(url);
 		});
 	},
 	upload: function(req, res) {
@@ -249,9 +264,14 @@ module.exports = {
 			return ;
 		}
 		var login = req.query.login ? req.query.login : req.query.email;
-		var sql = "SELECT id FROM users WHERE login = ? OR email = ?;";
-
-		db.query(sql, [login, login], function(err, rows) {
+		var sql = "SELECT id FROM users WHERE (login = ? OR email = ?)";
+		var args = [login, login];
+		if (req.session.user_id) {
+			sql += " AND id <> ?";
+			args.push(req.session.user_id);
+		}
+		db.query(sql, args, function(err, rows) {
+			console.log(this.sql);
 			if (err || rows.length > 0)
 				res.send(false);
 			else

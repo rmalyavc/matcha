@@ -158,10 +158,8 @@ function before_submit() {
 			latlng: current_user.location['latitude'] + ',' + current_user.location['longitude'],
 			key: 'AIzaSyBUANppGueYbxwGaR3-Fxbos3_uxYnG3OY'
 		}, function(res) {
-			console.log('result is:');
-			console.log(res);
 			document.getElementById('city').value = get_city(res);
-			// form.submit();
+			form.submit();
 		});
 	}
 }

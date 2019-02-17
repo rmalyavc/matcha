@@ -132,8 +132,8 @@ function create_locations() {
 		user_id INT(6) NOT NULL UNIQUE,\
 		latitude FLOAT(20) NOT NULL,\
 		longitude FLOAT(20) NOT NULL,\
-		approved TINYINT(1) NOT NULL\
-		city VARCHAR(100) DEFAULT ''\ 
+		approved TINYINT(1) NOT NULL,\
+		city VARCHAR(100) DEFAULT \'\'\
 	)";
 	conn.query(sql, function(err) {
 		if (err)
