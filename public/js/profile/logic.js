@@ -165,7 +165,7 @@ function draw_comment(comment, author) {
 				'<div>' +
 					'<p class="comment_author">' + author.login + '</p>' +
 					'<p class="comment_text">' + comment.text + '</p>' +
-					'<p class="comment_time">' + date.toLocaleString(); + '</p>' +
+					'<p class="comment_time">' + date_to_display(comment.time) + '</p>' +
 				'</div>' +
 			'</div>' +
 		'</div>';

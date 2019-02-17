@@ -96,6 +96,10 @@
 			<option value="Asexual" {{#selected orientation "Asexual"}}{{/selected}}>Asexual</option>
 			<option value="Other" {{#selected orientation "Other"}}{{/selected}}>Other</option>
 		</select><br>
+		<label for="city">City:</label><input type="text" class="form_field profile_input" id="city" name="city" value="{{ city }}" onfocusout="valid_city(true)"><br>
+		<span class="error profile_error" id="city_error">City is not found</span>
+		<input type="hidden" name="latitude" id="latitude" value="{{ latitude }}">
+		<input type="hidden" name="longitude" id="longitude" value="{{ longitude }}">
 		<label for="about">About:</label><textarea class="form_field profile_input" id="about" name="about">{{ about }}</textarea><br>
 		{{/user}}
 		<!-- <label for="hashtags">#HashTags:</label> -->

@@ -7,8 +7,6 @@ function check_ownership() {
 	var fields;
 
 	$.get('/users/ajax', {id: page_id, action: 'is_owner'}, function(result) {
-		console.log('RESULT IS: ' + result);
-		console.log('PAGE ID IS: ' + page_id);
 		if (result)
 			return ;
 		fields = document.getElementsByClassName('form_field profile_input');
@@ -50,6 +48,7 @@ function check_tag() {
 	var input = document.getElementById('new_hashtag');
 	var button = document.getElementById('add_hashtag');
 	var error = document.getElementById('hashtags').getElementsByClassName('error_text')[0];
+	
 
 	if (!input || !button || !error)
 		return ;
@@ -60,4 +59,30 @@ function check_tag() {
 	}
 	error.style.display = 'none';
 	button.disabled = false;
+}
+
+function valid_city(update_city) {
+	var city = document.getElementById('city');
+	var button = document.getElementById('save_changes');
+	var error = document.getElementById('city_error');
+	var lat = document.getElementById('latitude');
+	var long = document.getElementById('longitude');
+
+	if (!error || !city || !button || !lat || !long || (city.value == '' && (error.style.display = 'none')))
+		return ;
+	$.get('https://maps.googleapis.com/maps/api/geocode/json?', {
+		address: city.value,
+		key: 'AIzaSyBUANppGueYbxwGaR3-Fxbos3_uxYnG3OY'
+	}, function(res) {
+		var location = location_by_city(res);
+		if (location) {
+			error.style.display = 'none';
+			lat.value = location['latitude'];
+			long.value = location['longitude'];
+			if (update_city)
+				city.value = get_city(res);
+		}
+		else
+			error.style.display = 'block';
+	});
 }

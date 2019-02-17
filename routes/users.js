@@ -34,7 +34,19 @@ router.post('/update', function(req, res, next) {
 });
 
 router.get('/forgot', function(req, res, next) {
-  res.render('auth/restore');
+	if (!req.query['link'] || req.query['link'] == '' || !req.query['user_id'] || req.query['user_id'] == '')
+  		res.render('auth/restore');
+  	else
+  		user_controller.validate_restore_link(req, res);
+});
+
+router.post('/forgot', function(req, res, next) {
+	if (req.body['email'] && req.body['email'] != '')
+		user_controller.send_restore_link(req, res);
+	else if (req.body['password'] && req.body['password_again'] && req.body['password'] != '' && req.body['password_again'] != '' && req.body['password'].trim().length > 7 && req.body['password'] === req.body['password_again'])
+		user_controller.change_password(req, res);
+	else
+		res.render('auth/restore', {error: 'Invalid password'});
 });
 
 router.post('/valid', function(req, res, next) {
@@ -58,9 +70,13 @@ router.get('/history', function(req, res, next) {
 router.get('/profile/:id', function(req, res, next) {
 	// console.log('Params id = ' + )
 	var is_owner = (req.params.id == req.session.user_id);
-	var sql = "SELECT * FROM users WHERE id = ?;";
+	var sql = "SELECT u.*, l.city, l.latitude, l.longitude\
+				FROM users u\
+				LEFT JOIN locations l ON l.user_id = u.id\
+				WHERE u.id = ?";
 
 	db.query(sql, req.params.id, function(err, rows) {
+		console.log(this.sql);
 		if (err || rows.length < 1) {
 			res.render('error', {
 				message: err ? err : 'User is not found'

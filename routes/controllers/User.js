@@ -86,7 +86,8 @@ module.exports = {
 					user_id: results.insertId,
 					latitude: data['latitude'],
 					longitude: data['longitude'],
-					approved: data['approved']
+					approved: data['approved'],
+					city: data['city']
 				}, function(err) {
 					if (err) {
 						console.log(err.sqlMessage);
@@ -97,8 +98,6 @@ module.exports = {
 					}
 					else {
 						var link_hash = md5(new Date());
-						console.log("LINK HASH:");
-						console.log(link_hash);
 						var body = '<h3>Hey ' + data['login'] + '!</h3>\
 									<span>Please activate your account by clicking&nbsp;</span><a href="http://localhost:3000/users/activate?link=' + link_hash + '">here</a>';
 						var mailOptions = {
@@ -646,10 +645,10 @@ module.exports = {
 				return ;
 			}
 			else {
-				sql = "SELECT DISTINCT user_id FROM photo WHERE user_id = ? OR user_id = ?";
-				db.query(sql, [req.session.user_id, req.query['user_id']], function(err, rows) {
-					if (err || rows.length < 2)
-						res.send({success: false, error: err ? err.sqlMessage : 'Both users should have at least 1 photo to make friendship'});
+				sql = "SELECT DISTINCT user_id FROM photo WHERE user_id = ?";
+				db.query(sql, [req.session.user_id], function(err, rows) {
+					if (err || rows.length < 1)
+						res.send({success: false, error: err ? err.sqlMessage : 'You must have at least one photo to send this request'});
 					else {
 						sql = "INSERT INTO friends SET ?";
 						db.query(sql, {id1: req.session.user_id, id2: req.query['user_id']}, function(err) {
@@ -1127,6 +1126,89 @@ module.exports = {
 				res.send({success: false, error: err.sqlMessage});
 			else
 				res.send({success: true, data: rows});
+		});
+	},
+	send_restore_link: function(req, res) {
+		var link_hash = md5(new Date());
+		var sql = "SELECT id, login FROM users WHERE email = ?";
+
+		db.query(sql, req.body['email'], function(err, rows) {
+			if (err || !rows)
+				res.render('auth/restore', {error: 'DB error'});
+			else if (rows.length < 1)
+				res.render('auth/restore', {error: 'User with such email is not found'});
+			else {
+				sql = "INSERT INTO links SET ?";
+
+				db.query(sql, {
+					user_id: rows[0]['id'],
+					hash: link_hash
+				}, function(err) {
+					if (err)
+						res.render('auth/restore', {error: 'DB error'});
+					else {
+						var body = '<h3>Hey ' + rows[0]['login'] + '!</h3>\
+									<span>Please restore your password by clicking&nbsp;</span><a href="http://localhost:3000/users/forgot?link=' + link_hash + '&user_id=' + rows[0]['id'] + '">here</a>';
+						var mailOptions = {
+				            from: 'Matcha',
+				            to: req.body['email'],
+				            subject: 'Matcha Restore Link',
+				            html: body,
+				        };
+				        
+						transporter.sendMail(mailOptions, function(error, info) {
+							if (error)
+								res.render('auth/restore', {error: error});
+							else
+								res.render('auth/restore', {send_result: true});
+						});
+					}
+				});
+			}
+		});
+	},
+	validate_restore_link: function(req, res) {
+		var sql = "SELECT * FROM links WHERE hash = ? AND user_id = ?";
+
+		db.query(sql, [req.query['link'], req.query['user_id']], function(err, rows) {
+			if (err || !rows)
+				res.render('auth/restore', {error: 'DB error'});
+			else if (rows.length < 1)
+				res.render('auth/restore', {error: 'Invalid link'});
+			else {
+				sql = "DELETE FROM links WHERE id = ?";
+
+				db.query(sql, rows[0].id, function(err) {
+					if (err)
+						res.render('auth/restore', {error: 'DB error'});
+					else
+						res.render('auth/restore', {email: true, user_id: req.query['user_id']});
+				});
+			}
+		});
+	},
+	change_password: function(req, res) {
+		var sql = "UPDATE users SET password = ? WHERE id = ?";
+		db.query(sql, [hash.generate(req.body['password'], {algorithm: 'sha256'}), req.body['user_id']], function(err, result) {
+			if (err || !result)
+				res.render('auth/restore', {error: 'DB error'});
+			else if (result.affectedRows < 1)
+				res.render('auth/restore', {error: 'User is not found'});
+			else {
+				sql = "SELECT login FROM users WHERE id = ?";
+
+				db.query(sql, req.body['user_id'], function(err, rows) {
+					if (err || !rows)
+						res.render('auth/restore', {error: 'DB error'});
+					else if (rows.length < 1)
+						res.render('auth/restore', {error: 'User is not found'});
+					else {
+						req.session.user_id = req.body['user_id'];
+						req.session.user_login = rows[0].login;
+						res.redirect('/');
+					}
+				});
+			}
 		});
 	}
 }

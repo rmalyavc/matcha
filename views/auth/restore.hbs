@@ -1,7 +1,23 @@
 <div class="form_wrapper">
-	<form class="login_form">
-		<h2 class="text_header" id="form_header">Restore your password</h2>
-		<input type="email" class="form_field" name="email" placeholder="E-mail" required>
-		<button type="submit" class="submit_button"><strong class="button_text">Send a link</strong></button>
-	</form>
+	{{# if email }}
+		<form class="login_form" id="change_form" action="/users/forgot" method="POST">
+			<h2 class="text_header" id="form_header">Enter a new password</h2>
+			<input type="hidden" name="user_id" value="{{ user_id }}">
+			<input type="password" class="form_field" id="password" name="password" placeholder="New Password" required>
+			<input type="password" class="form_field" id="password_again" name="password_again" placeholder="New Password again" required>
+			<span class="error" id="password_error">Passwords should match</span>
+			<button type="submit" class="submit_button"><strong class="button_text">Save</strong></button>
+		</form>
+	{{ else if send_result }}
+		<h3 class="text_header green">The restore link has been sent to your email</h3>
+	{{ else if error }}
+		<h3 class="error_text">{{ error }}</h3>
+	{{ else }}
+		<form class="login_form" id="send_form" action="/users/forgot" method="POST">
+			<h2 class="text_header" id="form_header">Restore your password</h2>
+			<input type="email" class="form_field" name="email" placeholder="E-mail" required>
+			<button type="submit" class="submit_button"><strong class="button_text">Send a link</strong></button>
+		</form>
+	{{/if}}
+	
 </div>

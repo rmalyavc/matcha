@@ -78,3 +78,31 @@ function distance(lat1, lon1, lat2, lon2, unit = "K") {
 		return dist;
 	}
 }
+
+function date_to_display(str) {
+	var date = new Date(str);
+
+	return date.toLocaleString();
+}
+
+function get_city(data) {
+	if (!data || !data['results'] || data['results'].length < 1 || !data['results'][0]['address_components'] || data['results'][0]['address_components'].length < 1)
+		return '';
+	var results = data['results'][0]['address_components'];
+
+	for (var i = 0; i < results.length; i++) {
+		var types = results[i]['types'];
+		if (types.indexOf('locality') !== -1)
+			return results[i]['short_name'];
+	}
+	return '';
+}
+
+function location_by_city(data) {
+	if (!data || !data['results'] || data['results'].length < 1 || !data['results'][0]['geometry'] || !data['results'][0]['geometry']['location'] || !data['results'][0]['geometry']['location']['lat'] || !data['results'][0]['geometry']['location']['lng'])
+		return null;
+	return {
+		latitude: data['results'][0]['geometry']['location']['lat'],
+		longitude: data['results'][0]['geometry']['location']['lng']
+	};
+}

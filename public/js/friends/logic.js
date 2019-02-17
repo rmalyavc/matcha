@@ -223,7 +223,7 @@ function post_message(message, is_owner) {
 	// var db_time = message.time.split(/[- :]/);
 	// var time = db_time[2] + '/' + db_time[1] + '/' + db_time[0] + ' ' + db_time[3] + ':' + db_time[4];
 
-	cont.innerHTML += '<span class="message_time' + add_class + '">' + message.time + '</span><br>\
+	cont.innerHTML += '<span class="message_time' + add_class + '">' + date_to_display(message.time) + '</span><br>\
 		<span class="author_wrapper"' + add_style + '>\
 			<div class="avatar" style="background-image:url(\'' + avatar + '\');"></div>\
 			<strong class="message_login' + add_class + '">' + message.login + '</strong>\

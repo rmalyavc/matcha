@@ -39,6 +39,16 @@ function ownership_listeners() {
 		});
 }
 
+function city_listener() {
+	var field = document.getElementById('city');
+
+	if (!field)
+		return ;
+	field.addEventListener('keyup', function() {
+		valid_city(false);
+	});
+}
+
 function file_listeners() {
 	var field = document.getElementById('upload');
 	var button = document.getElementById('confirm_upload');
@@ -192,21 +202,11 @@ function hashtags_listeners() {
 			add_hashtag();
 	});
 	input.addEventListener('keyup', function(event) {
-		console.log("KEY IS: " + event.keyCode);
 		check_tag();
 		if (event.keyCode == 13 && input.value != '' && is_hashtag(input.value))
 			add_hashtag();
 	});
 }
-// function full_screen_listeners() {
-// 	var buttons = document.getElementsByClassName('full_screen');
-
-// 	for (var i = 0; i < buttons.length; i++) {
-// 		buttons[i].addEventListener('click', function() {
-// 			full_screen(this.id);
-// 		});
-// 	}
-// }
 
 function set_listeners() {
 	login_listener();
@@ -223,6 +223,7 @@ function set_listeners() {
 	hashtags_listeners();
 	post_images('preview_cont', 'img_wrapper');
 	post_tags();
+	city_listener();
 }
 
 set_listeners();

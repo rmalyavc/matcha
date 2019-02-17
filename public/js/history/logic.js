@@ -13,7 +13,7 @@ function post_history(rows) {
 						<div class="user_info">\
 							<div class="user_info_wrapper">\
 								<label class="admin_label">Login:</label><strong>' + rows[i].login + '</strong><br>\
-								<label class="admin_label">Date:</label><strong>' + rows[i].time + '</strong><br>\
+								<label class="admin_label">Date:</label><strong>' + date_to_display(rows[i].time) + '</strong><br>\
 							</div>\
 						</div>\
 					</a>\

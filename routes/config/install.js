@@ -133,6 +133,7 @@ function create_locations() {
 		latitude FLOAT(20) NOT NULL,\
 		longitude FLOAT(20) NOT NULL,\
 		approved TINYINT(1) NOT NULL\
+		city VARCHAR(100) DEFAULT ''\ 
 	)";
 	conn.query(sql, function(err) {
 		if (err)

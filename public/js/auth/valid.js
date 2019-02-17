@@ -154,6 +154,14 @@ function before_submit() {
 		document.getElementById('latitude').value = current_user.location['latitude'];
 		document.getElementById('longitude').value = current_user.location['longitude'];
 		document.getElementById('approved').value = current_user.location['approved'];
-		form.submit();
+		$.get('https://maps.googleapis.com/maps/api/geocode/json', {
+			latlng: current_user.location['latitude'] + ',' + current_user.location['longitude'],
+			key: 'AIzaSyBUANppGueYbxwGaR3-Fxbos3_uxYnG3OY'
+		}, function(res) {
+			console.log('result is:');
+			console.log(res);
+			document.getElementById('city').value = get_city(res);
+			// form.submit();
+		});
 	}
 }
