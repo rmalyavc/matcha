@@ -2,6 +2,7 @@ var url = window.location.href;
 var user_id = parseInt(url.substring(url.lastIndexOf('/') + 1));
 
 check_blocked();
+check_fake();
 
 function update_fame_rating() {
 	var rating = document.getElementById('fame_rating');
@@ -24,6 +25,12 @@ function update_user_status() {
 	var cont = document.getElementById('status_cont');
 	var last_seen = document.getElementById('last_seen');
 
+	if (!current_user || !current_user['info']) {
+		setTimeout(function() {
+			update_user_status();
+		}, 100);
+		return ;
+	}
 	if (current_user['info']['id'] == user_id) {
 		cont.style.display = 'none';
 		return ;
@@ -279,11 +286,6 @@ function draw_avatar() {
 
 	$.get('/users/ajax', {action: 'get_avatar', user_id: user_id}, function(res) {
 		var user_avatar = res.success ? res.data : '/images/avatar.png';
-		// console.log(res);
-		// if (!res) {
-		// 	console.log('Cannot get user');
-		// 	return;
-		// }
 		avatar.src = user_avatar;
 	});
 }
@@ -293,7 +295,6 @@ function draw_likes() {
 	var button = document.getElementById('like_button');
 	var qty = document.getElementById('like_qty');
 
-	console.log('Draw Likes!');
 	$.get('/users/ajax', {action: 'get_likes', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
 		console.log(res);
 		if (!res.success) {
@@ -451,6 +452,32 @@ function block_user() {
 	check_blocked();
 }
 
+function fake_report() {
+	var fog = document.getElementById('fog');
+	var confirm = fog.getElementsByClassName('confirm_window')[0];
+	var res_window = document.getElementsByClassName('confirm_result')[0];
+	var text = res_window.getElementsByClassName('text_header')[0];
+
+	document.getElementById('confirm_close').addEventListener('click', function() {
+		confirm.style.display = 'block';
+		res_window.style.display = 'none';
+		fog.style.display = 'none';
+	});
+	$.post('/users/ajax_post', {action: 'fake_user', user_id: user_id}, function(res) {
+		confirm.style.display = 'none';
+		res_window.style.display = 'block';
+		if (!res.success) {
+			text.setAttribute('class', 'text_header error_text');
+			text.innerHTML = res.error;
+		}
+		else {
+			text.setAttribute('class', 'text_header green');
+			text.innerHTML = 'Report has been sent';
+		}
+		check_fake();
+	});
+}
+
 function friends(button_id) {
 	var fog = document.getElementById('fog');
 	var text = fog.getElementsByClassName('text_header')[0];
@@ -469,6 +496,13 @@ function friends(button_id) {
 	else if (button_id == 'block_user') {
 		question.innerHTML = 'Do you really want to block this user?';
 		yes.onclick = block_user;
+		no.onclick = function() {
+			fog.style.display = 'none';
+		}
+	}
+	else if (button_id == 'fake_user') {
+		question.innerHTML = 'Do you really want to report this user as fake account?';
+		yes.onclick = fake_report;
 		no.onclick = function() {
 			fog.style.display = 'none';
 		}
@@ -506,6 +540,19 @@ function check_blocked() {
 		else if (res.blocked) {
 			document.getElementById('profile_form').getElementsByClassName('tools_wrapper')[0].innerHTML = '<h3 class="error_text">' + res.response + '</h3>';
 		}
+	});
+}
+
+function check_fake() {
+	var button = document.getElementById('fake_user');
+
+	if (!button)
+		return ;
+	$.get('/users/ajax', {action: 'check_fake', user_id: user_id}, function(res) {
+		if (!res.success)
+			console.log(res.error);
+		else
+			button.style.display = res.reported ? 'none' : 'block';
 	});
 }
 

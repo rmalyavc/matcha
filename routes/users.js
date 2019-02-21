@@ -69,6 +69,10 @@ router.get('/history', function(req, res, next) {
 
 router.get('/profile/:id', function(req, res, next) {
 	// console.log('Params id = ' + )
+	if (!req.session.user_id || req.session.user_id == '') {
+		res.redirect('/users/login');
+		return ;
+	}
 	var is_owner = (req.params.id == req.session.user_id);
 	var sql = "SELECT u.*, l.city, l.latitude, l.longitude\
 				FROM users u\
@@ -76,12 +80,8 @@ router.get('/profile/:id', function(req, res, next) {
 				WHERE u.id = ?";
 
 	db.query(sql, req.params.id, function(err, rows) {
-		console.log(this.sql);
-		if (err || rows.length < 1) {
-			res.render('error', {
-				message: err ? err : 'User is not found'
-			});
-		}
+		if (err || rows.length < 1)
+			res.redirect('/error?error=User is not found');
 		else {
 			var error = req.query['err'] ? req.query['err'] : false;
 			res.render('users/profile', {
@@ -200,6 +200,8 @@ router.get('/ajax', function(req, res, next) {
 		user_controller.get_rating(req, res);
 	else if (req.query['action'] == 'get_visits' && req.session.user_id && req.session.user_id != '' && req.query['button_id'] && req.query['button_id'] != '')
 		user_controller.get_visits(req, res);
+	else if (req.query['action'] == 'check_fake' && req.session.user_id && req.session.user_id != '' && req.query['user_id'] && req.query['user_id'] != '')
+		user_controller.check_fake(req, res);
 	else {
 		res.send({
 			success: false,
@@ -255,6 +257,8 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 			req.body['owner'] && req.body['owner'] != '' && req.body['owner'] != req.session.user_id &&
 			req.body['type'] && req.body['type'] != '' && (req.body['confirm'] !== null || req.body['type'] != 'request'))
 		user_controller.insert_history(req, res);
+	else if (req.body['action'] == 'fake_user' && req.body['user_id'] && req.body['user_id'] != '' && req.session.user_id && req.session.user_id != '' && req.body['user_id'] != req.session.user_id)
+		user_controller.fake_account(req, res);
 	else {
 		res.send({
 			success: false,

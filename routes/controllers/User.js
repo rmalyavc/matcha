@@ -564,7 +564,8 @@ module.exports = {
 						where += " AND h.name LIKE '%" + param + "%'";
 				}
 			}
-			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.rating, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude\
+			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.rating, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude,\
+						(SELECT COUNT(*) FROM `hashtags` WHERE user_id <> ? AND name IN (SELECT DISTINCT name FROM hashtags WHERE user_id = ?) AND user_id = u.id) AS common_tags\
 					FROM users u\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
 					LEFT JOIN locations l ON l.user_id = u.id\
@@ -602,8 +603,11 @@ module.exports = {
 					    CASE\
 					    	WHEN u.age IS NOT NULL THEN ABS(? - CAST(u.age AS SIGNED))\
 					    	ELSE 42\
-					    END";
+					    END,\
+					    common_tags DESC";
 			db.query(sql, [
+				req.session.user_id,
+				req.session.user_id,
 				req.session.user_id,
 				req.session.user_id,
 				matches[user.gender][user.orientation]['gender']['Male'],
@@ -1229,6 +1233,40 @@ module.exports = {
 					}
 				});
 			}
+		});
+	},
+	fake_account: function(req, res) {
+		var sql = "SELECT id FROM fake_reports WHERE reporter = ? AND reported = ?";
+
+		db.query(sql, [req.session.user_id, req.body['user_id']], function(err, rows) {
+			if (err) {
+				console.log(err.sqlMessage);
+				res.send({success: false, error: 'DB error'});
+			}
+			else if (rows.length > 0)
+				res.send({success: false, error: 'You already reported this user'});
+			else {
+				sql = "INSERT INTO fake_reports SET ?";
+
+				db.query(sql, {reporter: req.session.user_id, reported: req.body['user_id']}, function(err) {
+					if (err) {
+						console.log(err.sqlMessage);
+						res.send({success: false, error: 'DB error'});
+					}
+					else
+						res.send({success: true});
+				});
+			}
+		});
+	},
+	check_fake: function(req, res) {
+		var sql = "SELECT id FROM fake_reports WHERE reporter = ? AND reported = ?";
+
+		db.query(sql, [req.session.user_id, req.query['user_id']], function(err, rows) {
+			if (err)
+				res.send({success: false, error: 'DB error'});
+			else
+				res.send({success: true, reported: rows.length > 0});
 		});
 	}
 }

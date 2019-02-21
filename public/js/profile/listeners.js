@@ -225,8 +225,9 @@ function set_listeners() {
 	post_tags();
 	city_listener();
 }
-
-set_listeners();
-update_user_status();
-update_visit();
-update_fame_rating();
+$(document).ready(function() {
+	set_listeners();
+	update_user_status();
+	update_visit();
+	update_fame_rating();	
+});

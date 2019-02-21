@@ -6,6 +6,11 @@ var install = require('./config/install.js');
 var db = require('./config/connection.js');
 var app = express();
 
+var fs = require('fs');
+var shell = require('shelljs');
+var http = require('https');
+var Fakerator = require("fakerator");
+
 // var http = require('http').Server(app);
 // var io = require('socket.io')(http);
 // var http = require('http').Server(app);
@@ -71,6 +76,65 @@ router.get('/install', function(req, res) {
 	res.redirect('/');
 });
 
+
+router.get('/create_users', function(req, res) {
+	var fakerator = Fakerator();
+	var genders = ['Male', 'Female', 'Other'];
+	var orientations = ['Heterosexual','Homosexual','Bisexual','Asexual','Other'];
+	var users = [];
+	var user = {};
+	var get_names = {
+		'Male': function() {
+			user['first_name'] = fakerator.names.firstNameM();
+			user['last_name'] = fakerator.names.lastNameM();
+		},
+		'Female': function() {
+			user['first_name'] = fakerator.names.firstNameF();
+			user['last_name'] = fakerator.names.lastNameF();
+		},
+		'Other': function() {
+			user['first_name'] = fakerator.names.firstName();
+			user['last_name'] = fakerator.names.lastName();
+		}
+	}
+	for (var i = 0; i < 20; i++) {
+		user = {};
+		user['orientation'] = fakerator.random.arrayElement(orientations);
+		user['gender'] = fakerator.random.arrayElement(genders);
+		get_names[user['gender']]();
+		user['login'] = fakerator.internet.userName(user['first_name'], user['last_name'] + i);
+		user['email'] = fakerator.internet.email(user['first_name'], user['last_name'] + i);
+		user['avatar'] = fakerator.internet.avatar();
+		user['about'] = fakerator.lorem.paragraph();
+		user['admin'] = 0;
+		user['active'] = 1;
+		user['age'] = fakerator.date.age(12, 100);
+		var location = fakerator.address.geoLocation();
+		user['latitude'] = location['latitude'];
+		user['longitude'] = location['longitude'];
+		users.push(user);
+		if (i == 19) {
+			var file = fs.createWriteStream("externalImage.jpg");
+		    var request = http.get(user['avatar'], function(response) {
+		      	response.pipe(file);
+		      	console.log(file);	
+		    });
+			// var file = user['avatar'];
+			var path = get_upload_path(user['login']);
+			if (!fs.existsSync('public' + path))
+				shell.mkdir('-p', 'public' + path);
+			shell.mv(file['path'], 'public' + path + user['login'] + "\'s_photo.jpg");
+		}
+	}
+	console.log(users);
+});
+
+function get_upload_path(id) {
+	if (!id)
+		return (false);
+	var today = new Date();
+	return ('/uploads/' + id + '/' + today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate() + '/');
+}
 // io.on('connect', function(socket){
 //   console.log('a user connected');
 //   socket.on('disconnect', function(){

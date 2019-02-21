@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 17, 2019 at 10:39 AM
+-- Generation Time: Feb 21, 2019 at 11:02 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.16
 
@@ -67,6 +67,25 @@ INSERT INTO `comments` (`id`, `photo`, `author`, `text`, `time`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `fake_reports`
+--
+
+CREATE TABLE `fake_reports` (
+  `id` int(11) NOT NULL,
+  `reporter` int(6) NOT NULL,
+  `reported` int(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `fake_reports`
+--
+
+INSERT INTO `fake_reports` (`id`, `reporter`, `reported`) VALUES
+(1, 4, 12);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `friends`
 --
 
@@ -125,7 +144,8 @@ INSERT INTO `hashtags` (`id`, `name`, `user_id`) VALUES
 (24, '#fqeffeqfeqf', 2),
 (25, '#HashTagIsWorkingNow', 2),
 (26, '#fqeffeqfeqf', 4),
-(27, '#likeme', 13);
+(27, '#likeme', 13),
+(28, '#TryonemoreHASHtag', 4);
 
 -- --------------------------------------------------------
 
@@ -226,7 +246,21 @@ INSERT INTO `history` (`id`, `owner`, `visitor`, `type`, `confirm`, `time`, `rev
 (76, 4, 21, 'visit', 0, '2019-02-17 11:51:01', 1),
 (77, 4, 21, 'visit', 0, '2019-02-17 11:51:41', 1),
 (78, 3, 4, 'visit', 0, '2019-02-17 12:33:28', 1),
-(79, 4, 3, 'request', 1, '2019-02-17 12:34:11', 1);
+(79, 4, 3, 'request', 1, '2019-02-17 12:34:11', 1),
+(80, 2, 4, 'visit', 0, '2019-02-19 17:47:21', 0),
+(81, 2, 4, 'visit', 0, '2019-02-19 17:47:24', 0),
+(82, 2, 4, 'visit', 0, '2019-02-19 17:47:32', 0),
+(83, 2, 4, 'visit', 0, '2019-02-19 17:49:16', 0),
+(84, 2, 4, 'visit', 0, '2019-02-19 17:49:18', 0),
+(85, 5, 4, 'visit', 0, '2019-02-19 17:49:24', 0),
+(86, 15, 4, 'visit', 0, '2019-02-19 17:49:28', 0),
+(87, 2, 4, 'visit', 0, '2019-02-19 18:26:56', 0),
+(88, 2, 4, 'visit', 0, '2019-02-19 18:50:11', 0),
+(89, 12, 4, 'visit', 0, '2019-02-19 18:52:27', 0),
+(90, 12, 4, 'visit', 0, '2019-02-19 18:53:40', 0),
+(91, 12, 4, 'visit', 0, '2019-02-19 18:54:42', 0),
+(92, 12, 4, 'visit', 0, '2019-02-19 18:55:31', 0),
+(93, 12, 4, 'visit', 0, '2019-02-19 18:56:07', 0);
 
 -- --------------------------------------------------------
 
@@ -305,7 +339,7 @@ CREATE TABLE `locations` (
 INSERT INTO `locations` (`id`, `user_id`, `latitude`, `longitude`, `approved`, `city`) VALUES
 (2, 12, 50.4642, 30.4665, 1, ''),
 (5, 5, 50.4642, 30.4665, 1, ''),
-(6, 4, 50.4242, 30.4242, 1, 'Kyiv'),
+(6, 4, 65.9992, 57.5243, 1, 'Usinsk'),
 (7, 11, 50.4642, 30.4665, 1, ''),
 (8, 13, 50.4684, 30.4519, 1, ''),
 (9, 14, 50.4642, 30.4665, 1, ''),
@@ -458,7 +492,9 @@ INSERT INTO `messages` (`id`, `author`, `dest_user`, `text`, `time`, `room_id`) 
 (183, 4, NULL, 'Hi test1', '2019-02-17 12:35:58', 44),
 (184, 3, NULL, 'Test', '2019-02-17 12:36:09', 44),
 (185, 4, NULL, 'Test again', '2019-02-17 12:36:17', 44),
-(186, 4, NULL, 'Hi guys', '2019-02-17 12:39:31', 45);
+(186, 4, NULL, 'Hi guys', '2019-02-17 12:39:31', 45),
+(187, 4, NULL, 'Hi girl! Are you here?', '2019-02-19 17:56:03', 19),
+(188, 4, NULL, 'Hi!', '2019-02-19 17:56:35', 46);
 
 -- --------------------------------------------------------
 
@@ -748,7 +784,9 @@ INSERT INTO `message_user` (`id`, `message_id`, `user_id`, `read_date`) VALUES
 (784, 185, 4, '2019-02-17 12:36:17'),
 (785, 185, 3, '2019-02-17 12:36:17'),
 (786, 186, 4, '2019-02-17 12:39:31'),
-(787, 186, 3, '2019-02-17 12:39:31');
+(787, 186, 3, '2019-02-17 12:39:31'),
+(788, 187, 4, '2019-02-19 17:56:03'),
+(789, 188, 4, '2019-02-19 17:56:35');
 
 -- --------------------------------------------------------
 
@@ -845,7 +883,8 @@ INSERT INTO `rooms` (`id`, `active`, `private`) VALUES
 (42, 0, 1),
 (43, 1, 1),
 (44, 1, 1),
-(45, 1, 0);
+(45, 1, 0),
+(46, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -889,7 +928,10 @@ INSERT INTO `room_user` (`room_id`, `user_id`) VALUES
 (44, 4),
 (45, 2),
 (45, 3),
-(45, 4);
+(45, 4),
+(46, 21),
+(46, 4),
+(46, 13);
 
 -- --------------------------------------------------------
 
@@ -931,8 +973,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `login`, `password`, `email`, `first_name`, `last_name`, `admin`, `active`, `about`, `age`, `gender`, `orientation`, `last_seen`, `connected`, `rating`) VALUES
 (2, 'white_men', 'sha256$31587c1a$1$8eb5df5ae1026bc28119893c5f16ff21357e87d40f5efb202cc61c86aeede679', 'white_men@bigmir.no', 'Stanly', 'White', 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident oidento', 29, 'Male', 'Heterosexual', '2019-02-15 21:19:33', 0, 0),
-(3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', NULL, 'Female', 'Other', '2019-02-17 14:40:20', 0, 5),
-(4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', 'Daddy', 'Root', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual', '2019-02-17 20:35:36', 0, 29),
+(3, 'test1', 'sha256$d43c0e84$1$83d85884b539f918f401a8da14aff1c9acf5aa3554f15a0fc5a5d1d79d45b270', 'test1@example.com', 'Testing', 'Tester', 0, 1, 'I am just a test user. I like testing very much)', 29, 'Male', 'Heterosexual', '2019-02-17 14:40:20', 0, 5),
+(4, 'root', 'sha256$3acf68e5$1$5125e220c378c94a1f5d419cf6f5a62cc1c3cfc763e0d965422fddcba5ce6bec', 'root@example.com', 'Daddy', 'Root', 1, 1, 'Won\'t say anything) Hahaha', 29, 'Male', 'Heterosexual', '2019-02-19 20:58:53', 0, 29),
 (5, 'Stanly', 'sha256$794be04a$1$b2772c8bafb16ea1e3ff510d0eba864fdb38a04bd4c303d2821ff00c923eec1a', 'test@example.com', NULL, NULL, 0, 1, NULL, 27, 'Male', 'Asexual', '2019-02-06 19:05:31', 0, 0),
 (6, 'Roman', 'sha256$28a129c9$1$7825ba9139a1b775c0bb1ab192742e4163983a3ada624d6de4f976fddd1d284c', 'roman@beakon.uu', '', '', 0, 1, 'vaeuihuieahuivhuaevuuiavujiVJROVKWiokfkoFKEWk[peflkef0i0f3g o3gko 3 k35o k4o5 o54k o54k 45 ok45 oyko koy koky wwp05ti0i50it450i0 . 0i5 0i0yi0iy0i0irlfgkfkhos', 18, 'Male', 'Bisexual', '2019-02-08 22:06:25', 1, 15),
 (11, 'location', 'sha256$3666f3e8$1$0887134d2d8ba30613bdcbf2c51e28dc5b47bdc153ba3be73f393e640e696bd0', 'loc@test.com', NULL, NULL, 0, 1, NULL, 42, 'Female', 'Heterosexual', '2019-02-15 21:17:26', 0, -3),
@@ -957,6 +999,12 @@ ALTER TABLE `black_list`
 -- Indexes for table `comments`
 --
 ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `fake_reports`
+--
+ALTER TABLE `fake_reports`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1039,16 +1087,22 @@ ALTER TABLE `comments`
   MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `fake_reports`
+--
+ALTER TABLE `fake_reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `hashtags`
 --
 ALTER TABLE `hashtags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -1066,19 +1120,19 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=187;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
 
 --
 -- AUTO_INCREMENT for table `message_user`
 --
 ALTER TABLE `message_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=788;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=790;
 
 --
 -- AUTO_INCREMENT for table `photo`
@@ -1090,13 +1144,13 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

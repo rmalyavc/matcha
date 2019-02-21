@@ -165,6 +165,18 @@ function create_links() {
 	});
 }
 
+function create_reports() {
+	var sql = "CREATE TABLE fake_reports (\
+		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
+		reporter INT(6) NOT NULL,\
+		reported INT(6) NOT NULL\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});
+}
+
 module.exports = {
 	install: function() {
 		create_users();
@@ -177,5 +189,6 @@ module.exports = {
 		create_locations();
 		create_black_list();
 		create_links();
+		create_reports();
 	}
 }
