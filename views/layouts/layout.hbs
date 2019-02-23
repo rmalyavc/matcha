@@ -17,11 +17,8 @@
 			var socket = false;
 
 			$.get('/users/ajax', {action: 'current_user'}, function(res) {
-				if (!res.success)
-					console.log(res.error);
-				else {
+				if (res.success)
 					current_user['info'] = res.data;
-				}
 			});
 		</script>
 		<div class="header_tools">
@@ -43,16 +40,10 @@
 					socket.emit('add_client', {
 						user_id: id
 					});
-					console.log(socket);
 					$.get('/users/ajax', {id: id, action: 'get_user'}, function(result) {
 						if (!result)
 							return ;
 						document.getElementById('profile_link').innerHTML = result.login;
-						if (result.admin) {
-							var cont = document.getElementsByClassName('header_tools')[0];
-							cont.innerHTML = '<img class="header_icon" id="admin_link" onclick="location.href=' + "'/admin'" +
-								'" src="/images/admin.png">' + cont.innerHTML;
-						}
 					});
 				</script>
 			{{ else }}

@@ -14,7 +14,6 @@ function tools_listeners() {
 	var input = document.getElementById('message_input');
 
 	input.addEventListener('keypress', function(event) {
-		console.log(event.keyCode);
 		if (event.keyCode == 13)
 			action('send_message');
 	});

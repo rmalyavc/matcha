@@ -40,7 +40,7 @@ CREATE TABLE `black_list` (
 -- Table structure for table `comments`
 --
 
-CREATE TABLE `comments` (
+CREATE TABLE IF NOT EXISTS `comments` (
   `id` int(6) NOT NULL,
   `photo` int(6) NOT NULL,
   `author` int(6) NOT NULL,

@@ -54,13 +54,14 @@ function close_search(button_id) {
 	start_slider();
 }
 
-function apply_filters() {
+function apply_filters(elem = null) {
 	var cont = document.getElementById('filters_cont');
 	var filters;
 	var params = {};
 
 	if (cont)
-		filters = cont.getElementsByClassName('filter_row'); 
+		filters = cont.getElementsByClassName('filter_row');
+	// params['from'] = elem !== null ? 0 : null;
 	if (!cont || !filters)
 		return ;
 	for (var i = 0; i < filters.length; i++) {
@@ -84,6 +85,8 @@ function apply_filters() {
 			}
 		}
 	}
+	if (elem !== null)
+		search_results = [];
 	find_users(params);
 }
 
@@ -129,13 +132,19 @@ function post_users(rows = search_results) {
 
 	$('.search_result').remove();
 	$('.error_text').remove();
-	if (rows.length < 1)
+	$('#more').remove();
+
+	if (rows.length < 1) {
 		$(cont).append('<h2 class="text_header error_text">No users found =(</h2>');
+		return ;
+	}
 	for (var i = 0; i < rows.length; i++) {
 		var age = rows[i].age ? rows[i].age : '';
 		var avatar = rows[i].avatar ? rows[i].avatar : '/images/avatar.png';
 		var about = rows[i].about ? rows[i].about : '';
 		var full_name = rows[i].first_name ? rows[i].first_name + ' ' : '';
+		var gender = rows[i].gender ? rows[i].gender : '';
+		var orientation = rows[i].orientation ? rows[i].orientation : '';
 
 		if (rows[i].last_name)
 			full_name += rows[i].last_name;
@@ -148,6 +157,8 @@ function post_users(rows = search_results) {
 						<label class="admin_label">Login:</label><strong>' + rows[i].login + '</strong><br>\
 						<label class="admin_label">Full Name:</label><strong>' + full_name + '</strong><br>\
 						<label class="admin_label">Age:</label><strong>' + age + '</strong><br>\
+						<label class="admin_label">Gender:</label><strong>' + gender + '</strong><br>\
+						<label class="admin_label">Orientation:</label><strong>' + orientation + '</strong><br>\
 						<label class="admin_label">Fame Rating:</label><strong class="' + class_name + '" style="font-size: 0.7rem;vertical-align:middle;">' + rows[i].rating + '</strong><br>\
 						<label class="admin_label about_label">About me:</label>\
 						<div class="search_about">' + about + '</div>\
@@ -156,15 +167,15 @@ function post_users(rows = search_results) {
 			</a>\
 		</div>');
 	}
+	$(cont).append('<button class="submit_button" type="button" id="more" onclick="apply_filters();"><span class="button_text">More</span></button>')
 }
 
 function find_users(params = {}) {
-	// var form = document.getElementById('index_form');
-	// var fields = form.getElementsByClassName('form_field profile_input');
 	var results = document.getElementsByClassName('search_results')[0];
 	var req = {
 		action: 'find_users',
-		user_id: user_id
+		user_id: user_id,
+		from: search_results.length
 	};
 	if (params != {})
 		req.params = params;
@@ -172,9 +183,13 @@ function find_users(params = {}) {
 	results.style.display = 'block';
 	$.get('/users/ajax', req, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
+			// console.log(res.error);
 		else {
-			search_results = res.data;
+			for (var i = 0; i < res.data.length; i++) {
+				search_results.push(res['data'][i]);	
+			}
+			// search_results = res.data;
 			post_users();
 		}
 	});
@@ -221,8 +236,6 @@ function sort_results(button) {
 			}
  		}
  		else if (order_by.value == 'rating' && search_results[i + 1]) {
- 			
- 			console.log(search_results[i]);
  			if ((search_results[i]['rating'] > search_results[i + 1]['rating'] && sort_order.value == 'asc') || (search_results[i]['rating'] < search_results[i + 1]['rating'] && sort_order.value == 'desc')) {
  				var tmp = search_results[i];
  				search_results[i] = search_results[i + 1];

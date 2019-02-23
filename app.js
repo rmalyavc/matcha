@@ -13,11 +13,6 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-// view engine setup
-// hbs.registerHelper("is", function(val1, val2)
-// {
-//     return (val1 == val2);
-// });
 app.engine('hbs', hbs({
   extname: 'hbs',
   defaultLayout: 'layout',
@@ -64,5 +59,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-

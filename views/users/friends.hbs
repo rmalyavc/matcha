@@ -48,10 +48,8 @@
 </div>
 {{# if chat_with }}
 	<script type="text/javascript">
-		// console.log('chat_{{ chat_with }}');
 		document.getElementById('chat_window').style.display = 'block';
 		post_chats('chat_list');
 		wait_elem('id_name', 'chat_{{ chat_with }}', document, start_chat, ['chat_{{ chat_with }}']);
-		// start_chat('chat_{{ chat_with }}');
 	</script>
 {{/if}}

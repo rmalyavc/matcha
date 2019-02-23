@@ -90,7 +90,6 @@ module.exports = {
 					city: data['city']
 				}, function(err) {
 					if (err) {
-						console.log(err.sqlMessage);
 						res.render('./auth/valid', {
 							registred: false,
 							error: 'DB Error'
@@ -108,7 +107,6 @@ module.exports = {
 				        };
 				        transporter.sendMail(mailOptions, function(error, info){
 				            if (error) {
-				            	console.log(error);
 				                res.render('./auth/valid', {
 									registred: false,
 									error: error
@@ -168,7 +166,6 @@ module.exports = {
 	},
 	update: function (req, res) {
 		var data = req.body;
-		// var error = '';
 		if (data['user_id'] != req.session.user_id) {
 			res.redirect('/error?error=You cannot change another user\'s data!&image=/images/fuck.png');
 			return ;
@@ -235,7 +232,7 @@ module.exports = {
 					res.send({success: false, error: err ? err.sqlMessage : 'You cannot upload more then 5 photos'});
 				else {
 					if (!fs.existsSync('public' + path))
-					shell.mkdir('-p', 'public' + path);
+						shell.mkdir('-p', 'public' + path);
 					shell.mv(file.path, 'public' + path + file.filename + get_extension(file));
 
 					var sql = "INSERT INTO photo SET ?";
@@ -271,7 +268,6 @@ module.exports = {
 			args.push(req.session.user_id);
 		}
 		db.query(sql, args, function(err, rows) {
-			console.log(this.sql);
 			if (err || rows.length > 0)
 				res.send(false);
 			else
@@ -294,8 +290,6 @@ module.exports = {
 	get_album: function(req, res) {
 		var sql = "SELECT * FROM photo WHERE user_id = ?;";
 
-		console.log('Get Album!');
-		console.log(req.body);
 		db.query(sql, req.body['user_id'], function(err, rows) {
 			if (err || rows.length < 1) {
 				res.send({
@@ -521,7 +515,6 @@ module.exports = {
 		db.query(sql, req.session.user_id, function(err, rows) {
 			if (err || !rows || rows.length < 1) {
 				res.send({success: false, error: err ? err.sqlMessage : 'DB error'});
-				console.log(err ? err.sqlMessage : 'DB error');
 				return ;
 			}
 			var where = '';
@@ -564,7 +557,8 @@ module.exports = {
 						where += " AND h.name LIKE '%" + param + "%'";
 				}
 			}
-			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.rating, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude,\
+			var from = req.query['from'] ? parseInt(req.query['from']) : 0;
+			sql = "SELECT u.id, u.login, u.first_name, u.last_name, u.age, u.rating, u.gender, u.orientation, u.about, p.url AS avatar, GROUP_CONCAT(h.name) AS hashtags, l.latitude, l.longitude,\
 						(SELECT COUNT(*) FROM `hashtags` WHERE user_id <> ? AND name IN (SELECT DISTINCT name FROM hashtags WHERE user_id = ?) AND user_id = u.id) AS common_tags\
 					FROM users u\
 					LEFT JOIN photo p ON p.user_id = u.id AND p.avatar = '1'\
@@ -592,6 +586,10 @@ module.exports = {
 					        ELSE 42\
 					    END,\
 					    CASE\
+					    	WHEN u.age IS NOT NULL THEN ABS (? - CAST(u.age AS SIGNED))\
+					    	ELSE 42000\
+					    END,\
+					    CASE\
 					    	WHEN l.latitude IS NOT NULL THEN 111.111 *\
 											    	DEGREES(ACOS(LEAST(COS(RADIANS(l.latitude))\
 													* COS(RADIANS(?))\
@@ -600,11 +598,8 @@ module.exports = {
 													* SIN(RADIANS(?)), 1.0)))\
 					        ELSE 42\
 					    END,\
-					    CASE\
-					    	WHEN u.age IS NOT NULL THEN ABS(? - CAST(u.age AS SIGNED))\
-					    	ELSE 42\
-					    END,\
-					    common_tags DESC";
+					    common_tags DESC\
+					    LIMIT " + from + ", 10";
 			db.query(sql, [
 				req.session.user_id,
 				req.session.user_id,
@@ -618,12 +613,11 @@ module.exports = {
 				matches[user.gender][user.orientation]['orientation']['Homosexual'],
 				matches[user.gender][user.orientation]['orientation']['Asexual'],
 				matches[user.gender][user.orientation]['orientation']['Other'],
+				user.age,
 				user.latitude,
 				user.longitude,
-				user.latitude,
-				user.age
+				user.latitude
 			], function(err, rows) {
-				console.log(this.sql);
 				if (err || !rows) {
 					res.send({
 						success: false,
@@ -646,9 +640,6 @@ module.exports = {
 						WHERE name LIKE ?";
 			var needle = "%" + req.query['to_find'] + "%";
 			db.query(sql, needle, function(err, rows) {
-				console.log(this.sql);
-				console.log('Rows are:');
-				console.log(rows);
 				if (err || !rows)
 					res.send({success: false, error: err ? err.sqlMessage : 'DB error'});
 				else
@@ -713,8 +704,6 @@ module.exports = {
                     	SELECT id FROM tmp_cont);\
                     DELETE FROM tmp_cont;";
                 db.query(sql, [req.session.user_id, req.query['user_id']], function(err) {
-                	console.log('THIS IS SQL:');
-                	console.log(this.sql);
                 	if (err)
                 		res.send({success: false, error: err.sqlMessage});
                 	else
@@ -746,7 +735,6 @@ module.exports = {
 		});
 	},
 	confirm_friend: function(req, res) {
-		console.log(req.query['action']);
 		if (req.query['action'] == 'confirm_friend')
 			var sql = "UPDATE friends SET active = '1' WHERE id1 = ? AND id2 = ?;";
 		else
@@ -781,7 +769,6 @@ module.exports = {
 					LEFT JOIN photo p ON u.id = p.user_id AND p.avatar = '1'\
 						WHERE u.id <> ? AND f.active = '1' AND (f.id1 = ? OR f.id2 = ?);";
 		db.query(sql, [req.session.user_id, req.session.user_id, req.session.user_id], function(err, rows) {
-			console.log(this.sql);
 			if (err)
 				res.send({success: false, err: err.sqlMessage});
 			else
@@ -893,7 +880,6 @@ module.exports = {
 				});
 				return ;
 			}
-			// var room = req.query['room_id'];
 			if (rows[0]['private'] == '1') {
 				sql = "INSERT INTO rooms SET ?";
 				db.query(sql, {private: '0'}, function(err, result) {
@@ -1122,7 +1108,6 @@ module.exports = {
 		});
 	},
 	get_visits: function(req, res) {
-		// var sql = false;
 		if (req.query['button_id'] == 'by_you') {
 			var sql = "SELECT h.owner AS id, u.login, p.url AS avatar, h.time\
 					FROM history h\
@@ -1240,7 +1225,6 @@ module.exports = {
 
 		db.query(sql, [req.session.user_id, req.body['user_id']], function(err, rows) {
 			if (err) {
-				console.log(err.sqlMessage);
 				res.send({success: false, error: 'DB error'});
 			}
 			else if (rows.length > 0)
@@ -1250,7 +1234,6 @@ module.exports = {
 
 				db.query(sql, {reporter: req.session.user_id, reported: req.body['user_id']}, function(err) {
 					if (err) {
-						console.log(err.sqlMessage);
 						res.send({success: false, error: 'DB error'});
 					}
 					else

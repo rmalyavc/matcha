@@ -11,7 +11,7 @@ function update_fame_rating() {
 		return ;
 	$.get('/users/ajax', {action: 'get_rating', user_id: user_id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			var class_name = (parseInt(res.data)) < 0 ? 'error_text' : 'green';
 			rating.setAttribute('class', class_name);
@@ -37,7 +37,7 @@ function update_user_status() {
 	}
 	$.get('/users/ajax', {action: 'get_user', id: user_id}, function(res) {
 		if (!res)
-			console.log('User is not found');
+			return ;
 		else {
 			status.src = res.connected ? '/images/confirm.png' : '/images/close.png';
 			status.setAttribute('class', res.connected ? 'tool_button connected' : 'tool_button disconnected');
@@ -75,7 +75,7 @@ function post_images(cont_id, type) {
 		}
 		photo_listeners();
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
 }
 
@@ -84,7 +84,6 @@ function upload_image() {
 	var form_data = new FormData();
 
 	if (!input || !user_id) {
-		console.log('Input\'s not found');
 		return ;
 	}
 	form_data.append('file', $('#upload')[0].files[0]);
@@ -99,16 +98,11 @@ function upload_image() {
 		data: form_data,
 	}).done(function(res) {
 		if (res) {
-			// alert('Done!');
 			if (res.success === true)
 				post_images('preview_cont', 'img_wrapper');
-			else
-				alert(res.error);
 		}
-		else
-			alert('res is empty...');
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
 	input.value = '';
 }
@@ -124,12 +118,10 @@ function show_photo(elem) {
 	var cont = document.getElementById('full_size');
 	var fog = document.getElementById('fog');
 
-	console.log('Up to date is: ' + up_to_date());
 	if (!up_to_date()) {
 		post_images('full_preview', 'img_wrapper long');
 		photos = document.getElementsByClassName('img_wrapper long');
 		fog.getElementsByClassName('confirm_window')[0].style.display = 'none';
-		// fog.innerHTML = '';
 	}
 	fog.style.display = 'block';
 	cont.style.display = 'block';
@@ -149,7 +141,6 @@ function change_slide(elem_id) {
 			if (i + add < 0 || i + add >= photos.length)
 				return (false);
 			else {
-				console.log('I = ' + i + '\n Add = ' + add);
 				full.style.backgroundImage = photos[i + add].style.backgroundImage;
 				full_photo.setAttribute('name', photos[i + add].id);
 				comments();
@@ -177,26 +168,15 @@ function draw_comment(comment, author) {
 			'</div>' +
 		'</div>';
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
-	// cont.innerHTML += '<div class="comment">' +
-	// 	'<div class="avatar" id="avatar" style="background-image: url(' + "'" + get_avatar(author.id) + "'" +
-	// 	');background-position: center;background-size: 100%;background-repeat: no-repeat;"></div>' +
-	// 	'<div class="comment_wrapper">' +
-	// 		'<div>' +
-	// 			'<p class="comment_author">' + author.login + '</p>' +
-	// 			'<p class="comment_text">' + comment.text + '</p>' +
-	// 			'<p class="comment_time">' + date.toLocaleString(); + '</p>' +
-	// 		'</div>' +
-	// 	'</div>' +
-	// '</div>';
 }
 
 
 function draw_comments(comms) {
 	$.post('/users/ajax_post', {action: 'get_users', authors: get_authors(comms)}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			
 			for (var i = 0; i < comms.length; i++) {
@@ -213,10 +193,8 @@ function comments() {
 	$.get('/users/ajax', {photo_id: photo_id, action: 'get_comments'}, function(res) {
 		if (res.success && res.data && res.data.length > 0)
 			draw_comments(res.data);
-		else if (res.error)
-			console.log(res.error);
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
 }
 
@@ -233,11 +211,11 @@ function add_comment() {
 		action: 'add_comment'
 	}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else
 			comments();
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
 }
 
@@ -267,16 +245,14 @@ function set_avatar(elem_id) {
 	});
 	yes.onclick = function() {
 		$.get('/users/ajax', {action: 'set_avatar', user_id: user_id, photo_id: elem_id}, function(res) {
-			console.log(res);
 			if (!res.success) {
-				console.log(res.error);
 				return ;
 			}
 			fog.style.display = 'none';
 			cont.style.display = 'none';
 			draw_avatar();
 		}).catch(function(err) {
-			console.log(err);
+			return ;
 		});
 	};
 }
@@ -296,16 +272,14 @@ function draw_likes() {
 	var qty = document.getElementById('like_qty');
 
 	$.get('/users/ajax', {action: 'get_likes', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
-		console.log(res);
 		if (!res.success) {
-			console.log(res.error);
 			return ;
 		}
 		qty.innerHTML = res.qty;
 		button.setAttribute('liked', res.liked);
 		button.style['background'] = res.liked ? 'linear-gradient(0deg, #ff3232, #CD2421)' : 'none';
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
 }
 
@@ -314,14 +288,11 @@ function like_photo() {
 	var button = document.getElementById('like_button');
 
 	$.get('/users/ajax', {action: 'like_photo', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
-		// console.log(res);
-		if (!res.success)
-			console.log(res.error);
 		var points = button.getAttribute('liked') == 'true' ? -1 : 1;
 		update_rating(user_id, points);
 		draw_likes();
 	}).catch(function(err) {
-		console.log(err);
+		return ;
 	});
 }
 
@@ -337,15 +308,12 @@ function del_photo() {
 	}
 	yes.onclick = function() {
 		$.post('/users/ajax_post', {action: 'del_photo', photo_id: photo.getAttribute('name'), user_id: user_id}, function(res) {
-			console.log(res);
-			if (!res.success)
-				console.log(res.error);
-			else if (!change_slide('next_slide'))
+			if (res.success && !change_slide('next_slide'))
 				change_slide('prev_slide');
 			post_images('preview_cont', 'img_wrapper');
 			post_images('full_preview', 'img_wrapper long');
 		}).catch(function(err) {
-			console.log(err);
+			return ;
 		});
 		fog.style.display = 'none';
 	}
@@ -390,7 +358,7 @@ function add_del_friend() {
 			else {
 				$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'remove', confirm: 0}, function(res) {
 					if (!res.success)
-						console.log(res.error);
+						return ;
 					else {
 						socket.emit('history_request', {
 							user_id: user_id
@@ -438,7 +406,7 @@ function block_user() {
 					text.innerHTML = 'User has been blocked';
 					$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'block', confirm: 0}, function(res) {
 						if (!res.success)
-							console.log(res.error);
+							return ;
 						else {
 							socket.emit('history_request', {
 								user_id: user_id
@@ -536,7 +504,7 @@ function check_friendship() {
 function check_blocked() {
 	$.get('/users/ajax', {action: 'is_blocked', user_id: user_id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else if (res.blocked) {
 			document.getElementById('profile_form').getElementsByClassName('tools_wrapper')[0].innerHTML = '<h3 class="error_text">' + res.response + '</h3>';
 		}
@@ -550,7 +518,7 @@ function check_fake() {
 		return ;
 	$.get('/users/ajax', {action: 'check_fake', user_id: user_id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else
 			button.style.display = res.reported ? 'none' : 'block';
 	});
@@ -558,17 +526,14 @@ function check_fake() {
 
 function post_tags() {
 	var cont = document.getElementById('tag_list');
-	// var sep = '';
 
 	$.get('/users/ajax', {action: 'get_tags', user_id: user_id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			cont.innerHTML = '';
 			var onclick = res.is_owner ? 'onclick="del_hashtag(this);"' : 'onclick="copy_hashtag(this);"';
 			for (var i = 0; i < res.data.length; i++) {
-				// if (i > 0)
-				// 	sep = ',';
 				cont.innerHTML += '<a href="#" id="' + res.data[i]['id'] + '"' + onclick + '>' + res.data[i]['name'] + '</a>'; 
 			}
 		}
@@ -583,13 +548,12 @@ function add_hashtag() {
 		return ;
 	$.get('/users/ajax', {action: 'add_hashtag', text: input.value, user_id: user_id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			input.value = '';
 			post_tags();
 		}
 	});
-	// alert('Test!');
 }
 
 function del_hashtag(elem) {
@@ -609,13 +573,12 @@ function del_hashtag(elem) {
 	yes.onclick = function() {
 		$.post('/users/ajax_post', {action: 'del_hashtag', tag_id: elem.id}, function(res) {
 			if (!res.success)
-				console.log(res.error);
+				return ;
 			else
 				post_tags();
 		});
 		fog.style.display = 'none';
 	};
-	// console.log(elem);
 }
 
 function copy_hashtag(elem) {
@@ -647,8 +610,9 @@ function copy_hashtag(elem) {
 function update_visit() {
 	if (current_user['info']['id'] != user_id) {
 		$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'visit', confirm: 0}, function(res) {
-			if (!res.success)
-				console.log(res.error);
+			if (!res.success) {
+				return ;
+			}
 			else {
 				socket.emit('history_request', {
 					user_id: user_id

@@ -23,6 +23,17 @@ a:hover {
 	color: #4444FF;
 }
 
+#more {
+	position: relative;
+	float: right;
+	border: none;
+    margin-right: 2%;
+    width: 4%;
+    left: unset;
+    height: unset;
+    margin-bottom: 30px;
+}
+
 #block_user:hover {
 	border-radius: 50%;
 	background: linear-gradient(0deg, #ff3232, #CD2421);

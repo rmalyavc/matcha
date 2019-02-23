@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const config = {pingTimeout: 60000};
+var io = require('socket.io')(http, config);
 var mysql = require('mysql');
 
 var db = mysql.createConnection({
@@ -36,9 +37,6 @@ io.on('connection', function(socket){
 	    });
 	});
 	socket.on('send_message', function(msg){
-		console.log('Send Message Event. Clients are:');
-		console.log(clients);
-		// console.log(io.sockets.connected);
 		var sql = "SELECT user_id FROM room_user WHERE room_id = ?";
 
 		db.query(sql, msg.room_id, function(err, rows) {
@@ -71,7 +69,6 @@ io.on('connection', function(socket){
 			return ;
 		var sql = "UPDATE users SET connected = 0, last_seen = NOW() WHERE id = ?";
 		db.query(sql, socket.user_id, function(err) {
-			console.log(this.sql);
 			if (err)
 				console.log(err.sqlMessage);
 			else {

@@ -2,8 +2,6 @@
 	<div class="fog" id="avatar_fog">
 		<div class="confirm_window">
 			<h2 class="text_header error_text" id="confirm_question">Do you really want to choose this image?</h2>
-			<!-- <input type="hidden" id="action" value=""> -->
-			<!-- <input type="hidden" id="avatar_id" value=""> -->
 			<button class="confirm_button" id="yes_avatar"><strong>Yes</strong></button>
 			<button class="confirm_button" id="no_avatar"><strong>No</strong></button>
 		</div>
@@ -104,7 +102,6 @@
 		<input type="hidden" name="longitude" id="longitude" value="{{ longitude }}">
 		<label for="about">About:</label><textarea class="form_field profile_input" id="about" name="about">{{ about }}</textarea><br>
 		{{/user}}
-		<!-- <label for="hashtags">#HashTags:</label> -->
 		<div class="form_field profile_input tag_cont" id="hashtags">
 			<h3 class="text_header">HashTags</h3>
 			<div class="tag_list" id="tag_list"></div>
@@ -124,7 +121,6 @@
 				<img class="tool_button" src="/images/close.png" id="block_user">
 				<img class="tool_button" src="/images/fake.png" id="fake_user">
 			</div>
-			<!-- <img class="" -->
 		{{/if}}
 	</form>
 </div>

@@ -7,9 +7,6 @@ var user_controller = require('./controllers/User.js');
 var Admin = require('./controllers/Admin.js');
 var db = require('./config/connection.js');
 
-// var valid = require('./controllers/validators/user/valid_user.js');
-var User = require('./models/User.js');
-
 router.get('/login', function(req, res, next) {
   	res.render('auth/login', {
   		error: req.query['error'],
@@ -26,7 +23,8 @@ router.get('/logout', function(req, res, next) {
 router.get('/register', function(req, res, next) {
 	if (req.session.user_id)
 		res.redirect('/users/logout');
-	res.render('auth/register', {data: req.session.user});
+	else
+		res.render('auth/register', {data: req.session.user});
 });
 
 router.post('/update', function(req, res, next) {
@@ -68,7 +66,6 @@ router.get('/history', function(req, res, next) {
 });
 
 router.get('/profile/:id', function(req, res, next) {
-	// console.log('Params id = ' + )
 	if (!req.session.user_id || req.session.user_id == '') {
 		res.redirect('/users/login');
 		return ;
@@ -136,8 +133,6 @@ router.get('/activate', function(req, res, next) {
 });
 
 router.get('/ajax', function(req, res, next) {
-	console.log('Query is:');
-	console.log(req.query);
 	if (req.query['action'] == 'is_unique')
 		user_controller.is_unique(req, res);
 	else if (req.query['action'] == 'current_user')
@@ -212,8 +207,6 @@ router.get('/ajax', function(req, res, next) {
 });
 
 router.post('/ajax_post', upload.any(), function(req, res, next) {
-	console.log('REQ BODY IS: ');
-	console.log(req.body);
 	if (req.body['action'] == 'upload_photo' && req.body['user_id'] == req.session.user_id && req.files)
 		user_controller.upload(req, res);
 	else if (req.body['action'] == 'get_album' && req.body['user_id'])
@@ -237,8 +230,6 @@ router.post('/ajax_post', upload.any(), function(req, res, next) {
 		user_controller.get_avatars(req, res);
 	else if (req.body['action'] == 'del_photo' && req.body['photo_id'] && req.body['user_id'] == req.session.user_id)
 		user_controller.del_photo(req, res);
-	// else if (req.body['action'] == 'get_messages' && req.body['user_id'] && req.session.user_id && req.session.user_id != req.body['user_id'])
-	// 	user_controller.get_messages(req, res);
 	else if (req.body['action'] == 'get_messages' && req.body['room_id'] && req.session.user_id)
 		user_controller.get_messages(req, res);
 	else if (req.body['action'] == 'send_message' && req.body['room_id'] && req.body['text'] && req.body['text'].trim() != '' && req.session.user_id)

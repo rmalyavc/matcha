@@ -101,7 +101,6 @@ function valid_name(elem) {
 	}
 	var error = document.getElementById(elem.id + '_error');
 	if (!error) {
-		console.log('Cannot found relative error span...');
 		return false;
 	}
 	if (!elem.value || elem.value.trim() == '') {

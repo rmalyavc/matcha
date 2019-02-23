@@ -34,36 +34,6 @@ function user_listeners() {
 	user_listener('Do you really want to delete this user?', 'del_user', del_list);
 	user_listener('Do you really want to change admin rights for this user?', 'change_admin', admin_list);
 	user_listener('Do you really want to deactivate this user?', 'change_active', active_list);
-	// for (var i = 0; i < del_list.length; i++) {
-	// 	del_list[i].addEventListener('click', function() {
-	// 		text.innerHTML = 'Do you really want to delete this user?';
-	// 		fog.style.display = 'block';
-	// 		document.getElementById('action').value = 'del_user';
-	// 		document.getElementById('action_data').value = this.id;
-	// 		yes.onclick = proceed;
-	// 		no.onclick = function() {
-	// 			fog.style.display = 'none';
-	// 		}
-	// 	});
-	// }
-
-	// for (var i = 0; i < admin_list.length; i++) {
-	// 	admin_list[i].addEventListener('click', function() {
-	// 		text.innerHTML = 'Do you really want to change admin rights for this user?';
-	// 		fog.style.display = 'block';
-	// 		document.getElementById('action').value = 'change_admin';
-	// 		document.getElementById('action_data').value = this.id;
-	// 		yes.onclick = proceed;
-	// 		no.onclick = function() {
-	// 			fog.style.display = 'none';
-	// 			// users_menu();
-	// 		}
-	// 	});
-	// }
-
-	// for (var i = 0; i < active.length; i++) {
-
-	// }
 }
 
 function set_listeners() {

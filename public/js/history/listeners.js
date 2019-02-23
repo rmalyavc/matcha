@@ -14,4 +14,4 @@ function history_listeners() {
 $(document).ready(function() {
 	history_listeners();
 	get_history('by_you');
-})
+});

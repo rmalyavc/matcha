@@ -1,11 +1,7 @@
 function fog_visible(fog_id, show_fog, show_conf, show_res = false) {
 	var fog = document.getElementById(fog_id);
-	// console.log('Fog is:');
-	// console.log(fog);
-	// console.log()
 
 	if (!fog) {
-		console.log('Fog is not found');
 		return ;
 	}
 	var conf = fog.getElementsByClassName('confirm_window');
@@ -29,23 +25,19 @@ function wait_elem(type, name, parent, callback, args = [], tries = 100) {
 		},
 		'class_name': function() {
 			needle = parent.getElementsByClassName(name);
-			console.log('Class' + needle);
 			return (needle != null && needle.length > 0);
 		},
 		'tag_name': function() {
 			needle = parent.getElementsByTagName(name);
-			console.log(needle);
 			return (needle != null && needle.length > 0);
 		}
 	};
 
 	if (!type || !name || type == '' || name == '' || !parent || !callback) {
-		console.log("Wait Elem:\nError! Type = " + type + " Name = " + name + "Callback is: " + callback);
 		return (true);
 	}
 	var interval_id = setInterval(function() {
 		if (counter > tries) {
-			console.log("Wait Elem!\nError: Unable to find element\nType = " + type + " Name = " + name);
 			if (callback)
 				callback(args);
 		}

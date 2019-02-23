@@ -59,56 +59,12 @@
 							</div>
 							<p></p>
 						</div>
-						<button class="submit_button" type="button" onclick="apply_filters(); return ;"><strong class="button_text">Apply Filters</strong></button>
+						<button class="submit_button" type="button" onclick="apply_filters(this); return ;"><strong class="button_text">Apply Filters</strong></button>
 						<button class="submit_button" type="button" onclick="clear_filters();"><strong class="button_text">Clear Filters</strong></button>
 					</div>
 				</div>
 			</div>
-			<div class="results_tools">
-				<button class="close_button submit_button" type="button" id="back_button"><strong class="button_text">Back to search</strong></button>
-			</div>
 		</div>
-		<!-- <form class="login_form" id="index_form" action="#" submit="false">
-			<img type="button" id="close_search" class="close_button" src="/images/close.png">
-			<h2 class="text_header green">Who are you looking for?</h2>
-			<div class="fields_wrapper">
-				<label for="login">Login:</label><input type="text" class="form_field profile_input" id="login" name="login"><br>
-				<label for="first_name">First Name:</label><input type="text" class="form_field profile_input" id="first_name" name="first_name"><br>
-				<label for="last_name">Last Name:</label><input type="text" class="form_field profile_input" id="last_name" name="last_name"><br>
-				<label for="email">Email:</label><input type="email" class="form_field profile_input" id="email" name="email"><br>
-				<label for="age">Age:</label><input type="number" class="form_field profile_input" id="age" name="age" min="12" max="120"><br>
-				<label for="gender">Gender:</label>
-				<select class="form_field profile_input" name="gender" id="gender">
-					<option value=""></option>
-					<option value="Male">Male</option>
-					<option value="Female">Female</option>
-					<option value="Other">Other</option>
-				</select><br>
-				<label for="orientation">Orientation:</label><select class="form_field profile_input" name="orientation" id="orientation">
-					<option value=""></option>
-					<option value="Heterosexual">Heterosexual</option>
-					<option value="Homosexual">Homosexual</option>
-					<option value="Bisexual">Bisexual</option>
-					<option value="Asexual">Asexual</option>
-					<option value="Other">Other</option>
-				</select><br>
-				<button class="submit_button search_button" type="button" id="search_button"><strong class="button_text">Find Matches</strong></button>
-			</div>	
-		</form> -->
 	</div>
 <script type="text/javascript" src="/js/index/logic.js"></script>
 <script type="text/javascript" src="/js/index/listeners.js"></script>
-<!-- <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
-<!-- <script type="text/javascript">
-	$(document).ready(function() {
-		$( "#hashtag" ).autocomplete({
-	       source: "/users/ajax?action=auto_complete&to_find=hashtags",
-	       minLength: 2
-	    });
-	});
-</script> -->
-
-<!-- {{# if logged_user }}
-<h2>Hi, {{ user_login }}</h2>
-<h3>Your ID is: {{ logged_user }}</h3>
-{{/if}} -->

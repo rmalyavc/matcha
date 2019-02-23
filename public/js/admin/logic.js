@@ -29,7 +29,6 @@ function proceed() {
 	var user_id = document.getElementById('action_data');
 
 	if (!fog || !action || !user_id || action.value == '' || user_id.value == '') {
-		console.log('Something went wrong.');
 		fog.style.display = 'none';
 		users_menu();
 		return ;
@@ -48,7 +47,6 @@ function proceed() {
 function post_users(cont, users) {
 	$.post('/users/ajax_post', {action: 'get_avatars', list: get_user_ids(users)}, function(res) {
 		if (!res.success) {
-			console.log(res.error);
 			return ;
 		}
 		for (var i = 0; i < users.length; i++) {
@@ -99,7 +97,6 @@ function users_menu() {
 		if (!result.success)
 			cont.innerHTML = result.error;
 		else {
-			console.log(result);
 			button.style['background'] = 'linear-gradient(180deg, #6F9C1B, #8CC13D)';
 			post_users(cont, result.users);
 		}

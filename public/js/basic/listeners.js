@@ -4,9 +4,7 @@ function requets_listeners() {
 
 	if (!button || !cont)
 		return ;
-	console.log([button, cont]);
 	button.addEventListener('click', function() {
-		console.log('Trigger worked!');
 		cont.style.display = (cont.style.display == 'none' || !cont.style.display) ? 'block' : 'none';
 	});
 }
@@ -16,7 +14,6 @@ function set_listeners() {
 }
 
 $(document).ready(function() {
-	// set_listeners();
 	get_location();
 
 	get_requests();

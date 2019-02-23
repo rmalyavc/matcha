@@ -6,7 +6,6 @@ function hide_auto_complete(field) {
 }
 
 function select_option(field_id, option = false) {
-	console.log(option);
 	var field = document.getElementById(field_id);
 	if (option && field && option.value != '') {
 		field.value = option.value;
@@ -27,7 +26,6 @@ function auto_complete(field) {
 	cont.innerHTML = '';
 	$.get('/users/ajax', {action: 'auto_complete', find_from: field.id, to_find: field.value}, function(res) {
 		if (!res.success) {
-			console.log(res.error);
 			return ;
 		}
 		var rows = res.data;
@@ -43,12 +41,12 @@ function req_confirm(elem, user_id) {
 
 	$.get('/users/ajax', {action: action, user_id: user_id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			var confirm = action == 'confirm_friend' ? 1 : 0;
 			$.post('/users/ajax_post', {action: 'insert_history', owner: user_id, type: 'request', confirm: confirm}, function(res) {
 				if (!res.success)
-					console.log(res.error);
+					return ;
 				else {
 					socket.emit('history_request', {
 						user_id: user_id
@@ -125,7 +123,7 @@ function post_unread_messages(rows) {
 function get_unread_messages() {
 	$.get('/users/ajax', {action: 'get_unread_messages'}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else 
 			post_unread_messages(res.data);
 	});
@@ -159,14 +157,14 @@ function get_location() {
 function update_rating(user, nb) {
 	$.post('/users/ajax_post', {action: 'update_rating', user_id: user, points: nb}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 	});
 }
 
 function update_history() {
 	$.get('/users/ajax', {action: 'get_history'}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else
 			post_history(res.data);
 	});
@@ -217,17 +215,15 @@ function requests_visible() {
 		cont.style.display = 'none';
 		$.post('/users/ajax_post', {action: 'read_history'}, function(res) {
 			if (!res.success)
-				console.log(res.error);
+				return ;
 			else
 				update_history();
 		});
 	}
-	// cont.style.display = (cont.style.display == 'none' || !cont.style.display) ? 'block' : 'none';
 }
 
 if (socket) {
 	socket.on('friend_request', function(){
-		// console.log('Friend request!');
 		get_requests();
 	});
 	socket.on('chat message', function(msg){
@@ -237,4 +233,3 @@ if (socket) {
 		update_history();
 	});
 }
-

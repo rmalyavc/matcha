@@ -1,18 +1,16 @@
 var chat_with = '';
-// DELETE FROM rooms WHERE id = '12'; DELETE FROM room_user WHERE room_id = '12'
+
 socket.on('chat message', function(msg){
 	if (msg.room_id == chat_with)
 		post_messages(chat_with);
 	else
 		unread_messages();
-	// console.log(msg);
-	// $('#messages').append($('<li>').text(msg));
 });
 
 function add_to_chat(elem) {
 	$.get('/users/ajax', {action: 'add_to_chat', room_id: chat_with, user_id: elem.id}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			var win = document.getElementsByClassName('invite_to_chat')[0];
 			win.style.display = null;
@@ -20,7 +18,6 @@ function add_to_chat(elem) {
 			post_chats('chat_list');
 			wait_elem('id_name', 'chat_' + chat_with, document, start_chat, ['chat_' + chat_with]);
 			show_invite();
-			// start_chat('chat_' + res.data);
 		}
 	});
 }
@@ -31,16 +28,12 @@ function show_invite() {
 
 	cont.innerHTML = '';
 	if (win.style.display && win.style.display != 'none') {
-		// console.log("Window display Is: " + win.style.display);
 		win.style.display = 'none';
 		return ;
 	}
 	$.get('/users/ajax', {action: 'invite_list', room_id: chat_with}, function(res) {
-		// console.log('ROOM IS: ' + chat_with);
-		// console.log('Invite LIST is:');
-		// console.log(res);
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			cont.innerHTML = '';
 			for (var i = 0; i < res.data.length; i++) {
@@ -55,31 +48,10 @@ function show_invite() {
 	});
 }
 
-// function unread_messages(cont_id, show = true) {
-// 	if (!document.getElementById(cont_id))
-// 		return ;
-	
-// 	var cont = document.getElementById(cont_id).getElementsByClassName('unread_messages')[0];
-
-// 	if (show) {
-// 		cont.innerHTML = parseInt(cont.innerHTML) + 1;
-// 		cont.style.display = 'flex';	
-// 	}
-// 	else {
-// 		cont.innerHTML = 0;
-// 		cont.style.display = 'none';
-// 	}
-// 	// var list = document.getElementsByClassName('chat_user');
-
-// 	// for (var i = 0; i < list.length; i++) {
-
-// 	// }
-// }
-
 function unread_messages() {
 	$.get('/users/ajax', {action: 'get_unread_messages'}, function(res) {
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			var list = res.data;
 			for (var i = 0; i < list.length; i++) {
@@ -114,7 +86,6 @@ function fill_chat_list(cont, friend) {
 		<div class="req_avatar" style="background-image:url(\'' + avatar + '\');"></div>\
 		<div class="req_info">\
 			<h4 class="text_header">' + friend.login + '</h4>\
-			<i class="text_header" id="last_message">No recent messages...</i>\
 		</div>\
 		<div class="unread_messages">0</div>\
 	</div>';
@@ -151,10 +122,6 @@ function post_friend(cont, friend) {
 
 function post_friends(cont_id, funct) {
 	var cont = document.getElementById(cont_id);
-	// var cont = document.getElementsByClassName('friends_wrapper')[0];
-	// var cont = document.getElementById('chat_list').getElementsByClassName('chat_wrapper')[0];
-
-	// console.log(document.getElementById('friends_window'));
 	cont.innerHTML = '';
 	$.get('/users/ajax', {action: 'get_friends'}, function(res) {
 		if (!res.success)
@@ -173,7 +140,7 @@ function post_chats(cont_id) {
 	cont.innerHTML = '';
 	$.get('/users/ajax', {action: 'get_chats'}, function(res) {
 		if (!res.success || !res.data)
-			console.log(res.error);
+			return ;
 		else
 			for (var i = 0; i < res.data.length; i++) {
 				fill_chat_list(cont, res.data[i]);
@@ -215,13 +182,10 @@ function proceed_action() {
 }
 
 function post_message(message, is_owner) {
-	// console.log(message);
 	var cont = document.getElementById('chat_messages');
 	var add_class = is_owner ? ' owner' : '';
 	var avatar = message.avatar ? message.avatar : '/images/default_avatar.png';
 	var add_style = is_owner ? ' style="justify-content:flex-end;padding-left:5px;"' : '';
-	// var db_time = message.time.split(/[- :]/);
-	// var time = db_time[2] + '/' + db_time[1] + '/' + db_time[0] + ' ' + db_time[3] + ':' + db_time[4];
 
 	cont.innerHTML += '<span class="message_time' + add_class + '">' + date_to_display(message.time) + '</span><br>\
 		<span class="author_wrapper"' + add_style + '>\
@@ -239,9 +203,7 @@ function post_messages(user_id) {
 	var cont = document.getElementById('chat_messages');
 
 	$.post('/users/ajax_post', {action: 'get_messages', room_id: user_id}, function(res) {
-		console.log(res);
 		if (!res.success) {
-			console.log(res.error);
 			return ;
 		}
 		cont.innerHTML = '';
@@ -251,8 +213,6 @@ function post_messages(user_id) {
 		var target = cont.scrollTop + cont.offsetHeight * 42000;
     	$('#chat_messages').animate({scrollTop: target}, 0);
     	$.post('/users/ajax_post', {action: 'update_unread_messages', room_id: chat_with}, function(res) {
-			if (!res.success)
-				console.log(res.error);
 			get_unread_messages();
 			unread_messages();
 		});
@@ -263,9 +223,6 @@ function post_messages(user_id) {
 function start_chat(cont_id) {
 	var list = document.getElementsByClassName('chat_user');
 
-	// console.log(Array.isArray(cont_id));
-	console.log("Cont id is: " + cont_id + "List is:");
-	console.log(list);
 	if (Array.isArray(cont_id))
 		cont_id = cont_id[0];
 	chat_with = cont_id.replace('chat_', '');
@@ -273,9 +230,6 @@ function start_chat(cont_id) {
 		var list_id = list[i].id;
 		list[i].style['background'] = (list[i].id == cont_id) ? "rgba(200,200,200,0.2)" : 'none';
 	}
-	console.log(cont_id);
-	// var user_id = cont_id.replace('chat_', '');
-	
 	unread_messages();
 	post_messages(chat_with);
 }
@@ -284,11 +238,9 @@ function chat_action(user_id) {
 	var chat = document.getElementById('chat_window');
 	
 	chat.style.display = 'block';
-	// post_friends('chat_list', fill_chat_list);
 	$.get('/users/ajax', {action: 'get_room', user_id: user_id}, function(res) {
-		console.log(res);
 		if (!res.success)
-			console.log(res.error);
+			return ;
 		else {
 			chat_with = res.room_id;
 			post_chats('chat_list');
@@ -310,7 +262,6 @@ function del_action() {
 		return ;
 	$.get('/users/ajax', {action: 'get_user', id: checked.id}, function(res) {
 		if (!res) {
-			console.log('User is not found');
 			return ;
 		}
 		text.innerHTML = 'Do you really want to delete ' + res.login + ' from friends?';
@@ -328,7 +279,6 @@ function del_action() {
 }
 
 function send_message() {
-	// var socket = io();
 	var input = document.getElementById('message_input');
 
 	if (!input || input.value.trim() == '' || !chat_with || chat_with == '')
@@ -340,7 +290,6 @@ function send_message() {
 		});
 		input.value = '';
 		if (!res.success) {
-			console.log(res.error);
 			return ;
 		}
 		post_messages(chat_with);

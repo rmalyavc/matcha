@@ -14,9 +14,6 @@ function search_listeners() {
 	var closers = document.getElementsByClassName('close_button');
 	var sort = document.getElementById('sort_button');
 
-	// search.addEventListener('click', function() {
-	// 	find_users();
-	// });
 	sort.addEventListener('click', function() {
 		sort_results(this);
 	});
